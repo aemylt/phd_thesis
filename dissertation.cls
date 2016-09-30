@@ -11,7 +11,6 @@
       degree/.store in=\dissertation@degree,     % [BSc|MEng|MSci|MSc|PhD]
        title/.store in=\dissertation@title,      % string
     subtitle/.store in=\dissertation@subtitle,   % string
-        type/.store in=\dissertation@type,       % string
         year/.store in=\dissertation@year,       % string
   % defaults
       author = {},
@@ -19,7 +18,6 @@
       degree = {MEng},
        title = {},
     subtitle = {},
-        type = {},
         year = {\the\year}
 }
 
@@ -54,7 +52,7 @@
 \RequirePackage{lipsum}
 
 % see http://www.ctan.org/tex-archive/usergrps/dante/dtk
-\RequirePackage{dtklogos}
+%\RequirePackage{dtklogos}
 
 \makeatletter
 
@@ -111,10 +109,6 @@
   \newpage
   \thispagestyle{empty}
 
-  \ifcsempty{dissertation@type}{}{
-    \adjustbox{padding={5pt},frame={1pt},right}{Dissertation Type: \dissertation@type}
-  }
-
   \vspace*{\fill}
   \begin{center}
           \includegraphics[scale=0.3]{logos/logo_uob_color}          \\
@@ -138,7 +132,7 @@
         \ifcsstring{dissertation@degree}{MSci}{Master   of Science}{}%
         \ifcsstring{dissertation@degree}{MSc} {Master   of Science}{}%
         \ifcsstring{dissertation@degree}{PhD} {Doctor   of Philosophy}{}%
-  } in the Faculty of Engineering.                                
+  } in the Faculty of Science.                                
 
                        \vspace{1cm}
                 \rule{0.5\textwidth}{0.5pt}
@@ -160,7 +154,7 @@
 
   This dissertation is submitted to the University of Bristol in accordance 
   with the requirements of the degree of {\dissertation@degree} in the Faculty 
-  of Engineering.  It has not been submitted for any other degree or diploma 
+  of Science.  It has not been submitted for any other degree or diploma 
   of any examining body.  Except where specifically acknowledged, it is all 
   the work of the Author. 
 
