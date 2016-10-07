@@ -113,13 +113,14 @@
   \begin{center}
           \includegraphics[scale=0.3]{logos/logo_uob_color}          \\
                        \vspace{1cm}
-                DEPARTMENT OF COMPUTER SCIENCE                       \\
+                SCHOOL OF PHYSICS                       \\
 
                        \vspace{3cm}
                  {\LARGE \dissertation@title}                        \\
   \ifcsempty{dissertation@subtitle}{}{{\Large \dissertation@subtitle \\}}
                        \vspace{1cm}
                  {\Large \dissertation@author}                       \\
+                 {\Large Supervised by \dissertation@supervisor}
 
                        \vspace{1cm}
                 \rule{0.5\textwidth}{0.5pt}
