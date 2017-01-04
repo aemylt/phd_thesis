@@ -116,7 +116,7 @@
   \begin{center}
           \includegraphics[scale=0.3]{logos/logo_uob_color}          \\
                        \vspace{1cm}
-                SCHOOL OF PHYSICS                       \\
+                H. H. WILLS PHYSICS LABORATORY                       \\
 
                        \vspace{3cm}
                  {\LARGE \dissertation@title}                        \\
