@@ -1,17 +1,17 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{dissertation}[2012/05/04 UoB CS LaTeX class, Dan Page <page@cs.bris.ac.uk>]
+\ProvidesClass{thesis}[2012/05/04 UoB CS LaTeX class, Dan Page <page@cs.bris.ac.uk>]
 
 \RequirePackage{pgfkeys}
 \RequirePackage{pgfopts}
 
-\pgfkeys{/dissertation/.cd,
+\pgfkeys{/thesis/.cd,
   % options
-      author/.store in=\dissertation@author,     % string
-  supervisor/.store in=\dissertation@supervisor, % string
-      degree/.store in=\dissertation@degree,     % [BSc|MEng|MSci|MSc|PhD]
-       title/.store in=\dissertation@title,      % string
-    subtitle/.store in=\dissertation@subtitle,   % string
-        year/.store in=\dissertation@year,       % string
+      author/.store in=\thesis@author,     % string
+  supervisor/.store in=\thesis@supervisor, % string
+      degree/.store in=\thesis@degree,     % [BSc|MEng|MSci|MSc|PhD]
+       title/.store in=\thesis@title,      % string
+    subtitle/.store in=\thesis@subtitle,   % string
+        year/.store in=\thesis@year,       % string
   % defaults
       author = {},
   supervisor = {},
@@ -21,7 +21,7 @@
         year = {\the\year}
 }
 
-\ProcessPgfOptions{/dissertation}
+\ProcessPgfOptions{/thesis}
 \LoadClass[10pt,a4paper,twoside]{book}
 
 % see http://www.ctan.org/tex-archive/macros/latex/required/graphics
@@ -119,23 +119,23 @@
                 H. H. WILLS PHYSICS LABORATORY                       \\
 
                        \vspace{3cm}
-                 {\LARGE \dissertation@title}                        \\
-  \ifcsempty{dissertation@subtitle}{}{{\Large \dissertation@subtitle \\}}
+                 {\LARGE \thesis@title}                        \\
+  \ifcsempty{thesis@subtitle}{}{{\Large \thesis@subtitle \\}}
                        \vspace{1cm}
-                 {\Large \dissertation@author}                       \\
-                 {\Large Supervised by \dissertation@supervisor}
+                 {\Large \thesis@author}                       \\
+                 {\Large Supervised by \thesis@supervisor}
 
                        \vspace{1cm}
                 \rule{0.5\textwidth}{0.5pt}
                        \vspace{1cm}
 
-        A dissertation submitted to the University of Bristol
+        A thesis submitted to the University of Bristol
         in accordance with the requirements of the degree of
-  \mbox{\ifcsstring{dissertation@degree}{BSc} {Bachelor of Science}{}%
-        \ifcsstring{dissertation@degree}{MEng}{Master   of Engineering}{}%
-        \ifcsstring{dissertation@degree}{MSci}{Master   of Science}{}%
-        \ifcsstring{dissertation@degree}{MSc} {Master   of Science}{}%
-        \ifcsstring{dissertation@degree}{PhD} {Doctor   of Philosophy}{}%
+  \mbox{\ifcsstring{thesis@degree}{BSc} {Bachelor of Science}{}%
+        \ifcsstring{thesis@degree}{MEng}{Master   of Engineering}{}%
+        \ifcsstring{thesis@degree}{MSci}{Master   of Science}{}%
+        \ifcsstring{thesis@degree}{MSc} {Master   of Science}{}%
+        \ifcsstring{thesis@degree}{PhD} {Doctor   of Philosophy}{}%
   } in the Faculty of Science.                                
 
                        \vspace{1cm}
@@ -156,15 +156,15 @@
 
   \chapter*{Declaration}
 
-  This dissertation is submitted to the University of Bristol in accordance 
-  with the requirements of the degree of {\dissertation@degree} in the Faculty 
+  This thesis is submitted to the University of Bristol in accordance 
+  with the requirements of the degree of {\thesis@degree} in the Faculty 
   of Science.  It has not been submitted for any other degree or diploma 
   of any examining body.  Except where specifically acknowledged, it is all 
   the work of the Author. 
 
   \vspace{6cm}
 
-  \noindent {\dissertation@author}, \today
+  \noindent {\thesis@author}, \today
 }
 
 % define macros to mark front, main and back matter
@@ -184,7 +184,7 @@
   \pagestyle{marked}
 }
 
-% define macros to consistently generate dissertation type field
+% define macros to consistently generate thesis type field
 
 \newcommand{\typemeng}[1]{%
   \ifstrequal{#1}{E}{enterprise}{}%

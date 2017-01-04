@@ -11,7 +11,7 @@
 % - degree programme  should be "BSc", "MEng", "MSci", "MSc" or "PhD",
 % - dissertation title should be correctly capitalised (plus you can have
 %   an optional sub-title if appropriate, or leave this field blank),
-% - dissertation type should be formatted as one of the following:
+% - thesis type should be formatted as one of the following:
 %   * for the MEng degree programme either "enterprise" or "research" to
 %     reflect the stream,
 %   * for the MSc  degree programme "$X/Y/Z$" for a project deemed to be
@@ -25,12 +25,12 @@
                 supervisor={Dr. Peter S. Turner and Prof. Noah Linden},
                 % the degree programme
                     degree={PhD},
-                % the dissertation    title (which cannot be blank)
+                % the thesis    title (which cannot be blank)
                      title={Boltzon Sampling},
-                % the dissertation subtitle (which can    be blank)
+                % the thesis subtitle (which can    be blank)
                   subtitle={Sampling from semi-distinguishable photons},
                 % the year of submission
-                      year={\year} ]{dissertation}
+                      year={\year} ]{thesis}
 
 \begin{document}
 
@@ -55,7 +55,7 @@
 
 % LaTeX automatically generates a table of contents, plus associated lists 
 % of figures, tables and algorithms.  The former is a compulsory part of the
-% dissertation, but if you do not require the latter they can be suppressed
+% thesis, but if you do not require the latter they can be suppressed
 % by simply commenting out the associated macro.
 
 \tableofcontents
@@ -104,18 +104,18 @@
 %   \bibitem macro and typesets them manually, or
 % - using BiBTeX, which means entries are contained in a separate file
 %   (which is essentially a databased) then inported; this is the 
-%   approach used below, with the databased being dissertation.bib.
+%   approach used below, with the databased being thesis.bib.
 %
 % Either way, the each entry has a key (or identifier) which can be used
 % in the main matter to cite it, e.g., \cite{X}, \cite[Chapter 2}{Y}.
 
 \backmatter
 
-\bibliography{dissertation}
+\bibliography{thesis}
 
 % -----------------------------------------------------------------------------
 
-% The dissertation concludes with a set of (optional) appendicies; these are 
+% The thesis concludes with a set of (optional) appendicies; these are 
 % the same as chapters in a sense, but once signaled as being appendicies via
 % the associated macro, LaTeX manages them appropriatly.
 
