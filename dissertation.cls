@@ -50,6 +50,12 @@
 \RequirePackage{hyperref}
 % see http://www.ctan.org/tex-archive/macros/latex/contrib/lipsum
 \RequirePackage{lipsum}
+\RequirePackage{amsfonts}
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+\RequirePackage{tikz}
+\usetikzlibrary{automata}
+\RequirePackage[caption=false]{subfig}
 
 % see http://www.ctan.org/tex-archive/usergrps/dante/dtk
 %\RequirePackage{dtklogos}
@@ -65,14 +71,11 @@
 \lstset{basicstyle=\ttfamily,captionpos=b}
 \renewcommand{\lstlistlistingname}{List of Listings}
 
-% configure hyperref
-\hypersetup{colorlinks=true,bookmarks=false,urlcolor=red}
-
 % configure style of table of contents
 \setcounter{tocdepth}{1}
 
 % configure style of bibliography
-\bibliographystyle{plain}
+\bibliographystyle{alpha}
 
 % configure style of pages
 \geometry{a4paper,lmargin=2.5cm,rmargin=2.5cm,tmargin=2.5cm,bmargin=2.5cm}
@@ -190,6 +193,13 @@
 \newcommand{\typemsc}[3]{%
   $(#1,#2,#3)$%
 }%
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\DeclareMathOperator{\poly}{poly}
+\DeclareMathOperator{\polylog}{polylog}
+\newcommand{\FIXME}[1]{{\color{red}FIXME: #1}}
 
 % =============================================================================
 
