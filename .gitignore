@@ -1,3 +1,6 @@
+thesis.pdf
+poster.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -204,7 +207,7 @@ TSWLatexianTemp*
 # KBibTeX
 *~[0-9]*
 
-# auto folder when using emacs and auctex 
+# auto folder when using emacs and auctex
 /auto/*
 
 # expex forward references with \gathertags
