@@ -5,22 +5,6 @@
 \RequirePackage{pgfopts}
 
 \pgfkeys{/poster/.cd,
-  % options
-      author/.store in=\poster@author,     % string
-  supervisor/.store in=\poster@supervisor, % string
-      degree/.store in=\poster@degree,     % [BSc|MEng|MSci|MSc|PhD]
-       title/.store in=\poster@title,      % string
-    subtitle/.store in=\poster@subtitle,   % string
-        type/.store in=\poster@type,       % string
-        year/.store in=\poster@year,       % string
-  % defaults
-      author = {},
-  supervisor = {},
-      degree = {MEng},
-       title = {},
-    subtitle = {},
-        type = {},
-        year = {\the\year}
 }
 
 \ProcessPgfOptions{/poster}
@@ -41,6 +25,10 @@
 
 % =============================================================================
 
+\newcommand{\postertitle}[1]{\def \@postertitle {#1}}
+\newcommand{\posterauthors}[1]{\def \@posterauthors {#1}}
+\newcommand{\posteraffils}[1]{\def \@posteraffils {#1}}
+
 % define the official UoB red color as an RGB triple
 \definecolor{uobred}{RGB}{191,47,56}
 
@@ -60,9 +48,9 @@
   \begin{center}
   \vspace{4ex}
   \raggedright
-  {\Huge  \poster@title}                                                                       \\ [4ex]
-  {\Large Student: \poster@author, Supervisor: \poster@supervisor, Project Type: \poster@type} \\ [4ex]
-  {\Large University of Bristol, Department of Computer Science}
+  {\Huge  \@postertitle}                                                                       \\ [4ex]
+  {\Large \@posterauthors} \\ [4ex]
+  {\Large \@posteraffils}
   \vspace{4ex}
   \end{center}
   \end{column}
