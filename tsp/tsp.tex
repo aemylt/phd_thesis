@@ -9,15 +9,17 @@ Unfortunately, the salesman might have to take a long time in order to find the 
 
 Grover's famous quantum algorithm~\cite{grover96} for fast unstructured search can be applied to the na\"ive classical algorithm to achieve a runtime of $O(\sqrt{n!})$, up to polynomial terms in $n$. However, the best classical algorithms are already substantially faster than this. For many years, the algorithm with the best proven worst-case bounds for the general TSP was the Held-Karp algorithm~\cite{held1962}, which runs in $O(n^22^n)$ time and uses $O(n2^n)$ space. This algorithm uses the fact that for any shortest path, any subpath visiting a subset of vertices on that path must be the shortest path for visiting those vertices. Held and Karp used this to solve the TSP by computing the length of the optimal route for starting at vertex $1$, visiting every vertex in a set $S \subseteq V$ and finishing at a vertex $l \in S$. Denoting the length of this optimal route $D(S, l)$, they showed that this distance could be computed as
 %
-\[
+\begin{equation}
 D(S, l) = \begin{cases} c_{1l} & \text{if } S = \{l\}\\
           \min_{m \in S \setminus \{l\}}\left[D(S \setminus \{l\}, m) + c_{ml}\right] & \text{otherwise.}
   \end{cases}
-\]
+\end{equation}
 %
 Solving this relation recursively for $S=V$ would result in iterating over all $O((n-1)!)$ Hamiltonian cycles again, but Held and Karp showed that the relation could be solved in $O(n^22^n)$ time using dynamic programming. Bj{\"o}rklund et al.\ \cite{bjorklund2008} developed on this result, showing that modifications to the Held-Karp algorithm could yield a runtime of
 %
-\[ O((2^{k + 1} - 2k - 2)^{n/(k + 1)}\poly(n)), \]
+\begin{equation}
+O((2^{k + 1} - 2k - 2)^{n/(k + 1)}\poly(n)),
+\end{equation}
 %
 where $k$ is the largest degree of any vertex in the graph; this bound is strictly less than $O(2^n)$ for all fixed $k$. Unfortunately, it is not known whether quantum algorithms can accelerate general dynamic programming algorithms. Similarly, it is unclear whether TSP algorithms based around the standard classical techniques of branch-and-bound~\cite{little1963} or branch-and-cut~\cite{padberg1991} are amenable to quantum speedup.
 
@@ -149,7 +151,9 @@ It is also worth understanding the limitations of the quantum backtracking algor
 
 Another limitation of the quantum backtracking algorithm is that often there will be a metric $M \colon \mathcal{D} \rightarrow \mathbb{N}$ we want the backtracking algorithm to minimise while satisfying the other constraints. This is particularly relevant for the TSP, where the aim is to return the shortest Hamiltonian cycle. Classical backtracking algorithms can achieve this by recursively travelling down each branch of the tree to find results $D_1,\dots,D_d \in \mathcal{D}$ and returning the result that minimises $M$. The quantum backtracking algorithm cannot perform this; it instead returns a solution selected randomly from the tree that satisfies the constraints. In order to achieve a quantum speedup when finding the result that minimises $M$, we can modify the original predicate to prune results which are greater than or equal to a given bound. We then repeat the algorithm in a binary search fashion, updating our bound based on whether or not a solution was found. This will find the minimum after repeating the quantum algorithm at most $O(\log M_{max})$ times, where
 %
-\[M_{max} = \max\{M(D):D\in \mathcal{D}, P(D) = \text{true}\}.\]
+\begin{equation}
+M_{max} = \max\{M(D):D\in \mathcal{D}, P(D) = \text{true}\}.
+\end{equation}
 %
 We describe this binary search approach in more detail in Sec.\ \ref{sec:deg3speedup}.
 
@@ -312,7 +316,9 @@ We can now apply the backtracking algorithm (Theorem \ref{thm:backtrack}) to $P$
 
 To solve the TSP, we need to find the shortest Hamiltonian cycle. This can be done as follows. First, we run the backtracking algorithm. If the backtracking algorithm does not return a Hamiltonian cycle then we report that no Hamiltonian cycle was found. Otherwise after receiving Hamiltonian cycle $\Gamma$ with length $L_\Gamma$, we create variables $\ell \leftarrow 0$ \& $u \leftarrow L_\Gamma$ and modify $P$ to return false if
 %
-\[\sum_{e_{i,j}\in F}c_{ij} \geq \lceil(\ell + u)/2\rceil.\]
+\begin{equation}
+sum_{e_{i,j}\in F}c_{ij} \geq \lceil(\ell + u)/2\rceil.
+\end{equation}
 %
 If no cycle is found after running the algorithm again, we set $\ell \leftarrow \lceil(\ell + u)/2\rceil$ and repeat. Otherwise, upon receiving Hamiltonian cycle $\Gamma'$ with total cost $L_{\Gamma'}$, we set $u \leftarrow L_{\Gamma'}$ and repeat. We continue repeating until $\ell$ and $u$ converge, at which point we return the Hamiltonian cycle found by the algorithm. The scenario that will give the longest runtime is when the shortest cycle is found during the first run of the backtracking algorithm: the backtracking algorithm will fail to find a Hamiltonian cycle shorter than $\lceil(\ell + u)/2\rceil$, update $\ell$ and repeat until $\ell$ and $u$ converge. In this case, this algorithm matches a binary search. So the number of repetitions of the backtracking algorithm required to return the shortest Hamiltonian cycle is at most $O(\log L')$, where
 %
@@ -504,18 +510,18 @@ There are $10$ unique ways of splitting a vertex of degree $5$ into one vertex o
 
 If there are $f$ vertices of degree $5$, then there are $10^f$ possible ways of splitting all such vertices, of which $6^f$ will give the correct solution to the TSP. We can apply D\"urr and H\o yer's quantum algorithm for finding the minimum~\cite{durr1996} to find a splitting that leads to a shortest Hamiltonian cycle, or reporting if no cycle exists, after $O((10/6)^{f/2})$ repeated calls to the degree-4 algorithm. To ensure that the failure probability of the whole algorithm is at most $1/3$, we need to reduce the failure probability of the degree-4 algorithm to $O((10/6)^{-f/2})$, which can be achieved by repeating it $O(f)$ times and returning the minimum-length tour found. The overall runtime is thus
 %
-\begin{align*}
+\begin{align}
 &O^*\left(\left(\frac{10}{6}\right)^{\frac{f}{2}}1.301^n\log L \log \log L\right)\\
  = &O^*(1.680^n\log L \log \log L).
-\end{align*}
+\end{align}
 \end{proof}
 %
 It is also possible to split a vertex of degree $5$ into three vertices of degree $3$ connected by two forced edges. There are $15$ ways of performing this splitting, of which $6$ will succeed. Applying the degree-$3$ algorithm to these reduced graphs finds a runtime of
 %
-\begin{align*}
+\begin{align}
 &O^*\left(\left(\frac{15}{6}\right)^{\frac{f}{2}}1.110^n\log L \log \log L\right)\\
  = &O^*(1.754^n\log L \log \log L)
-\end{align*}
+\end{align}
 %
 \noindent which performs worse than Theorem \ref{thm:deg5}. We next turn to degree-6 graphs, for which the argument is very similar.
 
@@ -531,10 +537,10 @@ We can extend the idea of Theorem \ref{thm:deg5} to degree-6 graphs by splitting
 
 We finally considered extending the algorithm to degree-7 graphs by partitioning degree-7 vertices into one of degree $5$ and another of degree $4$, connected by a forced edge. We can split a vertex of degree $7$ into a vertex of degree $4$ and another of degree $5$ in $\binom{7}{4} = 35$ ways, of which $\binom{7-2}{4-2} + \binom{7-2}{3-2} = 15$ will not preserve the shortest Hamiltonian cycle. We then use the same process as for the degree-5 and degree-6 case, halting after $O((35/20)^{k/2})$ iterations and returning either the shortest Hamiltonian cycle found or reporting if no Hamiltonian cycle exists. From this, our overall runtime is
 %
-\begin{align*}
+\begin{align}
 &O^*\left(\left(\frac{35}{20}\right)^{k/2}1.680^n\log L \log \log L\right)\\
 =&O^*(2.222^n\log L \log \log L).
-\end{align*}
+\end{align}
 %
 This is the point where we no longer see a quantum speedup over the fastest classical algorithms using this approach, as classical algorithms such as those of Held-Karp~\cite{held1962} and Bj{\"o}rklund et al.~\cite{bjorklund2008} run in $O^*(2^n)$ and $O^*(1.984^n)$ time, respectively.
 
