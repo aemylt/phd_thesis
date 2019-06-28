@@ -10,3 +10,11 @@ This makes clear how distinguishabililty leads to decoherence in the standard qu
 At the heart of the circuit is the quantum Schur transform, which follows from a representation theoretic approach to the physics of distinguishable particles in first quantisation.
 The techniques are quite general and have application beyond boson sampling.
 %to exactly sample from this distribution on a classical computer must take superpolynomial time unless $P^{\#P} = BPP^{NP}$ and the Polynomial Hierarchy collapses to the third level. 
+
+Boson Sampling is the problem of sampling from the same distribution as indistinguishable single photons at the output of a linear optical interferometer. 
+It is an example of a non-universal quantum computation which is believed to be feasible in the near term and cannot be simulated on a classical machine.
+Like all purported demonstrations of ``quantum supremacy'', this motivates optimizing classical simulation schemes for a realistic model of the problem, in this case Boson Sampling when the implementations experience lost or distinguishable photons.
+Although current simulation schemes for sufficiently imperfect boson sampling are classically efficient, in principle the polynomial runtime can be infeasibly large.
+In this work, we develop a scheme for classical simulation of Boson Sampling under uniform distinguishability and loss, based on the idea of sampling from distributions where at most $k$ photons are indistinguishable.
+We show that asymptotically this scheme can provide a polynomial improvement in the runtime compared to classically simulating idealised Boson Sampling. 
+More significantly, we show that in the regime considered experimentally relevant, our approach gives an substantial improvement in runtime over other classical simulation approaches.

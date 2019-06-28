@@ -45,8 +45,8 @@ The paper is structured as follows.
 In Section \ref{sec:preliminary-notes} we give an overview of background material including Boson Sampling, irreducible representations of the unitary and symmetric groups, and Schur-Weyl duality. 
 We provide a simple quantum circuit for ideal indistinguishable photon sampling in Section \ref{sec:qc-bs}, before introducing the full circuit for sampling with distinguishable particles in Section \ref{sec:qc-noisy}. 
 In Section \ref{sec:uu-duality}, we provide some further explanation as to why these circuits work, via what is known as unitary-unitary duality.
-Following this result, we discuss a few interesting consequences: in Section \ref{sec:post-bs}, we show how postselection can be used with this circuit to sample from the indistinguishable distribution when given a distinguishable input; in Section \ref{sec:loss}, we consider how the circuit can be used to simulate Boson Sampling when photons are lost; and in Section \ref{sec:mixture}, we consider the multipartite entanglement of the output in the partially distinguishable case. 
-%We conclude with some discussion and future work in Section \ref{sec:conclusion}.
+Following this result, we discuss a few interesting consequences: in Section \ref{sec:post-bs}, we show how postselection can be used with this circuit to sample from the indistinguishable distribution when given a distinguishable input; in Section \ref{sec:nc-loss}, we consider how the circuit can be used to simulate Boson Sampling when photons are lost; and in Section \ref{sec:mixture}, we consider the multipartite entanglement of the output in the partially distinguishable case. 
+%We conclude with some discussion and future work in Section \ref{sec:nc-conclusion}.
 
 
 \section{Preliminaries}
@@ -283,7 +283,7 @@ To see that this distribution matches that of partially distinguishable bosons, 
 There, each boson is assigned an ``internal'' state $|\Phi_i\rangle$, where $i=1, \cdots, m$.
 Thus, in our terminology, every boson in System mode $i$ has a Label state given by $\Phi_i$.
 The probability distribution given there for sampling from partially distinguishable bosons is (in our notation)
-\begin{equation}\label{eq:TichyDist}
+\begin{equation}\label{eq:nc-TichyDist}
 \textrm{Pr}[S'] =  \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau'}(k)}} \mathcal{S}_{{\tau'(k)},{\tau(k)}},
 \end{equation}
 where $\mathcal{S}_{k,l} = \langle \Phi_{s_k}|\Phi_{s_l}\rangle$ is a Hermitian positive-definite $n \times n$ distinguishability matrix, $s_k$ gives the mode occupied by particle $k$, and we've included a factor to account for the possibility of multiple bosons in the same output mode.
@@ -319,7 +319,7 @@ When we apply the action of the interferometer $U$ on the $m$-dimensional System
  &= \frac{\sum_{\sigma, \sigma' \in \textrm{S}_n} \prod_{k=1}^n \langle s'_k|U|s_{\sigma^{-1}(k)}\rangle\langle s_{\sigma'^{-1}(k)}|U^\dagger|s'_k\rangle\mathcal{S}_{\sigma'^{-1}(k),\sigma^{-1}(k)}}{n!\prod_{i=1}^m S_i!}\\
  &= \frac{\sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^*_{s'_k,s_{\tau'(k)}} \mathcal{S}_{\tau'(k),\tau(k)}}{n!\prod_{i=1}^m S_i!}.
 \end{align}
-Up to a factor, this is the desired probability distribution of Eq.(\ref{eq:TichyDist}).
+Up to a factor, this is the desired probability distribution of Eq.(\ref{eq:nc-TichyDist}).
 As discussed at the end of the last section, this factor could be handled either by applying a second Schur transform on the System and sampling the $q$-register, or by classical post processing.
 
 Counting resources goes much the same as it did in the ideal case, though now we have $mn$-dimensional qudits that are made up of pairs of $m$- and $n$-dimensional qudits.
@@ -434,12 +434,12 @@ Following the arguments above, the circuit remains efficient since the added Sch
 More generally, such a postselected quantum circuit could sample from any irrep $\lambda$ of $\textrm{U}(m)$. 
 All we need to achieve this is to ensure that the input state has support in the irrep we wish to sample from, and postselect on being in that irrep.
 A dimension counting argument shows that the completely distinguishable input discussed above has support in all irreps~\cite{stanisic2018}, and so could be used for this purpose.
-%We will discuss the complexity of such sampling in Sec.~\ref{sec:conclusion}.
+%We will discuss the complexity of such sampling in Sec.~\ref{sec:nc-conclusion}.
 
 
 
 \section{Sampling with loss}
-\label{sec:loss}
+\label{sec:nc-loss}
 
 Another serious practical difficulty with linear optics is the loss of photons through unwanted scattering processes. 
 In this section, we discuss how the loss model developed by Aaronson and Brod~\cite{aaronson2015} can be simulated. 
@@ -581,7 +581,7 @@ Note that this does not imply that efficiently sampling from unitary actions on 
 
 
 \section{Conclusion}
-\label{sec:conclusion}
+\label{sec:nc-conclusion}
 
 We have described how to use the Schur transform to perform a quantum simulation of bosonic sampling when the bosons are arbitrarily distinguishable.
 These results make it clear that ideal $n$ boson, $m$ mode linear interferometry is equivalent to a transversal $n$ qudit quantum circuit, with the constraint that the input must be totally symmetric -- that is, the ordering of the qudits must be erased.
@@ -589,6 +589,6 @@ Moreover, we can introduce nonideal aspects into the quantum simulation by traci
 A recently released paper focusing on the issue of loss in more detail makes similar connections~\cite{oszmaniec2018}.
 
 A broad aim of future research along this approach is to better understand how the computational complexity of sampling from photons changes as photons become more distinguishable. 
-%As stated in Section \ref{sec:intro}, currently such results are only known for the perfectly distinguishable and indistinguishable cases. 
+%As stated in Section \ref{sec:nc-intro}, currently such results are only known for the perfectly distinguishable and indistinguishable cases. 
 By better understanding of how these intermediate levels of distinguishability link to representation theory, the hope is that it will be easier to find either classical algorithms for these cases similarly to Clifford and Clifford~\cite{clifford2017}, or in finding reductions to sampling imminants~\cite{mertens2013} much as Aaronson and Arkhipov focused on permanents. 
 Indeed, recent work by Havl\'{i}\u{c}ek and Strelchuk has demonstrated the potential for the use of the Schur transform in understanding the complexity of sampling problems~\cite{havlicek2018}.
