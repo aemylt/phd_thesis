@@ -36,47 +36,6 @@
 
 % =============================================================================
 
-% This macro creates the standard UoB title page by using information drawn
-% from the document class (meaning it is vital you select the correct degree 
-% title and so on).
-
-\maketitle
-
-% After the title page (which is a special case in that it is not numbered)
-% comes the front matter or preliminaries; this macro signals the start of
-% such content, meaning the pages are numbered with Roman numerals.
-
-\frontmatter
-
-% This macro creates the standard UoB declaration; on the printed hard-copy,
-% this must be physically signed by the author in the space indicated.
-
-\include{frontmatter/abstract}
-\makedecl
-
-% LaTeX automatically generates a table of contents, plus associated lists 
-% of figures, tables and algorithms.  The former is a compulsory part of the
-% thesis, but if you do not require the latter they can be suppressed
-% by simply commenting out the associated macro.
-
-\tableofcontents
-\listoffigures
-\listoftables
-\listofalgorithms
-\lstlistoflistings
-
-% The following sections are part of the front matter, but are not generated
-% automatically by LaTeX; the use of \chapter* means they are not numbered.
-
-% -----------------------------------------------------------------------------
-
-%\include{frontmatter/summary_of_changes}
-%\include{frontmatter/supporting_technologies}
-%\include{frontmatter/notation_and_acronyms}
-\include{frontmatter/acknowledgements}
-
-% =============================================================================
-
 % After the front matter comes a number of chapters; under each chapter,
 % sections, subsections and even subsubsections are permissible.  The
 % pages in this part are numbered with Arabic numerals.  Note that:
@@ -92,28 +51,7 @@
 
 % -----------------------------------------------------------------------------
 
-\include{introduction/introduction}
-\include{preliminary_q_c/preliminary_q_c}
-\include{tsp/tsp}
-\include{preliminary_bs/preliminary_bs}
 \include{noisy_circuit/noisy_circuit}
-\include{classical_sim/classical_sim}
-\include{conclusion/conclusion}
-
-% =============================================================================
-
-% Finally, after the main matter, the back matter is specified.  This is
-% typically populated with just the bibliography.  LaTeX deals with these
-% in one of two ways, namely
-%
-% - inline, which roughly means the author specifies entries using the 
-%   \bibitem macro and typesets them manually, or
-% - using BiBTeX, which means entries are contained in a separate file
-%   (which is essentially a databased) then inported; this is the 
-%   approach used below, with the databased being thesis.bib.
-%
-% Either way, the each entry has a key (or identifier) which can be used
-% in the main matter to cite it, e.g., \cite{X}, \cite[Chapter 2}{Y}.
 
 \backmatter
 
