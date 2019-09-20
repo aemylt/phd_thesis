@@ -7,21 +7,7 @@ This is an instance of the Travelling Salesman Problem (TSP). More generally, th
 
 Unfortunately, the salesman might have to take a long time in order to find the shortest route. The TSP has been shown to be NP-hard~\cite[Chapter $3$]{lawler1985}, suggesting that even the best algorithms for exactly solving it must take a superpolynomial amount of time. Nevertheless, the importance of the problem has motivated a substantial amount of classical work to develop algorithms for solving it provably more efficiently than the na\"ive algorithm which checks all $O((n-1)!)$ of the potential Hamiltonian cycles in the graph. Here we consider whether these algorithms can be accelerated using quantum computational techniques.
 
-Grover's famous quantum algorithm~\cite{grover96} for fast unstructured search can be applied to the na\"ive classical algorithm to achieve a runtime of $O(\sqrt{n!})$, up to polynomial terms in $n$. However, the best classical algorithms are already substantially faster than this. For many years, the algorithm with the best proven worst-case bounds for the general TSP was the Held-Karp algorithm~\cite{held1962}, which runs in $O(n^22^n)$ time and uses $O(n2^n)$ space. This algorithm uses the fact that for any shortest path, any subpath visiting a subset of vertices on that path must be the shortest path for visiting those vertices. Held and Karp used this to solve the TSP by computing the length of the optimal route for starting at vertex $1$, visiting every vertex in a set $S \subseteq V$ and finishing at a vertex $l \in S$. Denoting the length of this optimal route $D(S, l)$, they showed that this distance could be computed as
-%
-\begin{equation}
-D(S, l) = \begin{cases} c_{1l} & \text{if } S = \{l\}\\
-          \min_{m \in S \setminus \{l\}}\left[D(S \setminus \{l\}, m) + c_{ml}\right] & \text{otherwise.}
-  \end{cases}
-\end{equation}
-%
-Solving this relation recursively for $S=V$ would result in iterating over all $O((n-1)!)$ Hamiltonian cycles again, but Held and Karp showed that the relation could be solved in $O(n^22^n)$ time using dynamic programming. Bj{\"o}rklund et al.\ \cite{bjorklund2008} developed on this result, showing that modifications to the Held-Karp algorithm could yield a runtime of
-%
-\begin{equation}
-O((2^{k + 1} - 2k - 2)^{n/(k + 1)}\poly(n)),
-\end{equation}
-%
-where $k$ is the largest degree of any vertex in the graph; this bound is strictly less than $O(2^n)$ for all fixed $k$. Unfortunately, it is not known whether quantum algorithms can accelerate general dynamic programming algorithms. Similarly, it is unclear whether TSP algorithms based around the standard classical techniques of branch-and-bound~\cite{little1963} or branch-and-cut~\cite{padberg1991} are amenable to quantum speedup.
+Grover's famous quantum algorithm~\cite{grover96} for fast unstructured search can be applied to the na\"ive classical algorithm to achieve a runtime of $O(\sqrt{n!})$, up to polynomial terms in $n$. However, the best classical algorithms are already substantially faster than this. The Held-Karp algorithm, as discussed in \ref{chp:prelim-q-c}, runs in time $O(n^22^n)$, and its follow-up by Bj{\"o}rklund et al.\ \cite{bjorklund2008} has a better asymptotic runtime in terms of $k$. Other classical algorithms based on branch-and-bound \cite{little1963} or branch-and-cut \cite{padberg1991}, although not analysed asymptotically, are also believed to perform faster.
 
 % ------------------------------------------------------------------------------
 
