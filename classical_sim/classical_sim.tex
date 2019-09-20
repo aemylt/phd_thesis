@@ -528,7 +528,7 @@ With this in mind, we plot values for distinguishability and loss separately, an
 \subfloat[\label{fig:max-x-samek}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_x_samek}}
 \hfill
 \subfloat[\label{fig:max-eta-samek}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_eta_samek}}
-\caption{\label{fig:samek} 
+\caption[Highest value of $x$ when $\eta=1$ and of $\eta$ when $x=1$ simulable via state or point truncation up to 10\% error]{\label{fig:samek} 
 Highest value of (\ref{fig:max-x-samek}) $x$ when $\eta=1$ and (\ref{fig:max-eta-samek}) of $\eta$ when $x=1$ simulable via state (solid) or point (dashed) truncation up to 10\% error ($\epsilon=0.1$). 
 The number of photons, $n$, is varying, with $k$ chosen as either $k=n-1$ (red) or $k=n/2$ (green).
 The oscillatory behaviour is due to rounding $k=n/2$ when $n$ is odd.}
@@ -565,7 +565,7 @@ As a result, it is unsurprising that for $k$ increasing linearly with $n$ the hi
 
 \begin{figure}
 \includegraphics[width=\linewidth]{classical_sim/runtime}
-\caption{\label{fig:runtime} Approximated runtime in terms of number of operations to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ up to 10\% error ($\epsilon=0.1$) via state (solid) or point (dashed) truncation.}
+\caption[Approximated runtime in terms of number of operations to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ up to 10\% error via state or point truncation]{\label{fig:runtime} Approximated runtime in terms of number of operations to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ up to 10\% error ($\epsilon=0.1$) via state (solid) or point (dashed) truncation.}
 \end{figure}
 
 We next consider the runtime required to simulate $n$-photon Boson Sampling up to 10\% error via either method. 
@@ -596,7 +596,7 @@ And in the case where $\eta=0.755, x=0.976$, both algorithms have runtimes on th
 \subfloat[\label{fig:max-x-fixed-n-90}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_x_fixed_n_90}}
 \hfill
 \subfloat[\label{fig:max-eta-fixed-n-90}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_eta_fixed_n_90}}
-\caption{\label{fig:fixed-n-90} 
+\caption[Highest value of $x$ when $\eta=1$ and $\eta$ when $x=1$ simulable for 90-photon boson sampling at truncation level $k$ up to 10\% error]{\label{fig:fixed-n-90} 
 Highest value of (\ref{fig:max-x-fixed-n-90}) $x$ when $\eta=1$ and (\ref{fig:max-eta-fixed-n-90}) $\eta$ when $x=1$ simulable for 90-photon boson sampling at truncation level $k$ up to 10\% error ($\epsilon=0.1$). 
 Blue line indicates highest values simulable via state truncation at level $k$, green lines indicate highest values simulable via point truncation at level $k$, orange lines indicate highest values simulable at point truncation at level $k'$ such that $k'$ is the smallest level of truncation such that the approximate runtime of point truncation at level $k'$ is longer than the runtime of state truncation at level $k$.}
 \end{figure*}

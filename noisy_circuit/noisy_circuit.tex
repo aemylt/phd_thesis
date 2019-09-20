@@ -164,7 +164,7 @@ A quantum circuit for sampling from the same distribution as that produced by in
 
 \begin{figure}
 \includegraphics[width=\linewidth]{noisy_circuit/noiseless_circuit_irrep}
-\caption{
+\caption[A quantum circuit for Algorithm \ref{alg:bs}]{
 A quantum circuit for Algorithm \ref{alg:bs}. 
 Note that the measurement of the $q$-register returns a string that we associate to a GZ basis state.}
 \label{fig:bs}
@@ -266,14 +266,14 @@ Execute $U$ on the $|\Psi_{\textrm{Sys}}\rangle$ qudits in parallel, implementin
 Measure the System in the computational basis to obtain a sample $s'$\;
 Map $s'$ to an occupation $S'$ ($S'_i = \#$ of qudits in state $1\leq i\leq m$)\;
 \Return $S'$
-\caption{A quantum circuit for sampling from (essentially) the same distribution at that produced by distinguishable bosons in a linear interferometer.
+\caption[A quantum circuit for sampling from (essentially) the same distribution at that produced by distinguishable bosons in a linear interferometer]{A quantum circuit for sampling from (essentially) the same distribution at that produced by distinguishable bosons in a linear interferometer.
 In order to sample from exactly the same distribution, instead of step 7 one could transform back to the Schur basis by applying $W$ on the System and sample the $q$-register, or one could perform some post-processing as discussed at the end of the previous section.}
 \label{alg:noisy-bs}
 \end{algorithm}
 
 \begin{figure}
 \includegraphics[width=\linewidth]{noisy_circuit/noisy_circuit_fig}
-\caption{The quantum circuit described in Algorithm \ref{alg:noisy-bs}. 
+\caption[The quantum circuit described in Algorithm \ref{alg:noisy-bs}]{The quantum circuit described in Algorithm \ref{alg:noisy-bs}. 
 For simplicity we forego the second Schur transform as discussed in the previous section and measure in the computational ($Z$) basis. 
 Note that we only sample from the System qudits, effectively tracing out the Label qudits.}
 \label{fig:noisy-bs}
@@ -412,7 +412,7 @@ This shows that although in the ideal case only the symmetric subspace is in pla
 
 \begin{figure}
 \includegraphics[width=\linewidth]{noisy_circuit/post_circuit}
-\caption{Circuit diagram illustrating how postselection can be used to `filter out' distinguishability.
+\caption[Circuit diagram illustrating how postselection can be used to `filter out' distinguishability]{Circuit diagram illustrating how postselection can be used to `filter out' distinguishability.
 Note that the postselection measurement of the System $\lambda$-register is in the irrep basis, while that of the System $q$-register is in the GZ basis.
 The second Schur transform on the Label register is not necessary, but illustrates the unitary-unitary duality.}
 \label{fig:noisy-bs-rep}
@@ -449,7 +449,7 @@ The result can be shown by tracing out any choice of $k$ qudits in the ideal cas
 
 \begin{figure}
 \includegraphics[width=\linewidth]{noisy_circuit/lost_circuit}
-\caption{Circuit for sampling when $k$ bosons are lost. 
+\caption[Circuit for sampling when $k$ bosons are lost]{Circuit for sampling when $k$ bosons are lost. 
 Here, we ignore $k$ qudits of the System register, tracing them out with the Label register. 
 As with Fig.~\ref{fig:noisy-bs}, measurements are in the computational basis.}
 \label{fig:lost-bs}
