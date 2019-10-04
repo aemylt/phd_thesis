@@ -117,14 +117,34 @@ Both Branch and Bound \& Branch and Cut algorithms have also been developed for 
 
 \section{Quantum Speedups}
 
+We shall now summarise some of the research in quantum speedups of the classical algorithms already described in this chapter. For a more broad summary of quantum algorithms, we direct the reader to \cite{montanaro2016}.
+
 \subsection{Quantum Search}
 
-\subsection{Quantum Dynamic Programming}
+The most immediate way in which one might try to solve NP-Hard problems is with quantum search, originally developed by Grover \cite{grover96}. Given an oracle for checking if a solution is correct, Grover search works by querying this oracle over a superposition of different solutions. If there is a total of $n$ solutions, then it is possible to show that Grover search will find a correct solution after $O(\sqrt{n})$ queries, whereas an unstructured classical search would require $O(n)$ queries in the worst case.
 
-\subsection{Quantum Walks}
+Grover search has proven beneficial for a number of quantum algorithms. For instance, it has been shown that if there are $m$ correct solutions then Grover search will succeed after $O(\sqrt{n/m})$ queries. There is also a more general algorithm called amplitude amplification, where if the probability of a quantum algorithm outputting a correct solution is $a$, then a correct solution can be found after running the quantum algorithm $O(1/\sqrt{a})$ times \cite{brassard2002}. It is also possible to find the minimum solution in $O(\sqrt{n})$ queries, by choosing a threshold and periodically updating it as the algorithm runs \cite{durr1996}.
 
-\subsection{Quantum Backtracking}
+This seems like a reasonable starting place for trying to solve NP-Hard problems. Many of these problems, including the ones given above, are related to either proving a solution exists, or finding a minimum solution. Quantum search algorithms then provide a quadratic speedup over searching for all possible solutions. For example with SAT, our search space is all $2^n$ possible assignments of $n$ variables, meaning that Grover search would find a satisfying assignment or prove that one does not exist in $O(2^{n/2})$ queries. Assuming the Strong Exponential Time Hypothesis holds, this guarantees a quadratic speedup in worst-case performance.
 
-\subsubsection{Quantum Branch and Bound}
+However, a quadratic speedup over \textit{any} classical algorithm is not necessarily guaranteed. Take the Travelling Salesman Problem for example: the number of possible solutions is on the order of the number of permutations of vertices, of which there are $n!$, meaning that the quantum minimum finding algorithm would find a shortest Hamiltonian cycle in $O(\sqrt{n!})$ queries. But there are already classical algorithms which are significantly faster. The Held-Karp algorithm, for example, which uses $O(n^22^n)$ queries. As a result, we need to consider other speedups to gain an improvement over these better classical algorithms.
+
+\subsection{Dynamic Programming}
+
+Until recently, it was not known whether or not quantum algorithms would be able to speed up dynamic programming algorithms. This is because of the way in which dynamic programming typically records the solutions to all possible subproblems in memory. Adapting these methods for quantum computers is nontrivial as a result.
+
+The first improvement on dynamic programming algorithms was given by Ambainis et al.\ \cite{ambainis2018}, which considered the Path in the Hypercube problem. This problem is based around the $2^n$ Boolean hypercube, which is a graph where each vertex represents an $n$-bit string and two vertices are adjacent if their Hamming distance is 1. The aim is to find a path from $0^n$ to $1^n$ which only uses some subgraph of the Boolean hypercube.
+
+Ambainis et al.\ provide a quantum algorithm for solving this problem in $O^*(1.817^n)$ time. The fundamental idea of this technique is to use classical dynamic programming to solve subproblems close to $0^n$ and $1^n$, before using quantum search as described above to find a path between the two subproblems. Allowing the quantum algorithm to solve larger subproblems leads to a faster runtime, but improvements over time start becoming too small to be significant. Ambainis et al.\ reach the above runtime of $O^*(1.817^n)$ when the quantum algorithm starts running at depth $6$. When the subgraph has at most $\mu^n$ vertices for $\mu \geq 1.735$, this leads to speedups in other dynamic programming algorithms too.
+
+Ambainis et al.\ then develop a related algorithm for solving the Travelling Salesman Problem, as well as similar NP-Hard problems. This algorithm works by using classical computation to compute all ways of partitioning the set of vertices into two sets of size $k$ and $n-k$ for some $k$ and solving the TSP in these subspaces. The quantum subroutine then uses Grover search over all these subproblem solutions to find pairings that give an optimal solution to the TSP. Ambainis et al.\ found that the optimal runtime is when $k=n\alpha/4$ for $\alpha\approx0.055362$, which gives a runtime of $O^*(1.728^n)$. This algorithm can be generalised to other dynamic programming algorithms as well, by generalising from the set of vertices to more general sets with some cost function.
+
+This algorithm gave a speedup over classical algorithms such as the Held-Karp algorithm, which runs in $O(n^22^n)$ time \cite{held1962}. However, this is not a quadratic speedup, which is what we would ideally want. It is also worth noting that the classical algorithm of \cite{bjorklund14}, which runs in $O*(1.657^nL)$ where $L$ is the largest edge weight is more efficient assuming that the edge weights are at most a constant\footnote{In fact, the algorithm of \cite{bjorklund14} also performs when the edge weights are polylogarithmic in $n$, as the quantum algorithm of \cite{ambainis2018} also requires an $O(\log L)$ overhead for various edge-weight arithmetic, as do other algorithms such as Held-Karp \cite{held1962}.}.
+
+A quadratic speedup for dynamic programming was later proven by Ronagh \cite{ronagh2019}. This works by a technique called the Multiplicative Weights Update Method. In this method, there are $n$ experts, each of which advise the algorithm on the next step to take, after which the algorithm updates its weighting of each expert. Initially these experts are evenly weighted, and over time some experts become more favoured over others, until the algorithm halts after $T$ iterations for some $T$. The updating of weights after each iteration is based on computation of some cost vector. A quadratic speedup is achieved via quantum minimum finding \cite{durr1996}. This can be applied to dynamic programming via a dual formulation of dynamic programming methods. Applying all of this leads to a quantum algorithm for the Travelling Salesman Problem in $O^*(L^42^{n/2})$.
+
+\subsection{Backtracking}
+
+\subsubsection{Branch and Bound}
 
 \section{Estimated speedups in practice}
