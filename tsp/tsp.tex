@@ -57,12 +57,6 @@ Surprisingly little work has been done on quantum algorithms for the TSP. D\"orn
 
 Very recently, Mandr{\`a}, Guerreschi and Aspuru-Guzik~\cite{mandra2016} developed a quantum algorithm for finding a Hamiltonian cycle in time $O(2^{(k-2)n/4})$ in a graph where {\em every} vertex has degree $k$. Their approach reduces the problem to an Occupation problem, which they solve via a backtracking process accelerated by the quantum backtracking algorithm~\cite{montanaro2015}. The bounds obtained from their algorithm are $O(1.189^n)$ for $k = 3$ and $O(1.414^n)$ for $k=4$, in each case a bit slower than the runtimes of our algorithms; for $k \ge 5$, their algorithm has a slower runtime than Bj\"orklund's classical algorithm~\cite{bjorklund14}.
 
-Marto\v{n}\'ak, Santoro and Tosatti \cite{martonak2004} explored the option of using quantum annealing to find approximate solutions for the TSP. Rather than solve the problem purely through quantum annealing, they simplify their Ising Hamiltonian for solving the TSP and use path-integral Monte Carlo \cite{barker1979} to run their model. While no bounds on run time or accuracy were strictly proven, they concluded by comparing their algorithm to simulated annealing via the Metropolis-Hastings algorithm \cite{metropolis1953} and the Kernighan-Lin algorithm for approximately solving the TSP \cite{kernighan1970}. Their results showed that ad hoc algorithms could perform better than general simulated or quantum annealing, but quantum annealing could outperform simulated annealing alone. However, they noted that simulated annealing could perform better than in their analysis if combined with local search heuristics~\cite{martin1996}.
-
-Chen et al.\ \cite{chen11} experimentally demonstrated a quantum annealing algorithm for the TSP. Their demonstration used a nuclear-magnetic-resonance quantum simulator to solve the problem for a graph with 4 vertices.
-% AM: I'm not sure this text adds much.
-%While no comparison with classical algorithms were made, the total annealing time in order to solve the problem was $14.84\text{ ms}$.
-
 \subsection{Organisation}
 
 We start by introducing the main technique we use, backtracking, and comparing it with amplitude amplification. Then, in Section \ref{sec:bd}, we describe how this technique can be used to accelerate classical algorithms of Xiao and Nagamochi for graphs of degree at most 4~\cite{xiao2016degree3,xiao2016degree4}. In Section \ref{sec:higher-bound}, we extend this approach to graphs of degree at most 6.
@@ -76,72 +70,6 @@ We start by introducing the main technique we use, backtracking, and comparing i
 \label{sec:backtrack}
 
 Many of the most efficient classical algorithms known for the TSP are based around a technique known as backtracking. Backtracking is a general process for solving constraint satisfaction problems, where we have $v$ variables and we need to find an assignment to these variables such that they satisfy a number of constraints. A na\"{i}ve search across all possible assignments will be inefficient, but if we have some local heuristics then we can achieve better performance by skipping assignments that will definitely fail.
-
-Suppose each variable can be assigned one value from $[d] := \{0, \dots,d-1\}$. We define the set of partial assignments for $v$ variables as $\mathcal{D} := (\{1,\dots,v\}, [d])^j$, where $j \leq v$, with the first term denoting the variable to assign and the second denoting the value it is assigned. Using this definition for partial assignments, backtracking algorithms have two components. The first is a predicate, $P \colon \mathcal{D} \rightarrow \{\text{true}, \text{false}, \text{indeterminate}\}$, which takes a partial assignment and returns true if this assignment will definitely result in the constraints being satisfied regardless of how everything else is assigned, false if the assignment will definitely result in the constraints being unsatisfied, and indeterminate if we do not yet know. The second is a heuristic, $h \colon \mathcal{D} \rightarrow \{1,\dots,v\}$, which takes a partial assignment and returns the next variable to assign.
-
-The following simple recursive classical algorithm takes advantage of $P$ and $h$ to solve a constraint satisfaction problem. We take as input a partial assignment (initially, the empty assignment). We run $P$ on this partial assignment; if the result is true then we return the partial assignment, and if it is false then we report that no solutions were found in this recursive call. We then call $h$ on this partial assignment and find out what the next variable to assign is. For every value in $i \in [d]$ we can assign that variable, we recursively call the backtracking algorithm with $i$ assigned to that variable. If one of the recursive calls returns a partial assignment then we return that assignment, otherwise we report that no solutions were found in this call. We can view this algorithm as exploring a tree whose vertices are labelled with partial assignments. The size of the tree determines the worst-case runtime of the algorithm, assuming that there is no assignment that satisfies all the constraints.
-
-It is known that this backtracking algorithm can be accelerated using quantum techniques:
-
-\begin{theorem}[Montanaro \cite{montanaro2015}]
-\label{thm:backtrack}
-Let $\mathcal{A}$ be a backtracking algorithm with predicate $P$ and heuristic $h$ that finds a solution to a constraint satisfaction problem on $v$ variables by exploring a tree of at most $T$ vertices. There is a quantum algorithm which finds a solution to the same problem with failure probability $\delta$ with $O(\sqrt{T}v^{3/2}\log v\log(1/\delta))$ uses of $P$ and $h$.
-\end{theorem}
-
-Montanaro's result is based on a previous algorithm by Belovs \cite{belovs2013,belovs13a}, and works by performing a quantum walk on the backtracking tree to find vertices corresponding to assignments which satisfy the constraints. The reader familiar with \cite{montanaro2015} may note that the definition of the set of partial assignments $\mathcal{D}$ is different to that given there, in that it incorporates information about the ordering of assignments to variables. However, it is easy to see from inspection of the algorithm of \cite{montanaro2015} that this change does not affect the stated complexity of the algorithm.
-
-It is worth noting that more standard quantum approaches such as amplitude amplification~\cite{brassard1997} will not necessarily achieve a quadratic speedup over the classical backtracking algorithm. Amplitude amplification requires access to a function $f \colon \{0,1\}^k \rightarrow \{\text{true}, \text{false}\}$ and a guessing function $\mathcal{G}$. If the probability of $\mathcal{G}$ finding a result $x \in \{0,1\}^k$ such that $f(x) = \text{true}$ is $p$, then amplitude amplification will succeed after $O(1/\sqrt{p})$ applications of $f$ and $\mathcal{G}$~\cite{brassard1997}.
-
-
-\begin{figure}
-\begin{center}
-\subfloat[][]{
-\begin{tikzpicture}[scale=0.8]
-\tikzstyle{vertex}=[draw,shape=circle]
-\path (0,0) node[vertex](b0){} (-4,-1) node[vertex](b1){} (4,-1) node[vertex](b2){} (-6,-2) node[vertex](b3){} (-2,-2) node[vertex](b4){} (2,-2) node[vertex](b5){} (6,-2) node[vertex](b6){} (-7,-3) node[vertex](b7){$l_0$} (-5,-3) node[vertex](b8){$l_1$} (-3,-3) node[vertex](b9){$l_2$} (-1,-3) node[vertex](b10){$l_3$} (1,-3) node[vertex](b11){$l_4$} (3,-3) node[vertex, accepting](b12){$l_5$} (5,-3) node[vertex](b13){$l_6$} (7,-3) node[vertex](b14){$l_7$};
-\draw (b7) -- (b3) -- (b1) -- (b0) -- (b2) -- (b6) -- (b14);
-\draw (b8) -- (b3);
-\draw (b9) -- (b4) -- (b1);
-\draw (b10) -- (b4);
-\draw (b11) -- (b5) -- (b2);
-\draw (b12) -- (b5);
-\draw (b13) -- (b6);
-\end{tikzpicture}
-\label{fig:balanced-tree}
-}
-\hfill
-\subfloat[][]{
-\begin{tikzpicture}[scale=0.8]
-\tikzstyle{vertex}=[draw,shape=circle]
-\path (0,0) node[vertex](b0){} (-4,-1) node[vertex](b1){} (4,-1) node[vertex](b2){} (-6,-2) node[vertex](b3){$l_0$} (-2,-2) node[vertex](b4){$l_1$} (2,-2) node[vertex](b5){$l_2$} (6,-2) node[vertex](b6){} (5,-3) node[vertex](b7){$l_3$} (7,-3) node[vertex](b8){} (6,-4) node[vertex](b9){$l_4$} (8,-4) node[vertex](b10){} (7,-5) node[vertex, accepting](b11){$l_5$} (9,-5) node[vertex](b12){} (8,-6) node[vertex](b13){$l_6$} (10,-6) node[vertex](b14){$l_7$};
-\draw (b3) -- (b1) -- (b0) -- (b2) -- (b6) -- (b8) -- (b10) -- (b12) -- (b14);
-\draw (b4) -- (b1);
-\draw (b5) -- (b2);
-\draw (b7) -- (b6);
-\draw (b9) -- (b8);
-\draw (b11) -- (b10);
-\draw (b13) -- (b12);
-\end{tikzpicture}
-\label{fig:unbalanced-tree}
-}
-\end{center}
-\caption[Example backtracking trees]{Example backtracking trees, where $l_5$ is a leaf corresponding to a solution to a constraint satisfaction problem: \protect\subref{fig:balanced-tree} shows an example of a perfectly balanced backtracking tree, where each leaf can be associated with a 3-bit string corresponding to a path to that leaf; \protect\subref{fig:unbalanced-tree} on the other hand shows an example of an unbalanced backtracking tree, where specifying a path to a leaf requires 6 bits.}
-% AM changed this caption
-%leaf $l_5$ can be efficiently found by only exploring one branch of the whole tree. In comparison, Fig.\ \ref{fig:unbalanced-tree} shows a tree where one branch is significantly longer than the others. In this case, finding $l_5$ might require searching the entire tree, as we do not know which branch will contain that leaf.}
-\label{fig:tree}
-\end{figure}
-
-To apply amplitude amplification, we would need to access the leaves of the tree, as these are the points where the backtracking algorithm is certain whether or not a solution will be found. Thus, for each integer $i$, we would need to find a way of determining the $i$'th leaf $l_i$ in the backtracking tree. In the case of a perfectly balanced tree, such as Fig.\ \ref{fig:balanced-tree}, where every vertex in the tree is either a leaf or has exactly $d$ branches descending from it, such a problem is easy: write $i$ in base $d$ and use each digit of $i$ to decide which branch to explore. But not all backtracking trees are perfectly balanced, such as in Fig.\ \ref{fig:unbalanced-tree}. In these cases, finding leaf $l_i$ is hard as we cannot be certain which branch leads to that leaf. Some heuristic approaches, by performing amplitude amplification on part of the tree, can produce better speedups for certain trees, but do not provide a general speedup on the same level as the quantum backtracking algorithm~\cite{montanaro2015}.
-
-It is also worth understanding the limitations of the quantum backtracking algorithm, and why it cannot necessarily speed up all algorithms termed ``backtracking algorithms''~\cite{montanaro2015}. First, a requirement for the quantum algorithm is that decisions made in one part of the backtracking tree are independent of results in another part of the tree, which is not true of all classical algorithms, such as constraint recording algorithms \cite{dechter1990}. Second, the runtime of the quantum algorithm depends on the size of the entire tree. Thus, to achieve a quadratic speedup over a classical algorithm, the algorithm must explore the whole backtracking tree, instead of stopping after finding the first solution or intelligently skipping branches such as in backjumping \cite{dechter1990}. Therefore, it is important to check on a case-by-case basis whether classical backtracking algorithms can actually be accelerated using Theorem \ref{thm:backtrack}.
-
-Another limitation of the quantum backtracking algorithm is that often there will be a metric $M \colon \mathcal{D} \rightarrow \mathbb{N}$ we want the backtracking algorithm to minimise while satisfying the other constraints. This is particularly relevant for the TSP, where the aim is to return the shortest Hamiltonian cycle. Classical backtracking algorithms can achieve this by recursively travelling down each branch of the tree to find results $D_1,\dots,D_d \in \mathcal{D}$ and returning the result that minimises $M$. The quantum backtracking algorithm cannot perform this; it instead returns a solution selected randomly from the tree that satisfies the constraints. In order to achieve a quantum speedup when finding the result that minimises $M$, we can modify the original predicate to prune results which are greater than or equal to a given bound. We then repeat the algorithm in a binary search fashion, updating our bound based on whether or not a solution was found. This will find the minimum after repeating the quantum algorithm at most $O(\log M_{max})$ times, where
-%
-\begin{equation}
-M_{max} = \max\{M(D):D\in \mathcal{D}, P(D) = \text{true}\}.
-\end{equation}
-%
-We describe this binary search approach in more detail in Sec.\ \ref{sec:deg3speedup}.
 
 The intuition behind why backtracking is a useful technique for solving the TSP is that we can attempt to build up a Hamiltonian cycle by determining for each edge in the graph whether it should be included in the cycle (``forced''), or deleted from the graph. As we add more edges to the cycle, we may either find a contradiction (e.g.\ produce a non-Hamiltonian cycle) or reduce the graph to a special case that can be handled efficiently (e.g.\ a collection of disjoint cycles of four unforced edges). This can sometimes allow us to prune the backtracking tree substantially.
 
@@ -529,7 +457,3 @@ We finally considered extending the algorithm to degree-7 graphs by partitioning
 \end{align}
 %
 This is the point where we no longer see a quantum speedup over the fastest classical algorithms using this approach, as classical algorithms such as those of Held-Karp~\cite{held1962} and Bj{\"o}rklund et al.~\cite{bjorklund2008} run in $O^*(2^n)$ and $O^*(1.984^n)$ time, respectively.
-
-\section{Note added}
-
-Following the completion of this work, Andris Ambainis informed us of two new related results in this area. First, a quantum backtracking algorithm whose runtime depends only on the number of tree vertices visited by the classical backtracking algorithm, rather than the whole tree \cite{ambainis2017}. This alleviates one, though not all, of the limitations of the backtracking algorithm discussed in Section II. Second, a new quantum algorithm for the general TSP based on accelerating the dynamic programming algorithm \cite{ambainis2016b}. The algorithm's runtime is somewhat worse than ours for graphs of degree at most 6, and it uses exponential space; but it works for any graph, rather than the special case of bounded-degree graphs considered here. Following our submission of this work, Heim et al.~\cite{heim2017} have reported simulations of quantum annealing experiments to solve the TSP, concluding that ``analog quantum annealing devices are unlikely to be of interest as TSP solvers in the near future''.
