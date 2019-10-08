@@ -144,6 +144,7 @@ This algorithm gave a speedup over classical algorithms such as the Held-Karp al
 A quadratic speedup for dynamic programming was later proven by Ronagh \cite{ronagh2019}. This works by a technique called the Multiplicative Weights Update Method. In this method, there are $n$ experts, each of which advise the algorithm on the next step to take, after which the algorithm updates its weighting of each expert. Initially these experts are evenly weighted, and over time some experts become more favoured over others, until the algorithm halts after $T$ iterations for some $T$. The updating of weights after each iteration is based on computation of some cost vector. A quadratic speedup is achieved via quantum minimum finding \cite{durr1996}. This can be applied to dynamic programming via a dual formulation of dynamic programming methods. Applying all of this leads to a quantum algorithm for the Travelling Salesman Problem in $O^*(L^42^{n/2})$.
 
 \subsection{Backtracking}
+\label{sec:q-backtrack}
 
 Unlike dynamic programming, backtracking seems to hold a structure that more intuitively leads to a quantum speedup. The recursive nature means that each instance of the problem only depends on local results, rather than the global access required for dynamic programming. As a result, speedups in backtracking have been explored for decades.
 
