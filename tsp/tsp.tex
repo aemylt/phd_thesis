@@ -1,30 +1,20 @@
 \chapter{Quantum speedup of the Travelling Salesman Problem for bounded-degree graphs}
 \label{chp:tsp}
 
-A salesman has a map of $n$ cities that they want to visit, including the roads between the cities and how long each road is. Their aim is to start at their home, visit each city and then return home. To avoid wasting time, they want to visit each city exactly once and travel via the shortest route. So what route should the salesman take?
-
-This is an instance of the Travelling Salesman Problem (TSP). More generally, this problem takes an undirected graph $G = (V, E)$ of $n$ vertices connected by $m$ weighted edges and returns the shortest cycle which passes through every vertex exactly once, known as a Hamiltonian cycle, if such a cycle exists. If no Hamiltonian cycle exists, we should report that no Hamiltonian cycle has been found. The length or cost of an edge is given by an $n \times n$ matrix $C = (c_{ij})$ of positive integers, known as a cost matrix. This problem has a number of applications, ranging from route finding as in the story above to circuit board drilling~\cite{grotschel1991}.
-
-Unfortunately, the salesman might have to take a long time in order to find the shortest route. The TSP has been shown to be NP-hard~\cite[Chapter $3$]{lawler1985}, suggesting that even the best algorithms for exactly solving it must take a superpolynomial amount of time. Nevertheless, the importance of the problem has motivated a substantial amount of classical work to develop algorithms for solving it provably more efficiently than the na\"ive algorithm which checks all $O((n-1)!)$ of the potential Hamiltonian cycles in the graph. Here we consider whether these algorithms can be accelerated using quantum computational techniques.
-
-% ------------------------------------------------------------------------------
-
-%\subsection{Our results}
-
 Here we apply known quantum-algorithmic techniques to accelerate more recent classical TSP algorithms for the important special case of bounded-degree graphs. We say that a graph $G$ is degree-$k$ if the maximal degree of any vertex in $G$ is at most $k$. A recent line of research has produced a sequence of algorithms which improve on the $O^*(2^n)$ runtime of the general Held-Karp algorithm in this setting, where the notation $O^*(c^n)$ omits polynomial factors in $n$. First, Eppstein presented algorithms which solve the TSP on degree-3 graphs in time $O^*(2^{n/3}) \approx O^*(1.260^n)$, and on degree-4 graphs in time $O^*((27/4)^{n/3}) \approx O^*(1.890^n)$~\cite{eppstein2007}. The algorithms are based on the standard classical technique of {\em backtracking}, an approach where a tree of partial solutions is explored to find a complete solution to a problem (see Section \ref{sec:backtrack} for an introduction to this technique). Following subsequent improvements~\cite{iwama2007,liskiewicz14}, the best classical runtimes known for algorithms based on this general approach are $O^*(1.232^n)$ for degree-3 graphs~\cite{xiao2016degree3}, and $O^*(1.692^n)$ for degree-4 graphs~\cite{xiao2016degree4}, in each case due to Xiao and Nagamochi. All of these algorithms use polynomial space in $n$.
 
-An algorithm of Bodlaender et al.~\cite{bodlaender15} achieves a faster runtime of $O^*(1.219^n)$ for solving the TSP in degree-3 graphs, which is the best known; however, this algorithm uses exponential space. Similarly, an algorithm of Cygan et al.~\cite{cygan11} solves the TSP in unweighted degree-4 graphs in $O^*(1.588^n)$ time and exponential space. Both of these algorithms use an approach known as cut-and-count, which is based on dynamic programming, so a quantum speedup is not known for either algorithm.
+An algorithm of Bodlaender et al.~\cite{bodlaender15} achieves a faster runtime of $O^*(1.219^n)$ for solving the TSP in degree-3 graphs, which is the best known; however, this algorithm uses exponential space. Similarly, an algorithm of Cygan et al.~\cite{cygan11} solves the TSP in unweighted degree-4 graphs in $O^*(1.588^n)$ time and exponential space. Both of these algorithms use an approach known as cut-and-count, and a quantum speedup is not known for either algorithm.
 
 In the case where we have an upper bound $L$ on the maximum edge cost in the graph, Bj\"orklund~\cite{bjorklund14} gave a randomised algorithm which solves the TSP on arbitrary graphs in $O^*(1.657^n L)$ time and polynomial space, which is an improvement on the runtime of the Xiao-Nagamochi algorithm for degree-4 graphs when $L$ is subexponential in $n$. Again, the techniques used in this algorithm do not seem obviously amenable to quantum speedup.
 
-Here we use a recently developed quantum backtracking algorithm~\cite{montanaro2015} to speed up the algorithms of Xiao and Nagamochi in order to find Hamiltonian cycles shorter than a given upper bound, if such cycles do exist. We run this algorithm several times, using binary search to specify what our upper bound should be, in order to find the shortest Hamiltonian cycle and solve the Travelling Salesman Problem. In doing so, we achieve a near-quadratic reduction in the runtimes:
+Here we use the quantum speedup to backtracking described in Section \ref{sec:q-backtrack} to speed up the algorithms of Xiao and Nagamochi in order to find Hamiltonian cycles shorter than a given upper bound, if such cycles do exist. We run this algorithm several times, using binary search to specify what our upper bound should be, in order to find the shortest Hamiltonian cycle and solve the Travelling Salesman Problem. In doing so, we achieve a near-quadratic reduction in the runtimes:
 
 \begin{theorem}
 There are bounded-error quantum algorithms which solve the TSP on degree-3 graphs in time $O^*(1.110^n \log L \log \log L)$ and on degree-4 graphs in time $O^*(1.301^n \log L \log \log L)$, where $L$ is the maximum edge cost. The algorithms use $\poly(n)$ space.
 \label{thm:deg34}
 \end{theorem}
 
-In this result and elsewhere in the paper, ``bounded-error'' means that the probability that the algorithm either doesn't find a Hamiltonian cycle when one exists or returns a non-optimal Hamiltonian cycle is at most $1/3$. This failure probability can be reduced to $\delta$, for arbitrary $\delta > 0$, by repeating the algorithm $O(\log 1/\delta)$ times. Also here and throughout the paper, $\log$ denotes $\log$ base 2. Note that the time complexity of our algorithms has some dependence on $L$, the largest edge cost in the input graph. However, this dependence is quite mild. For any graph whose edge costs are specified by $w$ bits, $L \le 2^w$. Thus terms of the form $\polylog(L)$ are at most polynomial in the input size.
+In this result and elsewhere in the chapter, ``bounded-error'' means that the probability that the algorithm either doesn't find a Hamiltonian cycle when one exists or returns a non-optimal Hamiltonian cycle is at most $1/3$. This failure probability can be reduced to $\delta$, for arbitrary $\delta > 0$, by repeating the algorithm $O(\log 1/\delta)$ times. Also here and throughout, $\log$ denotes $\log$ base 2. Note that the time complexity of our algorithms has some dependence on $L$, the largest edge cost in the input graph. However, this dependence is quite mild. For any graph whose edge costs are specified by $w$ bits, $L \le 2^w$. Thus terms of the form $\polylog(L)$ are at most polynomial in the input size.
 
 Next, we show that degree-5 and degree-6 graphs can be dealt with via a randomised reduction to the degree-4 case.
 
@@ -54,7 +44,7 @@ The rest of this chapter is as follows. In Section \ref{sec:tsp-related}, we int
 \subsection{Related work}
 \label{sec:tsp-related}
 
-Surprisingly little work has been done on quantum algorithms for the TSP. D\"orn \cite{dorn2007} proposed a quantum speedup for the TSP for degree-3 graphs by applying amplitude amplification \cite{brassard1997} and quantum minimum finding~\cite{durr1996} to Eppstein's algorithm, and stated a quadratic reduction in the runtime. However, we were not able to reproduce this result (see Section~\ref{sec:backtrack} below for a discussion).
+Surprisingly little work has been done on quantum algorithms for the TSP. D\"orn \cite{dorn2007} proposed a quantum speedup for the TSP for degree-3 graphs by applying amplitude amplification \cite{brassard1997} and quantum minimum finding~\cite{durr1996} to Eppstein's algorithm, and stated a quadratic reduction in the runtime. However, we were not able to reproduce this result (see Section~\ref{sec:backtrack-tsp} below for a discussion).
 
 Very recently, Mandr{\`a}, Guerreschi and Aspuru-Guzik~\cite{mandra2016} developed a quantum algorithm for finding a Hamiltonian cycle in time $O(2^{(k-2)n/4})$ in a graph where {\em every} vertex has degree $k$. Their approach reduces the problem to an Occupation problem, which they solve via a backtracking process accelerated by the quantum backtracking algorithm~\cite{montanaro2015}. The bounds obtained from their algorithm are $O(1.189^n)$ for $k = 3$ and $O(1.414^n)$ for $k=4$, in each case a bit slower than the runtimes of our algorithms; for $k \ge 5$, their algorithm has a slower runtime than Bj\"orklund's classical algorithm~\cite{bjorklund14}.
 
@@ -64,9 +54,7 @@ Very recently, Mandr{\`a}, Guerreschi and Aspuru-Guzik~\cite{mandra2016} develop
 % ------------------------------------------------------------------------------
 
 \section{Backtracking algorithms for the TSP}
-\label{sec:backtrack}
-
-Many of the most efficient classical algorithms known for the TSP are based around a technique known as backtracking. Backtracking is a general process for solving constraint satisfaction problems, where we have $v$ variables and we need to find an assignment to these variables such that they satisfy a number of constraints. A na\"{i}ve search across all possible assignments will be inefficient, but if we have some local heuristics then we can achieve better performance by skipping assignments that will definitely fail.
+\label{sec:backtrack-tsp}
 
 The intuition behind why backtracking is a useful technique for solving the TSP is that we can attempt to build up a Hamiltonian cycle by determining for each edge in the graph whether it should be included in the cycle (``forced''), or deleted from the graph. As we add more edges to the cycle, we may either find a contradiction (e.g.\ produce a non-Hamiltonian cycle) or reduce the graph to a special case that can be handled efficiently (e.g.\ a collection of disjoint cycles of four unforced edges). This can sometimes allow us to prune the backtracking tree substantially.
 
@@ -175,7 +163,7 @@ If every $U$-component in a graph $G$ is trivial or a component of a 4-cycle, th
 
 We will not define the subroutines here in any detail; for our purposes, it is sufficient to assume that they all run in polynomial time and space. The circuit procedure for a circuit $\mathcal{C}$ begins by either adding an edge $e \in \mathcal{C}$ to $F$ or deleting it from the graph, then performing some other operations. ``Branching on a circuit $\mathcal{C}$ at edge $e \in \mathcal{C}$'' means generating two new instances from the current instance by applying each of these two variants of the circuit procedure starting with $e$.
 
-The Xiao-Nagamochi algorithm is described in Algorithm \ref{alg:tsp3}, reproduced from~\cite{xiao2016degree3}.
+The Xiao-Nagamochi algorithm is described in Algorithm \ref{alg:tsp3}, reproduced from~\cite{xiao2016degree3}. Lines 2 and 3 check that the existence of a Hamiltonian cycle is not ruled out, by ensuring that that there are at least two disjoint paths between any pair of vertices and that the graph satisfies the parity condition. Lines 4 and 5 reduce any reducible circuit by initially forcing one edge and then alternately removing and forcing edges. Lines 6 \& 7 remove any parallel edges from the graph, and lines 8 \& 9 remove any circuits of three edges as well as setting up circuits of four edges so that all edges incident to them are forced. Lines 10-12 are the recursive step, branching on a good circuit by either forcing or removing an edge in the circuit and then applying the circuit procedure. The algorithm continues these recursive calls until it either finds a Hamiltonian cycle or $G \setminus F$ is a collection of single vertices and cycles of length $4$, all of which are disjoint from one another, at which point the problem can be solved in polynomial time via lines 14 and 15.
 
 \begin{algorithm}
 \Fn{\FnTSPthree{$G$, $F$}}{
@@ -193,8 +181,7 @@ Return \FnTSPthree{$G'$, $F'$} for an instance $(G',F')$ obtained by applying th
 Select a good circuit $\mathcal{C}$ in $H$\;
 Return $\min\{$\FnTSPthree{$G_1$, $F_1$}$,$ \FnTSPthree{$G_2$, $F_2$}$\}$, where $(G_1,F_1)$ and $(G_2,F_2)$ are the
 two resulting instances after branching on $\mathcal{C}$\;
-}\Else{
-[each $U$-component of the graph is trivial or a $4$-cycle]\;
+}\Else{\tcc{each $U$-component of the graph is trivial or a $4$-cycle}
 Solve the problem directly in polynomial time by Lemma \ref{lem:trivial}\;
 Return the cost of an optimal tour\;
 }
@@ -202,9 +189,7 @@ Return the cost of an optimal tour\;
 \caption{\label{alg:tsp3} The Xiao-Nagamochi algorithm for solving the TSP on degree-3 graphs.}
 \end{algorithm}
 
-Step $1$ of the algorithm checks that the existence of a Hamiltonian cycle is not ruled out, by ensuring that that there are at least two disjoint paths between any pair of vertices and that the graph satisfies the parity condition. Step 2 reduces any reducible circuit by initially forcing one edge and then alternately removing and forcing edges. Step $3$ removes any parallel edges from the graph, and step $4$ removes any circuits of three edges as well as setting up circuits of four edges so that all edges incident to them are forced. Step 5 is the recursive step, branching on a good circuit by either forcing or removing an edge in the circuit and then applying the circuit procedure. The algorithm continues these recursive calls until it either finds a Hamiltonian cycle or $G \setminus F$ is a collection of single vertices and cycles of length $4$, all of which are disjoint from one another, at which point the problem can be solved in polynomial time via step $6$.
-
-Xiao and Nagamochi looked at how the steps of the algorithm, and step $5$ in particular as the branching step, reduced the size of the problem for different graph structures. From this they derived a quasiconvex program corresponding to $19$ branching vectors, each describing how the problem size is reduced at the branching step in different circumstances. Analysis of this quasiconvex program showed that the algorithm runs in $O^*(2^{3n/10})$ time and polynomial space \cite{xiao2016degree3}.
+Xiao and Nagamochi looked at how the steps of the algorithm, and in particular the branching step, reduced the size of the problem for different graph structures. From this they derived a quasiconvex program corresponding to $19$ branching vectors, each describing how the problem size is reduced at the branching step in different circumstances. Analysis of this quasiconvex program showed that the algorithm runs in $O^*(2^{3n/10})$ time and polynomial space \cite{xiao2016degree3}.
 
 \subsection{Quantum speedup of the Xiao-Nagamochi algorithm}
 \label{sec:deg3speedup}
@@ -215,15 +200,15 @@ The first step towards applying the quantum backtracking algorithm is to define 
 
 %The quantum approach to backtracking requires us to define a predicate $P$ and heuristic $h$, each taking as input a partial assignment. The variables we assign in the backtracking algorithm correspond to the edges of the graph, of which there are at most $3n/2$ for a degree-3 graph. Each variable represents our decision to include or exclude the corresponding edge from the tour.
 
-The quantum approach to backtracking requires us to define a predicate $P$ and heuristic $h$, each taking as input a partial assignment. Our predicate and heuristic make use of a reduction function, introduced in \cite{xiao2016degree3}, as a subroutine; this function is described in the next subsection. However it may be worth noting that the algorithm uses the original graph $G$, and partial assignments of it at each stage.
+The quantum approach to backtracking requires us to define a predicate \FnPredicatethree and heuristic \FnHeuristicthree, each taking as input a partial assignment. Our predicate and heuristic make use of a reduction function, introduced in \cite{xiao2016degree3}, as a subroutine; this function is described in the next subsection. However it may be worth noting that the algorithm uses the original graph $G$, and partial assignments of it at each stage.
 
-Firstly, we describe the predicate in Algorithm \ref{alg:predicate}.
+Firstly, we describe the predicate in Algorithm \ref{alg:predicate}. Lines 3 \& 4 match lines 2 and 3 of Xiao and Nagamochi's algorithm. Lines 5 and 6 are where the same conditions are met as in lines 14 and 15 of Xiao and Nagamochi's algorithm, where a shortest length Hamiltonian cycle is guaranteed to exist and can be found in polynomial time classically via Lemma \ref{lem:trivial}. The rest of Algorithm \ref{alg:predicate} continues the branching process, which together with how the circuit is picked by \FnHeuristicthree and the use of the circuit procedure in \FnReductionthree matches the branching step of Xiao and Nagamochi.
 
 \begin{algorithm}
-\Fn{\FnPredicate{$A$}}{
+\Fn{\FnPredicatethree{$A$}}{
 \KwIn{A partial assignment $A = ((e_1, A_1),\dots,(e_j, A_j))$ describing edges that have been forced or removed}
 \KwOut{True, false, or indeterminate depending on if a Hamiltonian cycle can be found}
-Using the partial assignment $A$, run \FnReduction{$G$, $F$} to get $(G', F')$\;
+Using the partial assignment $A$, run \FnReductionthree{$G$, $F$} to get $(G', F')$\;
 \uIf{$G$ is not $2$-edge-connected or fails the parity condition}{
 Return false\;
 }\uElseIf{Every $U$-component in $G'$ is either trivial or a $4$-cycle}{
@@ -232,27 +217,24 @@ Return true\;
 Return indeterminate\;
 }
 }
-\caption{\label{alg:predicate} The predicate function for the Xiao-Nagamochi algorithm.}
+\caption{\label{alg:predicate} The predicate function for the Xiao-Nagamochi algorithm for degree-3 graphs.}
 \end{algorithm}
 
-Step $2$ matches step $1$ of Xiao and Nagamochi's algorithm. Step $3$ is where the same conditions are met as in step $6$ of Xiao and Nagamochi's algorithm, where a shortest length Hamiltonian cycle is guaranteed to exist and can be found in polynomial time classically via Lemma \ref{lem:trivial}. Step $4$ continues the branching process, which together with how the circuit is picked by $h$ and step $2$(c) of the reduction function (qv) matches step $5$ of Xiao and Nagamochi.
-
-The heuristic is described in Algorithm \ref{alg:heuristic}, taking as input a partial assignment $A = ((e_1, A_1),\dots,(e_j, A_j))$ of the edges of $G$.
+The heuristic is described in Algorithm \ref{alg:heuristic}, taking as input a partial assignment $A = ((e_1, A_1),\dots,(e_j, A_j))$ of the edges of $G$. Here we apply the same branching strategy as Xiao and Nagamochi's algorithm, by selecting the next circuit to branch on and picking an edge in that circuit. If the reduced version of the graph results in \FnHeuristicthree picking an edge corresponding to multiple edges in the original graph, line 4 ensures that we only return one of these edges to the backtracking algorithm, as the reduction function will ensure that every edge in the original graph corresponding to an edge in the reduced graph will be consistently forced or removed. The rest of the circuit will be forced or removed by line 26 of the reduction function (Algorithm \ref{alg:reduction}).
 
 \begin{algorithm}
-\Fn{\FnHeuristic{$A$}}{
+\Fn{\FnHeuristicthree{$A$}}{
 \KwIn{A partial assignment $A = ((e_1, A_1),\dots,(e_j, A_j))$ describing edges that have been forced or removed}
 \KwOut{The next edge to force or remove from $G$}
-Using the partial assignment $A$, run \FnReduction{$G$, $F$} to get $(G', F')$\;
+Using the partial assignment $A$, run \FnReductionthree{$G$, $F$} to get $(G', F')$\;
 Select a $U$-component in $G'$ that is neither trivial nor a cycle of length $4$. Select a circuit $\mathcal{C}$ in that component that fits the criteria of a ``good'' circuit~\cite{xiao2016degree3}, then select an edge $e_i' \in \mathcal{C}$\;
-Return an edge in $G$ corresponding to $e_i'$ (if there is more than one, choosing one arbitrarily)\;
+Return an edge in $G$ corresponding to $e_i'$ \;
+\tcc{if there is more than one edge corresponding to $e_i'$, we can choose one arbitrarily}
 }
-\caption{\label{alg:heuristic} The heuristic function for the Xiao-Nagamochi algorithm.}
+\caption{\label{alg:heuristic} The heuristic function for the Xiao-Nagamochi algorithm for degree-3 graphs.}
 \end{algorithm}
 
-Step $2$ applies step $5$ of Xiao and Nagamochi's algorithm, by selecting the next circuit to branch on and picking an edge in that circuit. If the reduced version of the graph results in $h$ picking an edge corresponding to multiple edges in the original graph, step $3$ ensures that we only return one of these edges to the backtracking algorithm, as step $2$(b) of the reduction function will ensure that every edge in the original graph corresponding to an edge in the reduced graph will be consistently forced or removed. The rest of the circuit will be forced or removed by step $2$(c) of the reduction function.
-
-We can now apply the backtracking algorithm (Theorem \ref{thm:backtrack}) to $P$ and $h$ to find a Hamiltonian cycle. We will later choose its failure probability $\delta$ to be sufficiently small that we can assume that it always succeeds, i.e.\ finds a Hamiltonian cycle if one exists, and otherwise reports that one does not exist. At the end of the algorithm, we will receive either the information that no assignment was found, or a partial assignment. By applying the reduction steps and the partial assignments, we can reconstruct the graph at the moment our quantum algorithm terminated, which will give a graph such that every $U$-component is either trivial or a 4-cycle. We then construct and return the full Hamiltonian cycle in polynomial time using step $6$ of Xiao and Nagamochi's algorithm~\cite{xiao2016degree3}. %In order to reduce the probability of not returning a Hamiltonian cycle when one does exist, we repeat the algorithm multiple times and either return the shortest Hamiltonian cycle found or report that no Hamiltonian cycle was found.
+We can now apply the backtracking algorithm (Theorem \ref{thm:backtrack}) to \FnPredicatethree and \FnHeuristicthree to find a Hamiltonian cycle. We will later choose its failure probability $\delta$ to be sufficiently small that we can assume that it always succeeds, i.e.\ finds a Hamiltonian cycle if one exists, and otherwise reports that one does not exist. At the end of the algorithm, we will receive either the information that no assignment was found, or a partial assignment. By applying the reduction steps and the partial assignments, we can reconstruct the graph at the moment our quantum algorithm terminated, which will give a graph such that every $U$-component is either trivial or a 4-cycle. We then construct and return the full Hamiltonian cycle in polynomial time using step $6$ of Xiao and Nagamochi's algorithm~\cite{xiao2016degree3}. %In order to reduce the probability of not returning a Hamiltonian cycle when one does exist, we repeat the algorithm multiple times and either return the shortest Hamiltonian cycle found or report that no Hamiltonian cycle was found.
 
 To solve the TSP, we need to find the shortest Hamiltonian cycle. This can be done as follows. First, we run the backtracking algorithm. If the backtracking algorithm does not return a Hamiltonian cycle then we report that no Hamiltonian cycle was found. Otherwise after receiving Hamiltonian cycle $\Gamma$ with length $L_\Gamma$, we create variables $\ell \leftarrow 0$ \& $u \leftarrow L_\Gamma$ and modify the predicate to return false if
 %
@@ -274,13 +256,13 @@ is an upper bound on the total cost of any Hamiltonian cycle in the graph.
 \subsection{The reduction function}
 \label{sec:reduction}
 
-Finally, we describe the reduction function, which takes the original graph $G$ and partial assignment $A$, and applies the partial assignment to this graph in order to reduce it to a smaller graph $G'$ with forced edges $F'$. This reduction might mean that forcing or removing a single edge in $G'$ would be akin to forcing several edges in $G$. For example, let $X$ be a $3$-reducible subgraph of at most $8$ vertices with $\text{cut}(X) = \{ax_1, bx_2, cx_3\}$ for vertices $x_1, x_2, x_3 \in V(X)$. The $3/4$-cut reduction reduces $X$ to a single vertex $x \in G'$ with edges $ax, bx, cx$. If the edges $ax$ and $bx$ are forced, this is equivalent to forcing every edge in $\Pi \cup \{ax_1, bx_2\}$, where $\Pi$ is the shortest path that starts at $x_1$, visits every vertex in $X$ exactly once, and ends at $x_2$. As we need to solve the problem in terms of the overall graph $G$ and not the reduced graph $G'$, our assigned variables need to correspond to edges in $G$. To do this, our $h$ function described in Sec.\ \ref{sec:deg3speedup} includes a step where if the edge selected in $G'$ corresponds to multiple edges in $G$, we simply select one of the corresponding edges in $G$ to return. Likewise, if the next edge in our partial assignment is one of several edges in $G$ corresponding to a single edge in $G'$, we apply the same assignment to all of the other corresponding edges in $G$.
+Finally, we describe the reduction function, which takes the original graph $G$ and partial assignment $A$, and applies the partial assignment to this graph in order to reduce it to a smaller graph $G'$ with forced edges $F'$. This reduction might mean that forcing or removing a single edge in $G'$ would be akin to forcing several edges in $G$. For example, let $X$ be a $3$-reducible subgraph of at most $8$ vertices with $\text{cut}(X) = \{ax_1, bx_2, cx_3\}$ for vertices $x_1, x_2, x_3 \in V(X)$. The $3/4$-cut reduction reduces $X$ to a single vertex $x \in G'$ with edges $ax, bx, cx$. If the edges $ax$ and $bx$ are forced, this is equivalent to forcing every edge in $\Pi \cup \{ax_1, bx_2\}$, where $\Pi$ is the shortest path that starts at $x_1$, visits every vertex in $X$ exactly once, and ends at $x_2$. As we need to solve the problem in terms of the overall graph $G$ and not the reduced graph $G'$, our assigned variables need to correspond to edges in $G$. To do this, our \FnHeuristicthree function described in Sec.\ \ref{sec:deg3speedup} includes a step where if the edge selected in $G'$ corresponds to multiple edges in $G$, we simply select one of the corresponding edges in $G$ to return. Likewise, if the next edge in our partial assignment is one of several edges in $G$ corresponding to a single edge in $G'$, we apply the same assignment to all of the other corresponding edges in $G$.
 
-The reduction function is described in Algorithm \ref{alg:reduction}, using reductions and procedures from Xiao and Nagamochi \cite{xiao2016degree3}.
+The reduction function is described in Algorithm \ref{alg:reduction}, using reductions and procedures from Xiao and Nagamochi \cite{xiao2016degree3}. This function applies the edge assignments made so far, as well as any possible reductions at each step. Lines 5 and 6 case recreate lines 4 and 5 from Xiao and Nagamochi's original algorithm by applying the circuit procedure where possible. Steps 7 and 8 recreate steps 6 and 7 of the original algorithm by applying the reduction of parallel edges. And steps 9 \& 10 case recreate steps 8 and 9 of the original algorithm via the $3/4$-cut reduction. We then apply the next step of the branching that has been performed so far, to ensure that the order in which the edges are forced is the same as in the classical algorithm, followed by branching on a circuit at edge $e_i$ via the circuit procedure. Finally, we check whether or not the graph can be reduced further by running the reduction steps again for edge $j$.
 
 \begin{algorithm}
-\Fn{\FnReduction{$G$, $F$}}{
-\KwIn{A graph $G=(V,E)$, a set of forced edges $F\subseteq E$}
+\Fn{\FnReductionthree{$G$, $F$}}{
+\KwIn{A graph $G=(V,E)$, a partial assignment of edges $A$}
 \KwOut{A reduced graph $G'$ and set of forced edges $F'$}
 Create a copy of the graph $G' \leftarrow G$ and set of forced edges $F' \leftarrow \emptyset$\;
 \For{$i=1,\dots,j$}{
@@ -292,28 +274,39 @@ Apply the reduction rule of eliminating parallel edges\;
 }\ElseIf{$G'$ contains a subgraph $X$ of at most $8$ vertices such that $X$ is $3/4$-cut reducible}{
 Apply the $3$/$4$-cut reduction to $X$\;
 }
+}
+\uIf{$A_i = \text{force}$}{
+\uIf{$e_i$ is in a set of edges corresponding to a single reduced edge in $e_i' \in G'$}{
+$F' \leftarrow F' \cup \{e_i'\}$\;
+}\Else{
+$F' \leftarrow F' \cup \{e_i\}$\;
+}
+}\Else{\tcc{$A_i = \text{remove}$}
+\uIf{$e_i$ is in a set of edges corresponding to a single reduced edge in $e_i' \in G'$}{
+$G' \leftarrow G' - \{e_i'\}$\;
+}\Else{
+$G' \leftarrow G' - \{e_i\}$\;
+}
+}
 Apply the circuit procedure to the rest of the circuit containing edge $e_i$\;
 }
-Run the repeated step again until no further reductions can be applied\;
+Repeat lines 4-12 until no further reductions can be applied\;
 Return $(G', F')$\;
 }
-}
-\caption{\label{alg:reduction} The Xiao-Nagamochi algorithm for solving the TSP on degree-3 graphs.}
+\caption{\label{alg:reduction} The reduction function for degree-3 graphs.}
 \end{algorithm}
-
-Step $2$(a)i recreates step $2$ from Xiao and Nagamochi's original algorithm by applying the circuit procedure where possible. Step $2$(a)ii recreates step $3$ of the original algorithm by applying the reduction of parallel edges. Step $2$(a)iii recreates step $4$ of the original algorithm via the $3/4$-cut reduction. Step $2$(b) applies the next step of the branching that has been performed so far, to ensure that the order in which the edges are forced is the same as in the classical algorithm. Step $2$(c) corresponds to branching on a circuit at edge $e_i$. Finally, step $3$ checks whether or not the graph can be reduced further by running the reduction steps again.
 
 One might ask if an edge could be part of two circuits, in which case our algorithm would fail as it would not be able to reduce the circuit. However, as discussed in Sec.\ \ref{sec:xndeg3}, any edge can only be part of at most one circuit.
 
 \subsection{Analysis}
 
-Steps $2$(a)i-iii of the reduction algorithm can be completed in polynomial time~\cite{xiao2016degree3}. All of these steps also reduce the size of a problem by at least a constant amount, so only a polynomial number of these steps are needed. Step 2(b) is constant time and step 2(c) can be run in polynomial time as the circuit is now reducible. All steps are only repeated $O(m)$ times, so the whole reduction algorithm runs in polynomial time in terms of $m$.
+All procedures in the reduction algorithm can be completed in polynomial time~\cite{xiao2016degree3}. All of these steps also reduce the size of a problem by at least a constant amount, so only a polynomial number of these steps are needed. Step 2(b) is constant time and step 2(c) can be run in polynomial time as the circuit is now reducible. All steps are only repeated $O(m)$ times, so the whole reduction algorithm runs in polynomial time in terms of $m$.
 
-Steps $2$ and $3$ of the $h$ subroutine run in polynomial time as searching for a good circuit in a component can be done in polynomial time \cite{xiao2016degree3}. Likewise, steps 2 and 3 of the $P$ function involve looking for certain structures in the graph that can be found in polynomial time. As a result, the runtimes for the $P$ and $h$ functions are both polynomial in $m$.
+The remaining steps in the heuristic subroutine run in polynomial time as searching for a good circuit in a component can be done in polynomial time \cite{xiao2016degree3}. Likewise, remaining steps in the predicate function involve looking for certain structures in the graph that can be found in polynomial time. As a result, the runtimes for the \FnPredicatethree and \FnHeuristicthree functions are both polynomial in $m$.
 
-By Theorem \ref{thm:backtrack}, the number of calls to $P$ and $h$ we make in order to find a Hamiltonian cycle with failure probability $\delta$ is $O(\sqrt{T}\poly(m)\log (1/\delta))$, where $T$ is the size of the backtracking tree, which in our case is equal to the number of times the Xiao-Nagamochi algorithm branches on a circuit. $P$ and $h$ both run in polynomial time and as a result can be included in the $\poly(m)$ term of the runtime. Because $m \leq 3n/2$, the polynomial term in this bound is also polynomial in terms of $n$.
+By Theorem \ref{thm:backtrack}, the number of calls to \FnPredicatethree and \FnHeuristicthree we make in order to find a Hamiltonian cycle with failure probability $\delta$ is $O(\sqrt{T}\poly(m)\log (1/\delta))$, where $T$ is the size of the backtracking tree, which in our case is equal to the number of times the Xiao-Nagamochi algorithm branches on a circuit. \FnPredicatethree and \FnHeuristicthree both run in polynomial time and as a result can be included in the $\poly(m)$ term of the runtime. Because $m \leq 3n/2$, the polynomial term in this bound is also polynomial in terms of $n$.
 
-The behaviour of the $P$ and $h$ subroutines is designed to reproduce the behaviour of Xiao and Nagamochi's TSP3 algorithm~\cite{xiao2016degree3}. It is shown in~\cite[Theorem 1]{xiao2016degree3} that this algorithm is correct, runs in time $O^*(2^{3n/10})$ and uses polynomial space. As the runtime of the TSP3 algorithm is an upper bound on the number of branching steps it makes, the algorithm branches on a circuit $O^*(2^{3n/10})$ times. Therefore, the quantum backtracking algorithm finds a Hamiltonian cycle, if one exists, with failure probability at most $\delta$ in time $O^*(2^{3n/20} \log(1/\delta)) \approx O^*(1.110^n \log(1/\delta))$ and polynomial space.
+The behaviour of the \FnPredicatethree and \FnHeuristicthree subroutines is designed to reproduce the behaviour of Xiao and Nagamochi's TSP3 algorithm~\cite{xiao2016degree3}. It is shown in~\cite[Theorem 1]{xiao2016degree3} that this algorithm is correct, runs in time $O^*(2^{3n/10})$ and uses polynomial space. As the runtime of the TSP3 algorithm is an upper bound on the number of branching steps it makes, the algorithm branches on a circuit $O^*(2^{3n/10})$ times. Therefore, the quantum backtracking algorithm finds a Hamiltonian cycle, if one exists, with failure probability at most $\delta$ in time $O^*(2^{3n/20} \log(1/\delta)) \approx O^*(1.110^n \log(1/\delta))$ and polynomial space.
 
 Finding the shortest Hamiltonian cycle requires repeating the algorithm $O(\log L')$ times, where $L'$ is given in Equation \ref{eqn:l}. By using a union bound over all the runs of the algorithm, to ensure that all runs succeed with high probability it is sufficient for the failure probability $\delta$ of each run to be at most $O(1/(\log L'))$. From this we obtain the following result, proving the first part of Theorem \ref{thm:deg34}:
 
@@ -338,7 +331,27 @@ There is a bounded-error quantum algorithm which solves the TSP for degree-4 gra
 As the argument is very similar to the degree-3 case, we only sketch the proof.
 
 \begin{proof}[Proof sketch]
-Xiao and Nagamochi's algorithm for degree-4 graphs works in a similar way to their algorithm for degree-3 graphs: The graph is reduced in polynomial time by looking for specific structures in the graph and then picking an edge in the graph to branch on. We apply the quantum backtracking algorithm as before, finding a Hamiltonian cycle with failure probability $\delta$ in $O^*(1.301^n\log(1/\delta))$ time. We then use binary search to find the shortest Hamiltonian cycle after $O(\log L)$ repetitions of the algorithm, rejecting if the total length of the forced edges is above a given threshold. To achieve overall failure probability $1/3$, the algorithm runs in $O^*(1.301^n\log L\log \log L)$ time.
+Xiao and Nagamochi's algorithm for degree-4 graphs works in a similar way to their algorithm for degree-3 graphs. Indeed, the predicate function considers largely the same cases as in Algorithm \ref{alg:predicate}:
+
+\begin{lemma}[Xiao and Nagamochi \cite{xiao2016degree4}]Let $G=(V,E)$ be a graph and $F\subseteq E$ a set of forced edges. There is no Hamiltonian cycle that visits every edge in $F$ if:
+
+\begin{enumerate}
+\item $G$ is not 2-edge-connected;
+\item a vertex $v$ is incident to more than 2 edges in $F$;
+\item $(V, F)$ contains a non-Hamiltonian cycle;
+\item or there exists a $U$-component incident to an odd number of edges in $F$.
+\end{enumerate}
+\end{lemma}
+
+Cases 1 and 4 are already considered in Algorithm \ref{alg:predicate}, with case $4$ forming part of the parity condition. The algorithm also only returns an definite solution in the same way as the degree $3$ case, via Lemma \ref{lem:trivial}. As a result, our new predicate only needs to care about cases $2$ and $3$, both of which can be checked in polynomial time.
+
+The reductions utilised are also simple to observe and related to those used in Algorithm \ref{alg:reduction}. The first two are removing unforced edges incident to any vertex $v$ where $v$ is incident to two forced edges, and forcing any edges incident to a vertex of degree 2, both of which are similar to what is already performed by the circuit procedure. Likewise, the fourth reduction process is reducing triangles in the graph to a single vertex, akin to the 3-cut reduction from before.
+
+The third reduction process is more involved, but can still be computed in polynomial time. This reduction checks for each edge $e$ if it is a bridge, an edge that would split a $U$-component $H$ in the graph into two disconnected subgraphs $H_1$ and $H_2$. If $e$ is a bridge, then it is either forced or removed depending on if $H_1$ is incident to and odd or even number of forced edges, respectfully. If $H$ is incident to an even number of forced edges, then so are the subgraphs $H_1$ and $H_2$. Note that this might leave $H_2$ disconnected from the rest of the graph, but this would violate the 2-edge-connected rule and therefore be rejected by the predicate.
+
+The heuristic is more involved than previously, but essentially consists of selecting a degree-4 vertex $v$ incident to a forced edge and branching on an edge incident to that vertex. If no such vertex exists then we select a degree-3 vertex $v$ incident to a forced edge and branch on an edge incident to a vertex at most two edges away from $v$. We shall omit details on how the branching edge is chosen for simplicity, but note that these conditions can be computed in polynomial time.
+
+We apply the quantum backtracking algorithm as before, finding a Hamiltonian cycle with failure probability $\delta$ in $O^*(1.301^n\log(1/\delta))$ time. We then use binary search to find the shortest Hamiltonian cycle after $O(\log L)$ repetitions of the algorithm, rejecting if the total length of the forced edges is above a given threshold. To achieve overall failure probability $1/3$, the algorithm runs in $O^*(1.301^n\log L\log \log L)$ time.
 \end{proof}
 
 \subsection{Degree-5 and degree-6 graphs}
@@ -480,7 +493,7 @@ We can extend the idea of Theorem \ref{thm:deg5} to degree-6 graphs by splitting
 
 \subsection{Degree-7 graphs}
 
-We finally considered extending the algorithm to degree-7 graphs by partitioning degree-7 vertices into one of degree $5$ and another of degree $4$, connected by a forced edge. We can split a vertex of degree $7$ into a vertex of degree $4$ and another of degree $5$ in $\binom{7}{4} = 35$ ways, of which $\binom{7-2}{4-2} + \binom{7-2}{3-2} = 15$ will not preserve the shortest Hamiltonian cycle. We then use the same process as for the degree-5 and degree-6 case, halting after $O((35/20)^{k/2})$ iterations and returning either the shortest Hamiltonian cycle found or reporting if no Hamiltonian cycle exists. From this, our overall runtime is
+We next consider extending the algorithm to degree-7 graphs by partitioning degree-7 vertices into one of degree $5$ and another of degree $4$, connected by a forced edge. We can split a vertex of degree $7$ into a vertex of degree $4$ and another of degree $5$ in $\binom{7}{4} = 35$ ways, of which $\binom{7-2}{4-2} + \binom{7-2}{3-2} = 15$ will not preserve the shortest Hamiltonian cycle. We then use the same process as for the degree-5 and degree-6 case, halting after $O((35/20)^{k/2})$ iterations and returning either the shortest Hamiltonian cycle found or reporting if no Hamiltonian cycle exists. From this, our overall runtime is
 %
 \begin{align}
 &O^*\left(\left(\frac{35}{20}\right)^{k/2}1.680^n\log L \log \log L\right)\\
@@ -488,3 +501,30 @@ We finally considered extending the algorithm to degree-7 graphs by partitioning
 \end{align}
 %
 This is the point where we no longer see a quantum speedup over the fastest classical algorithms using this approach, as classical algorithms such as those of Held-Karp~\cite{held1962} and Bj{\"o}rklund et al.~\cite{bjorklund2008} run in $O^*(2^n)$ and $O^*(1.984^n)$ time, respectively.
+
+\section{Arbitrary degree graphs}
+
+We conclude this section with a brief note on what speedups can be obtained from graphs of arbitrary degree. To achieve a speedup, we can apply the quantum speedup for dynamic programming by Ronagh \cite{ronagh2019} to the algorithm of Bj\"orklund et al.\ for graphs of degree $k$ \cite{bjorklund2008}.
+
+The Bj\"orklund et al.\ algorithm runs in the same way as the Held-Karp algorithm, but with an additional polynomial-time circuit that checks if $D(S,l)$ is actually solvable. Adding this same polynomial-time circuit to Ronagh's speedup for the Travelling Salesman Problem will give a speedup of
+
+\begin{equation}
+O^*\left(L^4\left(2^{k+1}-2k-2\right)^{n/(2k+2)}\right).
+\end{equation}
+
+Runtimes for small instances of $k$ are given in Table \ref{tab:degree-k}, with classical runtimes from Bj"orklund et al.~\cite{bjorklund2008}. It is worth noting that the quantum runtime is strictly less than $O(2^{n/2})$ for all constant $k$. Also note that for $L=\poly(n)$, this runtime is better than the runtimes given in Theorem \ref{thm:deg6}.
+
+\begin{table}
+\begin{center}
+\begin{tabularx}{\textwidth}{|c|c|C|c|}
+\hline Degree $k$ & Quantum & Classical (poly space) & Classical (exp space) \\
+\hline 5 & $O^*(1.390^n L^4)$ & $O^*(1.989^n)$ & $O^*(1.932^n)$ \\
+ 6 & $O^*(1.403^n L^4)$ & $O^*(1.996^n)$ & $O^*(1.967^n)$\\
+ 7 & $O^*(1.409^n L^4)$ & $O^*(1.998^n L)$ & $O^*(1.984)$ \\
+ 8 & $O^*(1.411^n L^4)$ & $O^*(1.999^n L)$ & $O^*(1.991)$ \\
+\hline
+\end{tabularx}
+\end{center}
+\caption[Runtimes of the quantum speedup of Bj"orklund et al.]{Runtimes of the quantum speedup achieved by applying the quantum speedup of dynamic programming by Ronagh to the bounded-degree TSP algorithm of Bj\"orklund et al. Classical runtimes given in Bj\"orklund et al.\ \cite{bjorklund2008}.}
+\label{tab:degree-k}
+\end{table}
