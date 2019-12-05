@@ -74,12 +74,13 @@ D(S, l) = \begin{cases} c_{1l} & \text{if } S = \{l\}\\
 Solving this relation recursively for $S=V$ would result in iterating over all $O((n-1)!)$ Hamiltonian cycles again, but Held and Karp showed that the relation could be solved in $O(n^22^n)$ time using dynamic programming. Bj{\"o}rklund et al.\ \cite{bjorklund2008} developed on this result, showing that modifications to the Held-Karp algorithm could yield a runtime of
 %
 \begin{equation}
-O((2^{k + 1} - 2k - 2)^{n/(k + 1)}\poly(n)),
+O^*((2^{k + 1} - 2k - 2)^{n/(k + 1)}),
 \end{equation}
 
-\noindent where $k$ is the largest degree of any vertex in the graph; this bound is strictly less than $O(2^n\poly(n))$ for all fixed $k$.
+\noindent where $k$ is the largest degree of any vertex in the graph; this bound is strictly less than $O^*(2^n)$ for all fixed $k$. Note that throughout this chapter and Chapter \ref{chp:tsp}, we use the $O^*$ notation to suppress terms which are at most polynomial in $n$.
 
 \subsection{Backtracking}
+\label{sec:backtrack}
 
 Backtracking is a form of recursive algorithm designed for solving Constraint Satisfaction Problems (CSPs). These are problems where the input is a set of variables $x_1,\dots,x_n$ and the aim is to find an assignment for these variables satisfying constraints $c_1,\dots,c_n$.
 
@@ -105,7 +106,7 @@ Return \FnBTSAT{$B$, $\tilde{\mathbf{x}}(x_i=\false)$};
 \caption{\label{alg:backtracksat} A backtracking algorithm for SAT.}
 \end{algorithm}
 
-Algorithm \ref{alg:backtracksat} gives an example of a backtracking algorithm for Boolean Satisfiability. Asymptotically, this algorithm will require $O(2^n\poly(n))$ time in the worst case, where every possible assignment needs to be tested. However, in practice we might not need to evaluate large portions of the tree, due to finding partial assignments which already succeed or fail to satisfy the Boolean formula.
+Algorithm \ref{alg:backtracksat} gives an example of a backtracking algorithm for Boolean Satisfiability. Asymptotically, this algorithm will require $O^*(2^n)$ time in the worst case, where every possible assignment needs to be tested. However, in practice we might not need to evaluate large portions of the tree, due to finding partial assignments which already succeed or fail to satisfy the Boolean formula.
 
 \subsubsection{Branch and Bound}
 
@@ -141,7 +142,7 @@ Ambainis et al.\ then develop a related algorithm for solving the Travelling Sal
 
 This algorithm gave a speedup over classical algorithms such as the Held-Karp algorithm, which runs in $O(n^22^n)$ time \cite{held1962}. However, this is not a quadratic speedup, which is what we would ideally want. It is also worth noting that the classical algorithm of \cite{bjorklund14}, which runs in $O*(1.657^nL)$ where $L$ is the largest edge weight is more efficient assuming that the edge weights are at most a constant\footnote{In fact, the algorithm of \cite{bjorklund14} also performs when the edge weights are polylogarithmic in $n$, as the quantum algorithm of \cite{ambainis2018} also requires an $O(\log L)$ overhead for various edge-weight arithmetic, as do other algorithms such as Held-Karp \cite{held1962}.}.
 
-A quadratic speedup for dynamic programming was later proven by Ronagh \cite{ronagh2019}. This works by a technique called the Multiplicative Weights Update Method. In this method, there are $n$ experts, each of which advise the algorithm on the next step to take, after which the algorithm updates its weighting of each expert. Initially these experts are evenly weighted, and over time some experts become more favoured over others, until the algorithm halts after $T$ iterations for some $T$. The updating of weights after each iteration is based on computation of some cost vector. A quadratic speedup is achieved via quantum minimum finding \cite{durr1996}. This can be applied to dynamic programming via a dual formulation of dynamic programming methods. Applying all of this leads to a quantum algorithm for the Travelling Salesman Problem in $O^*(L^42^{n/2})$.
+A quadratic speedup for dynamic programming was later proven by Ronagh \cite{ronagh2019}. This works by a technique called the Multiplicative Weights Update Method. In this method, there are $n$ experts, each of which advise the algorithm on the next step to take, after which the algorithm updates its weighting of each expert. Initially these experts are evenly weighted, and over time some experts become more favoured over others, until the algorithm halts after $T$ iterations for some $T$. The updating of weights after each iteration is based on computation of some cost vector found by linear programming. A quadratic speedup is achieved by computing this cost vector via quantum minimum finding \cite{durr1996}. This can be applied to dynamic programming via a dual formulation of dynamic programming methods. Applying all of this leads to a quantum algorithm for the Travelling Salesman Problem in $O^*(L^42^{n/2})$. Note that this algorithm has a polynomial dependence on the maximum edge weight rather than a logarithmic dependence, and thus only offers a speedup in cases where the edge weight is small (at most poly in $n$).
 
 \subsection{Backtracking}
 \label{sec:q-backtrack}
@@ -204,13 +205,13 @@ Let $\mathcal{A}$ be a backtracking algorithm with predicate $P$ and heuristic $
 
 The reader familiar with \cite{montanaro2015} may note that the definition of the set of partial assignments in Montanaro's work also incorporates information about the ordering of assignments to variables. However, it is easy to see from inspection of the algorithm of \cite{montanaro2015} that removing this information does not affect the stated complexity of the algorithm.
 
-Runtime factors of Montanaro's algorithm were improved in subsequent work by Jarret and Wan \cite{jarret2018}. This was achieved by noting that the runtime of Belovs' quantum walk algorithm also depends on the effective resistance of a graph, a property of a graph inspired by the analogous idea in electrical networks, which is not utilised by Montanaro. Jarret and Wan showed that this quantity can be efficiently approximated on a quantum computer and utilised to achieve a runtime of $O(\sqrt{Tv}\log^4(mv)\log(m/\epsilon))$, where $m$ is the number of satisfying assignments. This leads to an improvement in terms of $v$ as long as $m$ grows sub-exponentially with $v$.
+Runtime factors of Montanaro's algorithm were improved in subsequent work by Jarret and Wan \cite{jarret2018}. This was achieved by noting that the runtime of Belovs' quantum walk algorithm also depends on the effective resistance of a graph, a property of a graph inspired by electrical networks, which is not utilised by Montanaro. Jarret and Wan showed that this quantity can be efficiently approximated on a quantum computer and utilised to achieve a runtime of $O(\sqrt{Tv}\log^4(mv)\log(m/\epsilon))$, where $m$ is the number of satisfying assignments. This leads to an improvement in terms of $v$ as long as $m$ grows sub-exponentially with $v$.
 
 It is worth understanding the limitations of the quantum backtracking algorithm, and why it cannot necessarily speed up all algorithms termed ``backtracking algorithms''~\cite{montanaro2015}. First, a requirement for the quantum algorithm is that decisions made in one part of the backtracking tree are independent of results in another part of the tree, which is not true of all classical algorithms, such as constraint recording algorithms \cite{dechter1990}. Second, the runtime of the quantum algorithm depends on the size of the entire tree. Thus, to achieve a quadratic speedup over a classical algorithm, the algorithm must explore the whole backtracking tree, instead of stopping after finding the first solution or intelligently skipping branches such as in backjumping \cite{dechter1990}.
 
 This second limitation was removed in work by Ambainis and Kokainis \cite{ambainis2017}, using a quantum algorithm for estimating the size of trees in $\tilde{O}(\sqrt{vT})$ steps. This new backtracking algorithm uses the quantum tree size estimation algorithm to generate a path of the first $2^i$ vertices the classical backtracking algorithm visits for some $i$, and then performs Montanaro's backtracking algorithm on this subtree. This is repeated for increasing values of $i$ until either a marked vertex is found or the entire tree has been visited. This algorithm succeeded with probability $\epsilon$ and ran in
 
-$$O(v^{3/2}\sqrt{T}\log^2\frac{v\log T_0}{\epsilon})$$
+$$O\left(v^{3/2}\sqrt{T}\log^2\frac{v\log T_0}{\epsilon}\right)$$
 
 \noindent time, where $T_0$ is the size of the total tree, $T$ is the size visited by the backtracking algorithm.
 
