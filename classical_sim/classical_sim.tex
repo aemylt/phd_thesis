@@ -2,7 +2,6 @@
 \label{chp:classical_sim}
 
 \section{Introduction}
-\label{sec:intro}
 
 Since the idea of quantum computers was first proposed, speedups have been theoretically demonstrated for a variety of problems~\cite{montanaro2016}. 
 More recently, this has turned to interest in near term quantum speedups on realistic hardware~\cite{harrow2017}. 
@@ -10,7 +9,7 @@ Boson Sampling is an example of such a problem~\cite{aaronson2011}, which consid
 Aaronson and Arkhipov showed that the ability to exactly simulate Boson Sampling in polynomial time would imply that $P^{\#P} = BPP^{NP}$, and the Polynomial Hierarchy would collapse to the third level. 
 This is because the output probabilities of a linear optical interferometer are proportional to the permanent of an $n \times n$ complex matrix \cite{scheel2008}, which is $\#P$-Hard to compute.
 The same result was also shown for approximately sampling from the same distribution, modulo two conjectures related to the permanents of Gaussian matrices~\cite{aaronson2011}. 
-This led to significant interest in Boson Sampling, with experimental demonstrations ranging from two to six photons~\cite{broome2013, spring2013, tillmann2013, crespi2013, carolan2015, wang2017, zhong2018, paesani2018}. %{\blue Now 8 photons from Pan's group I think?}{\blue AM: Highest I've seen from Pan's group is 5? ie \cite{zhong2018}}.
+This led to significant interest in Boson Sampling, with experimental demonstrations ranging from two to ten photons~\cite{broome2013, spring2013, tillmann2013, crespi2013, carolan2015, wang2017, zhong2018, paesani2018, wang2019}, as well as experiments with up to twenty input photons of which fourteen were detected \cite{wang2019}. %{\blue Now 8 photons from Pan's group I think?}{\blue AM: Highest I've seen from Pan's group is 5? ie \cite{zhong2018}}.
 
 This has driven interest in improving classical simulations of Boson Sampling, in order to verify any speedup gained from an experimental implementation.
 Neville \textit{et al.}~\cite{neville2017} showed that Boson Sampling can be classically performed for 30 bosons across 900 modes at a rate of 250 samples in under five hours on a standard laptop. %\footnote{Specifically, a Dell Latitude E5450 laptop with 2.30GHz Intel Core i5-5300U CPU}. 
@@ -22,11 +21,11 @@ This was later expanded to consider loss as well~\cite{renema2018loss}.
 However, the runtime might still not be efficient in practice, as the polynomial can be large. There is also a further disadvantage in that the error bounds are the average case for a random linear optical interferometer, meaning that there could be interferometers for which the algorithm performs significantly worse.
 A significant improvement could be achieved through adapting the method of Clifford \& Clifford to this algorithm, but there are challenges with this approach.
 
-Another motivation for adapting Clifford \& Clifford to photonic imperfection is the task of classically simulating other photonic regimes, such as Gaussian Boson Sampling \cite{hamilton2017}. The probability distribution of Gaussian Boson Sampling is that of $n$ indistinguishable squeezed states at the output of an $m$-mode linear optical interferometer, and depends on the Hafnian of a matrix. Unlike Boson Sampling, there is no known polynomial time classical algorithm for computing the outcome of $n$ fully distinguishable squeezed states. On the other hand, it is classically efficient to sample distinguishable squeezed states, via a similar approach to that used for classically sampling distinguishable single photons \cite{aaronson2014}. As a result, adapting the Clifford \& Clifford algorithm to non-ideal Boson Sampling models provides a first step towards being able to classically simulate imperfections in Gaussian Boson Sampling.
+Another motivation for adapting Clifford \& Clifford to photonic imperfection is the task of classically simulating other photonic regimes, such as Gaussian Boson Sampling \cite{hamilton2017}. The probability distribution of Gaussian Boson Sampling is that of $n$ indistinguishable squeezed states at the output of an $m$-mode linear optical interferometer, and depends on the Hafnian of a matrix. Unlike Boson Sampling, there is no known polynomial time classical algorithm for computing the probability of a single outcome from $n$ fully distinguishable squeezed states. On the other hand, it is classically efficient to sample $n$ fully distinguishable squeezed states, via a similar approach to that used for classically sampling distinguishable single photons \cite{aaronson2014}: For each squeezed state, one first samples the number of photons in that squeezed state via the inverse binomial distribution \cite{wu2019}, then each of those photons is sampled through the interferometer individually, as photons that start in the same spatial mode do not interfere with one another and their outcomes can therefore be sampled individually. As a result, adapting the Clifford \& Clifford algorithm to non-ideal Boson Sampling models provides a first step towards being able to classically simulate imperfections in Gaussian Boson Sampling.
 
 Here we consider the cost of classically simulating Boson Sampling when the photons are partially distinguishable or lossy.
 We look at the same model of distinguishability as considered in \cite{renema2018,renema2018loss}, and use techniques for modelling photon distinguishability in first quantization \cite{moylett2018, stanisic2018} to show that this is akin to choosing the indistinguishable photons of a Boson Sampling experiment via the binomial distribution. 
-We combine this with the well-studied model of uniform loss, which also follows a binomial distribution. 
+We combine this with the well-studied model of uniform loss, where each photon independently survives with probability $\eta$. Under this model, the probability of how many photons survive overall also follows a binomial distribution. 
 This gives rise to a method which is able to naturally apply the Clifford \& Clifford algrithm and take advantage of its efficiency. This algorithm also offers a worst-case error bound for \textit{any} linear optical interferometer, rather than a random one.
 Although this approach only offers a polynomial improvement compared to the runtime for ideal Boson Sampling (unlike the exponential improvement shown in \cite{renema2018,renema2018loss}) we use analytical bounds to show that for photon numbers of experimental interest our algorithm can make a significant improvement over alternative approaches. 
 
@@ -37,7 +36,7 @@ In Sec.\ \ref{sec:average-case}, we consider average error bounds for a Haar-ran
 In Sec.\ \ref{sec:worst-case}, we improve this bound to a worst-case error bound, by computing an upper bound for the trace distance between our approximation and the model. 
 In Sec.\ \ref{sec:loss}, we expand these results to consider uniform loss, and show how distinguishability and loss relate to each other. 
 In Sec.\ \ref{sec:empirical-errors}, we explore these error bounds for experimentally interesting numbers of photons, and show that there are some cases where our algorithm offers an improvement. 
-Finally, we briefly consider \emph{non}-uniform loss, where loss is is a function of the number of optical components, and use the methods of \cite{garciapatron2017, oszmaniec2018} to show that classical simulations with non-uniform loss also become easier when distinguishability is introduced.
+Finally, we briefly consider \emph{non}-uniform loss, where loss is a function of the number of optical components, and use the methods of \cite{garciapatron2017, oszmaniec2018} to show that classical simulations with non-uniform loss also become easier when distinguishability is introduced.
 We conclude with some open research questions in Sec.\ \ref{sec:conclusion}.
 
 
@@ -57,7 +56,7 @@ The probability of seeing output occupation $S'$ from input $S$ with interferome
 \begin{equation}\label{eq:TichyDist}
 \prob[S'] =  \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau'}(k)}} \mathcal{S}_{{\tau'(k)},{\tau(k)}},
 \end{equation}
-where $\mathcal{S}_{k,l}$ is an $n \times n$ Gram matrix describing the (in)distinguishability of pairs of photons, $S$ is a Fock array describing the arrangement of input photons, $s$ is the corresponding array of single particle states in first quantisation, likewise for $S'$ and $s'$, $U$ is a $m\times m$ unitary matrix describing the interferometer, and S$_n$ is the group of permutations of $n$ particles.
+where $\mathcal{S}_{k,l}$ is an $n \times n$ Gram matrix describing the (in)distinguishability of pairs of photons, $S$ is a Fock array describing the arrangement of input photons, $s$ is the corresponding array of single particle states in first quantisation, likewise for $S'$ and $s'$, $U$ is an $m\times m$ unitary matrix describing the interferometer, and S$_n$ is the group of permutations of $n$ particles.
 Of particular note is that when $\mathcal{S}$ is the all-1 matrix, we have
 \begin{align}
 \prob[S'] &= \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau'}(k)}}\\
@@ -77,7 +76,7 @@ which is the distribution for fully distinguishable photons.
 In first quantisation, the input state can be written as~\cite{moylett2018}
 \begin{equation}
 \rho
-=\frac{1}{n!\prod_{i=1}^m S_i!}\sum_{\sigma,\sigma'\in\textrm{S}_n}\sigma|s\rangle\langle s|\sigma'^\dagger \prod_{k=1}^n \mathcal{S}_{\sigma'^{-1}(k),\sigma^{-1}(k)}, \label{eqn:dist-state}
+=\frac{1}{n!\prod_{i=1}^m S_i!}\sum_{\sigma,\sigma'\in\textrm{S}_n}\sigma|s\rangle\langle s|\sigma'^\dagger \prod_{k=1}^n \mathcal{S}_{{\sigma'}^{-1}(k),\sigma^{-1}(k)}, \label{eqn:dist-state}
 \end{equation}
 For convenience, we will assume here and throughout the rest of this paper that our photons start in the Fock state $\ket{S}=\ket{1^n0^{m-n}}$. 
 We will use the corresponding first quantized states of this form in the following.%, as long as we have a means of describing the $\mathcal{S}$ matrix.
@@ -96,7 +95,7 @@ The second result, by Clifford \& Clifford \cite{clifford2017}, gave a classical
 This is through a combination of optimizations, particularly computing marginal probabilities and sampling via the chain rule.
 Our approach here is to make these more efficient techniques applicable to realistic situations with distinguishability and loss.
 
-It is also worth discussing at this point how to classically simulate boson sampling with completely distinguishable photons, for which a polynomial time exists \cite{aaronson2014}. In this case, there is no photon interference, so photons can be sampled individually. This is done by taking a photon which starts in mode $i$, and sampling output mode $j$ with probability $|U_{j,i}|^2$. Repeating for all photons gives us the complete sample in $O(mn)$ time.
+It is also worth discussing at this point how to classically simulate boson sampling with completely distinguishable photons, for which a polynomial time algorithm exists \cite{aaronson2014}. In this case, there is no photon interference, so photons can be sampled individually. This is done by taking a photon which starts in mode $i$, and sampling output mode $j$ with probability $|U_{j,i}|^2$. Repeating for all photons gives us the complete sample in $O(mn)$ time.
 
 
 \subsection{Expanding in terms of fixed points}
@@ -116,12 +115,13 @@ The sum over permutations can be ordered based on how many \emph{fixed points} a
 where $\sigma^j$ denotes permutations which have $n-j$ elements as fixed points.
 Each permanent can be broken down via the Laplace expansion into a sum of a complex matrix permanent multiplied by a positive matrix permanent:
 \begin{equation}
-\prob[S'] = \sum_{j=0}^n\sum_{\sigma^j}x^j\sum_{\substack{J'\leq S'\\|J'|=j}}\per(M_{J',1}*M^*_{J',\sigma_p})\per(|M_{\bar{J'},\sigma_u}|^2) .
+\prob[S'] = \sum_{j=0}^n\sum_{\sigma^j}x^j\sum_{\substack{J'\leq S'\\|J'|=j}}\per(M_{J',1}*M^*_{J',\sigma_p})\per(|M_{\bar{J'},\sigma_u}|^2) ,
 \end{equation}
-Here we are now choosing submatrices of $M$, with $J'$ representing the $\binom{n}{j}$ possible combinations of rows from $M$, $\bar{J'}$ representing the remaining rows, and $\sigma_p$ and $\sigma_u$  representing permuted and unpermuted elements of $\sigma$ respectively.
+
+\noindent where $J'$ is an occupation with $j$ photons. Here we are now choosing submatrices of $M$, with $J'$ representing the $\binom{n}{j}$ possible combinations of rows from $M$, $\bar{J'}$ representing the remaining rows, and $\sigma_p$ and $\sigma_u$  representing permuted and unpermuted elements of $\sigma$ respectively.
 The $J' \leq S'$ notation is used to indicate that $J'$ is a Fock state such that $J_i\leq S'_i \,\forall i\in[m]$.
 
-The classical simulation method used truncates the number of fixed points in a permutation as being at most $k$, with the remainder of the probability treated as an error margin. 
+The classical simulation method used truncates the number of non-fixed points in a permutation as being at most $k$, with the remainder of the probability treated as an error margin. 
 It is important to note while these approximations are real, they are not necessarily positive. 
 This is due to the truncation, where positive higher order terms which would have corrected the probability to be positive are now missing from the approximation. 
 To correct this, any negative approximations are rounded up to $0$.
@@ -131,9 +131,11 @@ The permanents of $k\times k$ complex matrices can be computed classically in $O
 As long as $k$ is independent of $n$, this means that there is a polynomial runtime.
 
 To work out a suitable value $k$, define coefficients $c_j$ as
+
 \begin{equation}
-c_j = \sum_{\substack{J'\leq S'\\|J'|=j}}\per(M_{J',1}*M^*_{J',\sigma_p})\per(|M_{\bar{J'},\sigma_u}|^2)\label{eqn:coefficients}.
+c_j = \sum_{\sigma^j}\sum_{\substack{J'\leq S'\\|J'|=j}}\per(M_{J',1}*M^*_{J',\sigma_p})\per(|M_{\bar{J'},\sigma_u}|^2)\label{eqn:coefficients}.
 \end{equation}
+
 Assuming the matrices are Gaussian, the variance of each permanent can be bounded as
 
 \begin{equation}
@@ -156,10 +158,10 @@ and the second is that the covariance for different values of $j$ is zero:
 From this one can approximate the variance of the error as a geometric series, which as $n\rightarrow\infty$ tends towards the inequality
 \begin{align}
 \var[\Delta \prob[S']] &= \var[\prob[S']-\prob_k[S']]\\
-&= \var\left[\sum_{j=k+1}^nx^j\var[c_j]\right]\label{eqn:renema-variance}\\
+&= \sum_{j=k+1}^nx^{2j}\var[c_j]\label{eqn:renema-variance}\\
 &< \left(\frac{n!}{m^n}\right)^2\left(\frac{x^{2(k+1)}}{1-x^2}\right),
 \end{align}
-\noindent where $P_k$ is the probability distribution when truncated at $j\leq k$.
+\noindent where $P_k$ is the probability distribution when truncated at $j\leq k$ for some $k<n$.
 
 Finally one can use a Markov inequality to show that if the variance of the error is of the form $(n!/m^n)^2\epsilon^2$, the average error of the simulation is at most $\epsilon$ \cite{renema2018loss}.
 Crucially, this value of $\epsilon$ is only dependent on $x$ and $k$ and no longer dependent on $n$.
@@ -171,7 +173,7 @@ First, the algorithm is reliant on Metropolised Independence Sampling, which pot
 Second, approximating each probability requires $O(n^{2k})$ permanents of $k\times k$ matrices, which even for small $k$ could be a large number of permanents. 
 And third, approximating each probability requires $O(n^{2k})$ permanents of $(n-k)\times(n-k)$ matrices with non-negative elements. 
 Although approximating permanents of matrices with non-negative elements can be achieved in polynomial time, classical algorithms still have a runtime ranging from $O((n-k)^4\log(n-k))$ to $O((n-k)^{7}\log^4(n-k))$, depending on the sparsity of the matrix~\cite{huber2008}. These issues are the main points to address in order to achieve a practical classical algorithm for Boson Sampling. Clifford \& Clifford could help to alleviate these issues, but there is a challenge due to the fact that the approximation used in Renema et al.\ does not correspond to a bosonic state. 
-This in turn leads to negative probabilities, which are not clear how to correct for the Clifford \& Clifford algorithm.
+This in turn leads to negative probabilities, which are not clear how to correct for in the Clifford \& Clifford algorithm.
 
 
 \subsection{Classical simulation of lossy Boson Sampling}
@@ -189,7 +191,7 @@ Novel classical simulations for Boson Sampling under loss have also been conside
 There has also been some consideration of how classical simulations can be generalised to non-uniform loss. 
 This usually means photon loss that is dependent on the number of optical components, with each component having transmission probability $\tau$. 
 Classical simulation methods can be generalised to this model by identifying a layer of uniform losses from the circuit, followed a non-uniform lossy circuit which can be simulated classically through the use of additional modes for lost photons \cite{garciapatron2017,oszmaniec2018}. 
-These results showed that Boson Sampling under non-uniform loss can be classically simulated as long as the smallest number of components a photon encounters is logarithmic in $n$.
+These results showed that Boson Sampling under non-uniform loss can be classically simulated as long as the smallest number of components a photon encounters is logarithmic in $n$. More recently, methods were also developed to give a polynomial-time algorithm in the case where some photons experience little or no loss, by extracting losses into a layer of non-uniform loss and simulating via a generalisation of the Clifford \& Clifford algorithm \cite{brod2019}.
 
 
 
@@ -207,7 +209,7 @@ For reference, the expansion of \cite{renema2018,renema2018loss} is carried out 
 \label{eqn:rhoni}
 \rho_{n,x} = \frac{1}{n!}\left(\sum_{i=0}^nx^i\sum_{\substack{\sigma,\sigma'\in\symm_n\\\exists I\subseteq [n] \textrm{ s.t. } |I|=i\\\sigma^{-1}(j)\neq\sigma'^{-1}(j)\forall j \in I\\\sigma^{-1}(j)=\sigma'^{-1}(j)\forall j \notin I}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right).
 \end{equation}
-Note here that the sums over permutations do not correspond to physical states. 
+Note here that the terms in the sum over permutations do not correspond to physical states. 
 This can be seen by the fact that for $i\neq 0$ this summation has no elements along the diagonal of the density matrix, as $\sigma$ and $\sigma'$ need to differ in \emph{exactly} $i$ places.
 
 We instead look at an alternative expansion, in order to decompose the model into a linear combination of physical states:
@@ -219,7 +221,7 @@ We instead look at an alternative expansion, in order to decompose the model int
 where $\rho_I$ is the state where photons in modes $j \in I$ are fully indistinguishable from each other, all other photons are fully distinguishable, and $0 \leq p_i \leq 1$ is a coefficient dependent on $x$ and $n$ determining the probability of a state with $i$ indistinguishable single photons.
 
 Note that unlike Eq.\ (\ref{eqn:rhoni}), where permutations must differ in exactly $i$ points, in Eq.\ (\ref{eqn:state-expansion}) we allow permutations to differ in \emph{at most} $i$ points. 
-This means that elements closer to and along the diagonal of the density matrix are also part of this summation, and this means that each sum over $\sigma,\sigma' \in \symm_n$ forms a valid density matrix.
+This means that elements closer to and along the diagonal of the density matrix are also part of this summation, and this means that each $\sigma,\sigma' \in \symm_n$ term forms a valid density matrix.
 
 Already we can see how a classical simulation might work -- if we are able to sample $p_i$ efficiently, then we can choose $\rho_I$ by selecting $i$ photons uniformly at random to be indistinguishable. 
 These $i$ photons can be classically simulated using Clifford \& Clifford \cite{clifford2017}, while the remaining $n-i$ photons are treated as fully distinguishable photons, each of which can be simulated individually in polynomial time \cite{aaronson2014,neville2017}.
@@ -277,12 +279,12 @@ First, we sample an integer $i \in [n]$ according to the Binomial distribution w
 Next, we sample a subset $I$ of the photons uniformly at random from the $\binom{n}{i}$ possible subsets of size $i$. 
 These are the indistinguishable photons of our simulation, which we simulate using Clifford and Clifford in $O(i2^i + \poly(i,m))$ time. 
 The remaining $n-i$ photons are considered to be distinguishable. 
-Rather than needing to compute the output probabilities of these photons colletively, which could take between $O(n-i)^4\log(n-i)$ and $O(n-i)^7\log^4(n-i)$ time via permanents of matrices with non-negative entries \cite{huber2008}, we can instead sample each distinguishable photon individually. 
+Rather than needing to compute the output probabilities of these photons collectively, which could take between $O(n-i)^4\log(n-i)$ and $O(n-i)^7\log^4(n-i)$ time via permanents of matrices with non-negative entries \cite{huber2008}, we can instead sample each distinguishable photon individually. 
 To do so, we take a distinguishable photon in mode $a$, and compute the probability of this photon being measured in mode $b$ as $|U_{b,a}|^2$. 
 Thus we can compute all output probabilities and obtain a sample for a single distinguishable photon in $O(m)$ time, meaning that we can obtain a sample for all $n-i$ distinguishable photons in $O(m(n-i))$ time \cite{aaronson2014,neville2017}.
 
 The run time is dominated by the time taken to sample our indistinguishable photons, which can be as large as $O(n2^n + \poly(n,m))$ if we are unlucky. 
-By truncating our Binomial sampling up to some level $k$, we can simulate Boson Sampling up to some level of error. 
+By truncating our binomial sampling up to some level $k$, we can simulate Boson Sampling up to some level of error. 
 The extent of this error will be the focus of Secs. \ref{sec:average-case} \& \ref{sec:worst-case}.
 
 
@@ -290,23 +292,24 @@ The extent of this error will be the focus of Secs. \ref{sec:average-case} \& \r
 \section{Average case error}
 \label{sec:average-case}
 
-We can use the same strategies used in \cite{renema2018,renema2018loss} to derive an error bound for Boson Sampling via state truncation for a Haar-random interferometer. We shall do this by considering the total variation distance between our approximation and the model for partial distinguishability for a Gaussian matrix. This is given by
+We can use the same strategies used in \cite{renema2018,renema2018loss} to derive an error bound for Boson Sampling via state truncation for a Haar-random interferometer. We shall do this by considering the expected total variation distance between our approximation and the model for partial distinguishability for a Gaussian matrix. This is given by
 
-\begin{equation}
-\mean[\Delta P] = \sum_{S'}\mean|\prob[S']-\prob_k[S']|,
-\end{equation}
+\begin{align}
+\mean[\Delta P] &= \mean\left[\frac{1}{2}\sum_{S'}|\prob[S']-\prob_k[S']|\right]\\
+&= \frac{1}{2}\sum_{S'}\mean|\prob[S']-\prob_k[S']| \label{eqn:tvd},
+\end{align}
 where $\prob_k$ is the probability distribution truncated at $k$ indistinguishable photons via our approximation. For a specific outcome $S'$, we can expand the right hand side to
 \begin{align}
 \mean\left[|\prob[S']-\prob_k[S']|\right] = &\mean\left|\sum_{i=0}^k\left(p_i-p_i'\right)\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right.\nonumber\\
 &\quad+\left.\sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|,
 \end{align}
 where $P_I$ is now the probability distribution with indistinguishable photons defined by set $I$, and $p_i'=p_i/(\sum_{i=0}^kx^i(1-x)^{n-i}\binom{n}{i})$ is the normalised version of the $p_i$ coefficients defined in Sec.\ \ref{sec:expansion}. 
-Note that $P_I$ is akin to the distribution arising from state $\rho_I$ in Sec.\ \ref{sec:expansion}. 
+Note that $P_I$ is the distribution arising from state $\rho_I$ in Sec.\ \ref{sec:expansion}. 
 We can use the triangle inequality to bound this value to
 \begin{align}
 \mean\left[|\prob[S']-\prob_k[S']|\right] &\leq \mean\left|\sum_{i=0}^k\left(p_i-p_i'\right)\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|\nonumber\\
 &+\mean\left|\sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|\\
-&= \mean[\Delta P_{\leq k}] +\mean[\Delta P_{> k}],
+&= \mean[\Delta P_{\leq k}] +\mean[\Delta P_{> k}]\label{eqn:single-outcome-error},
 \end{align}
 where we have introduced variables $\Delta P_{\leq k}$ and $\Delta P_{> k}$ for convenience. 
 We shall consider the expected values of these terms for a Gaussian matrix separately, starting with the latter.
@@ -357,7 +360,7 @@ Thus we can rewrite this term as
 Using the same techniques for computing the Laplace expansion and calculating the expected value of permanents of Gaussian matrices, we can show that
 \begin{align}
 \mean[\Delta P_{\leq k}] &= \sum_{i=0}^k(p_i'-p_i)\binom{n}{i}^2\frac{(n-i)!i!}{m^n}\\
-&= \frac{n!}{m^n}\sum_{i=0}^k(p_i'-p_i)\binom{n}{i}.
+&= \frac{n!}{m^n}\sum_{i=0}^k(p_i'-p_i)\binom{n}{i}\label{eqn:gtk}.
 \end{align}
 
 Next we expand $p_i'$:
@@ -368,21 +371,30 @@ Next we expand $p_i'$:
 and use this expansion as well as the value of $p_i$ to calculate
 \begin{align}
 \mean[\Delta P_{\leq k}] &= \frac{n!}{m^n}\left(1 - \sum_{i=0}^kx^i(1-x)^{n-i}\binom{n}{i}\right)\\
-&= \frac{n!}{m^n}\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}.
+&= \frac{n!}{m^n}\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}\label{eqn:leqk}.
 \end{align}
-Finally, we use these values and sum over all collision-free $S'$, of which there are $\binom{m}{n}\approx m^n/n!$ to bound our total variation distance for a Haar-random unitary as
+
+We plug our values for Eqs.\ \ref{eqn:gtk} \& \ref{eqn:leqk} into Eq.\ \ref{eqn:single-outcome-error} to bound our error for a single outcome as
+
 \begin{equation}
-\mean[\Delta P] \leq 2\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}.
+\mean\left[|\prob[S']-\prob_k[S']|\right] \leq 2\frac{n!}{m^n}\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}.
 \end{equation}
+
+Finally, we use these values and sum over all collision-free $S'$, of which there are $\binom{m}{n}\approx m^n/n!$ to bound the expectation of our total variation distance for a Haar-random unitary as
+
+\begin{align}
+\mean[\Delta P] &\leq \frac{1}{2}\sum_{S'}2\frac{n!}{m^n}\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}\\
+&\approx \frac{m^n}{n!}\frac{n!}{m^n}\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}\\
+&=\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}.
+\end{align}
 
 It seems like there should be some room for improvement in this bound. 
 In particular, the use of the triangle inequality suggests that there might be more precise approximations of the expected distance.
 
-
 \section{Worst case error}
 \label{sec:worst-case}
 
-We shall now give an improved error bound, using a different technique. This bound will be an improvement in two ways: first by improving the error bound by a factor of two, and second by being a bound for the worst-case error of any linear-optical interferometer, rather than a bound for a Haar-random unitary interferometer. We do so by finding an upper bound for the trace distance between our ideal partially distinguishable state and the approximation that results from truncating at some $k$, the size of the largest indistinguishable set of particles.
+We shall now use a different technique to show that the above Haar average case error bound matches the worst-case error for any linear-optical interferometer. We do so by finding an upper bound for the trace distance between our ideal partially distinguishable state and the approximation that results from truncating at some $k$, the size of the largest indistinguishable set of particles.
 As the trace distance is an upper bound for any POVM measurement, we know that this will provide an upper bound for the difference in distribution produced by any interferometer.
 
 Denoting our truncated state
@@ -461,10 +473,10 @@ For the remainder, we see that
 where $\Delta P_L$ denotes the error of our simulation with photons in input modes denoted by $L$. 
 Using our bound in Sec.\ \ref{sec:average-case} as well as the rule of conditional binomial distributions (see below), we can bound this as
 \begin{equation}
-\mean[\Delta P] \leq 2\sum_{i=k+1}^n(\eta x)^i(1-\eta x)^{n-i}\binom{n}{i}.
+\mean[\Delta P] \leq \sum_{i=k+1}^n(\eta x)^i(1-\eta x)^{n-i}\binom{n}{i}.
 \end{equation}
 
-Again, an improvement over the use of the triangle inequality can lead to an improvement in this bound.
+Again, an improvement over the use of the triangle inequality can potentially lead to an improvement in this bound.
 
 
 For the worst-case error, we construct analogous states to those in Sec.\ \ref{sec:worst-case}:
@@ -483,7 +495,7 @@ As a result, the worst-case error of this simulation, using the convex propertie
 &=\sum_{i=k+1}^n(\eta x)^i(1-\eta x)^{n-i}\binom{n}{i}\label{eqn:lossy-worst},
 \end{align}
 where in the second line we have used the rule of conditional binomial distributions. 
-Using the same result as used for Eq.\ (\ref{eqn:worst-case}), we can bound the error to a constant value if $k=n\alpha$ for $\alpha>\eta x$ \cite{arratia1989}. 
+Using the same result as used for Eq.\ (\ref{eqn:worst-case}), we can bound the error to a value decreasing in $n$ by setting $k = n\beta$ for $\beta>\eta x$ \cite{arratia1989}. 
 This shows a relationship between distinguishability and loss similarly to, but not exactly the same, as the one found in \cite{renema2018loss}: the more distinguishable photons are, the more we can classically simulate photon loss, and vice versa. It is remarkable to see that these two algorithms have a different dependence on $x$ and $\eta$: while state truncation depends on $\eta x$, point truncation depends on $\eta x^2$. It is not immediately clear where this difference comes from, and we leave it as an open question.
 
 
@@ -498,7 +510,7 @@ But this comes at the cost of a potentially large, albeit polynomial, runtime of
 Truncating based on states, on the other hand, provides a significant improvement in runtime based on $k$, and is able to run in $O(2^k + \poly(k,m,n))$ time, but at the cost of $k$ increasing linearly with $n$ for constant error.
 
 We therefore consider a variety of comparisons. 
-In Sec.\ \ref{subsec:same-k}, we start by considering the highest value of $x$ and $\eta$ simulable by each approach when given the same values of $n$ and $k$. 
+In Sec.\ \ref{subsec:same-k}, we start by considering the highest value of $x$ and $\eta$ simulable by each approach when given the same values of $n$ and $k$ for a fixed error rate. 
 We then introduce the runtime for each algorithm in Sec.\ \ref{subsec:runtimes}, by comparing how fast they can simulate particular values of $x$ and $\eta$ for increasing $n$. 
 Finally in Sec.\ \ref{subsec:same-runtime}, we compare the highest value of $x$ and $\eta$ simulable by both algorithms for a 90-photon Boson Sampling experiment, where $k$ is varying but under the condition that the algorithms have similar run times. The motivation for this is that $90$ photons has been suggested as strict upper bound for what is achievable using classical computation~\cite{dalzell2018}.
 
@@ -509,7 +521,7 @@ For the runtime of fixed point truncation, we explicitly calculate $\sum_{i=0}^k
 \footnote{Note that this computation could in the worst case take $O(n-i)^7\log^4(n-i)$ time, depending on the matrix sparsity~\cite{huber2008}.}. 
 For Metropolised Independence Sampling, we choose the number of probabilities to approximate via state truncation as 100, which matches currently used ``burn in'' and ``thinning'' times\cite{neville2017}, though it is worth noting that this number could be different depending on the distribution of partially-distinguishable and lossy bosons. 
 For the runtime of state truncation, we use $2k2^k + mk(k-1)/2 + m(n-k)$, where we have used the fact that the first term is approximately equivalent to computing two matrix permanents, the second term is the polynomial overhead of the Clifford \& Clifford approach, and the final term is the polynomial overhead of sampling the fully distinguishable photons \cite{clifford2017}. 
-For these calculations, we have also assumed that $m=n^2$
+For these calculations, we have also assumed that there are $m=n^2$ spatial modes
 \footnote{Note that $m\in O(n^2)$ is only sufficient to ensure that the probability of seeing collisions from a Haar-random interferometer are small \cite{arkhipov2011}. 
 The classical hardness of Boson Sampling is also dependent on entries of $U$ being drawn independently with high probability. 
 To ensure this, $m$ could be required to be as large as $n^6$ \cite{aaronson2011}. 
@@ -528,7 +540,7 @@ With this in mind, we plot values for distinguishability and loss separately, an
 \subfloat[\label{fig:max-x-samek}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_x_samek}}
 \hfill
 \subfloat[\label{fig:max-eta-samek}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_eta_samek}}
-\caption[Highest value of $x$ when $\eta=1$ and of $\eta$ when $x=1$ simulable via state or point truncation up to 10\% error]{\label{fig:samek} 
+\caption[Highest value of (\ref{fig:max-x-samek}) $x$ and $\eta$ simulable via state or point truncation]{\label{fig:samek} 
 Highest value of (\ref{fig:max-x-samek}) $x$ when $\eta=1$ and (\ref{fig:max-eta-samek}) of $\eta$ when $x=1$ simulable via state (solid) or point (dashed) truncation up to 10\% error ($\epsilon=0.1$). 
 The number of photons, $n$, is varying, with $k$ chosen as either $k=n-1$ (red) or $k=n/2$ (green).
 The oscillatory behaviour is due to rounding $k=n/2$ when $n$ is odd.}
@@ -546,7 +558,7 @@ There are a number of things we can note from FIG.\ \ref{fig:samek}.
 First is that when $k=n-1$, we can see that both algorithms tend to the same maximum values of distinguishability and loss. 
 In the case of distinguishability, we can easily see why by considering the error bounds of both algorithms. 
 One can see from Eq.\ (\ref{eqn:error-sum}) that state truncation will have a simple error bound in this case of $\epsilon \leq x^n$, meaning that for constant error the largest value of $x$ simulable is $x = \epsilon^{1/n}$. 
-For point truncation, Eq.\ (\ref{eqn:renema-variance}) shows that the error is similarly bounded as $\epsilon \leq x^n/\sqrt{e}$, leading to a largest value of $x=(\epsilon\sqrt{e})^{1/n}$. 
+For point truncation, Eqs.\ (\ref{eqn:renema-variance}) \& (\ref{eqn:var}) with $k=n-1$ show that the error is similarly bounded as $\epsilon \leq x^n/\sqrt{e}$, leading to a largest value of $x=(\epsilon\sqrt{e})^{1/n}$. 
 Thus, although the highest value of $x$ simulable via point truncation is higher than that via state truncation, the difference will decrease in the limit of large $n$. 
 Curiously we see the same effect as well in the case of loss, but now the highest value of $\eta$ simulable via state truncation is higher than that of point truncation. 
 Again, this can be shown to hold theoretically: For state truncation the error scales as $\epsilon \leq \eta^n$ according to Eq.\ (\ref{eqn:lossy-worst}), corresponding to $\eta=\epsilon^{1/n}$; whereas for point truncation we see from Eq.\ (\ref{eqn:renema-variance}) and substituting $x=\sqrt{\eta}$ that the error scales as $\epsilon \leq \eta^{n/2}/\sqrt{e}$, meaning a maximum value of $\eta$ is $\eta=(e\epsilon^2)^{1/n}$. 
@@ -565,7 +577,7 @@ As a result, it is unsurprising that for $k$ increasing linearly with $n$ the hi
 
 \begin{figure}
 \includegraphics[width=\linewidth]{classical_sim/runtime}
-\caption[Approximated runtime in terms of number of operations to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ up to 10\% error via state or point truncation]{\label{fig:runtime} Approximated runtime in terms of number of operations to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ up to 10\% error ($\epsilon=0.1$) via state (solid) or point (dashed) truncation.}
+\caption[Approximate runtime to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ via state or point truncation]{\label{fig:runtime} Approximate runtime (number of operations) to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ up to 10\% error ($\epsilon=0.1$) via state (solid) or point (dashed) truncation. Note that a modern supercomputer running for an hour can perform roughly $10^{20}$ operations.}
 \end{figure}
 
 We next consider the runtime required to simulate $n$-photon Boson Sampling up to 10\% error via either method. 
@@ -596,16 +608,16 @@ And in the case where $\eta=0.755, x=0.976$, both algorithms have runtimes on th
 \subfloat[\label{fig:max-x-fixed-n-90}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_x_fixed_n_90}}
 \hfill
 \subfloat[\label{fig:max-eta-fixed-n-90}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_eta_fixed_n_90}}
-\caption[Highest value of $x$ when $\eta=1$ and $\eta$ when $x=1$ simulable for 90-photon boson sampling at truncation level $k$ up to 10\% error]{\label{fig:fixed-n-90} 
+\caption[Highest value of $x$ and $\eta=1$ simulable for 90-photon boson sampling at truncation level $k$]{\label{fig:fixed-n-90} 
 Highest value of (\ref{fig:max-x-fixed-n-90}) $x$ when $\eta=1$ and (\ref{fig:max-eta-fixed-n-90}) $\eta$ when $x=1$ simulable for 90-photon boson sampling at truncation level $k$ up to 10\% error ($\epsilon=0.1$). 
-Blue line indicates highest values simulable via state truncation at level $k$, green lines indicate highest values simulable via point truncation at level $k$, orange lines indicate highest values simulable at point truncation at level $k'$ such that $k'$ is the smallest level of truncation such that the approximate runtime of point truncation at level $k'$ is longer than the runtime of state truncation at level $k$.}
+Blue line indicates highest values simulable via state truncation at level $k$, green lines indicate highest values simulable via point truncation at level $k$, orange lines indicate highest values simulable by point truncation at level $k'$ such that $k'$ is the smallest level of truncation such that the approximate runtime of point truncation at level $k'$ is longer than the runtime of state truncation at level $k$.}
 \end{figure*}
 
 Now we consider both truncation level and runtime, and compare the algorithms when restricted to comparable runtimes. 
 To do this, we shall consider the challenge of simulating a 90-photon Boson Sampling experiment, and the largest values of distinguishability and loss that can be simulated at level $k$ with 10\% error. 
 The motivation for this is that $90$ photons has been suggested as strict upper bound for what is achievable using classical computation~\cite{dalzell2018}. 
 
-The results are shown in Fig.\ \ref{fig:fixed-n-90}, detailing for each algorithm the highest value of $x$ simulable when $\eta=1$ (\ref{fig:max-x-fixed-n-90}) and the highest value of $\eta$ simulable when $x=1$ (\ref{fig:max-eta-fixed-n-90}). 
+The results are shown in FIG.\ \ref{fig:fixed-n-90}, detailing for each algorithm the highest value of $x$ simulable when $\eta=1$ (\ref{fig:max-x-fixed-n-90}) and the highest value of $\eta$ simulable when $x=1$ (\ref{fig:max-eta-fixed-n-90}). 
 In both figures, the blue line indicates state truncation at level $k$, and the green line indicates point truncation at level $k$. 
 However, the runtime of state truncation at level $k$ and point truncation at level $k$ are likely to be drastically different. 
 To take runtime into consideration as well, we consider the orange line which indicates point truncation at level $k'$, where $k'$ is the smallest integer such that the approximated runtime of point truncation at level $k'$ is longer than that of state truncation at level $k$. 
@@ -628,7 +640,7 @@ The uniform loss layer means that each photon has probability $\eta=\tau^s$ of s
 If we take the total number of lossy components to be $d$, the remaining lossy circuit can be modelled as an $(m+d)$-mode interferometer, with lost photons ending up in the additional $d$ modes. 
 Thus we can achieve the same error as Eq.\ (\ref{eqn:lossy-worst}) in $O(k2^k+\poly(k,m,d))$ time. 
 In typical schemes for linear interferometers, $d$ is at most polynomial in $m$ \cite{reck1994,clements2016}, so the overhead from these additional modes is small. 
-We can bound the error to a constant if $k>nx\tau^s$. Taking the logarithm on both sides and rearranging for $s$, we find that this holds if
+We can bound the error to a decreasing value in terms of $n$ if $k>nx\tau^s$. Taking the logarithm on both sides and rearranging for $s$, we find that this holds if
 
 \begin{equation}
 s>\frac{\log n-\log 1/x-\log k}{\log1/\tau}.
@@ -652,7 +664,7 @@ In particular, the approach of Ref.~\cite{renema2018} for truncation when lookin
 A direct adaptation of the Clifford \& Clifford algorithm to this approach would almost certainly offer an improvement over our algorithm. 
 However, such an adaptation is non-trivial, due to the fact that the term in the expansion are not states, something that motivated our work here.
 
-There are other open questions we would like to consider as well. The first would be to improve the average-case error bounds to match, if not improve over, our worst-case error bound. This would most likely involve an alternative to using the triangle inequality. The second would be to find a way of explaining the difference in dependence on $\eta$ and $x$ between point and state truncation, and ideally improving either algorithm in the process.
+There are other open questions we would like to consider as well. The first would be to reduce the average-case error bounds to be less than our worst-case error bounds. This would most likely involve an alternative to using the triangle inequality. The second would be to find a way of explaining the difference in dependence on $\eta$ and $x$ between point and state truncation, and ideally improving either algorithm in the process.
 
 
 \subsection{Note Added}
