@@ -41,81 +41,10 @@ Here we show explicitly how nonideal linear optics can be viewed as a quantum co
 Our approach shows that while the ideal case is intimately related to the symmetric representation of the unitary group through matrix permanents, in the nonideal case all representations play a role.
 
 The paper is structured as follows. 
-In Section \ref{sec:preliminary-notes} we give an overview of background material including Boson Sampling, irreducible representations of the unitary and symmetric groups, and Schur-Weyl duality. 
 We provide a simple quantum circuit for ideal indistinguishable photon sampling in Section \ref{sec:qc-bs}, before introducing the full circuit for sampling with distinguishable particles in Section \ref{sec:qc-noisy}. 
 In Section \ref{sec:uu-duality}, we provide some further explanation as to why these circuits work, via what is known as unitary-unitary duality.
 Following this result, we discuss a few interesting consequences: in Section \ref{sec:post-bs}, we show how postselection can be used with this circuit to sample from the indistinguishable distribution when given a distinguishable input; in Section \ref{sec:nc-loss}, we consider how the circuit can be used to simulate Boson Sampling when photons are lost; and in Section \ref{sec:mixture}, we consider the multipartite entanglement of the output in the partially distinguishable case. 
 %We conclude with some discussion and future work in Section \ref{sec:nc-conclusion}.
-
-
-\section{Preliminaries}
-\label{sec:preliminary-notes}
-
-\subsection{Sampling from bosonic distributions}
-
-We start by defining the ideal probability distribution of indistinguishable single bosons interacting on a linear interferometer.
-We'll refer to this as bosonic sampling, as it's a bit more general than Aaronson and Arkhipov's Boson Sampling problem as we describe below.
-The input is $U \in \mathrm{U}(m)$, an $m\times m$ unitary matrix which describes an $m$-mode linear interferometer, and $S = (S_1,S_2,\dots,S_m)$ with $\sum_{i=1}^m S_i =n$, an ordered list of integers that corresponds to an $n$-boson, $m$-mode occupation describing the input state with $S_i$ bosons in mode $i$. 
-Given an output occupation $S'$, define the $n \times n$ (not necessarily unitary) matrix $U_{S',S}$ as that formed by first taking $S_i'$ copies of row $i$ of $U$ in order to create an $m\times n$ matrix, from which we then take $S_j$ copies of column $j$. 
-We can then define $\mathcal{D}_{U,S}$, the probability distribution for measuring an $n$-boson $m$-mode occupation $S'$ for interferometer $U$ and input state $S$, as
-\begin{equation}\label{eqn:bs-distribution}
-\textrm{Pr}_{\mathcal{D}_{U,S}}[S'] = \frac{|\per(U_{S',S})|^2}{\prod_{i=1}^m S_i'! S_i!} ,
-\end{equation}
-where $\per$ is the matrix permanent.
-
-In a photonics experiment, this setting is described in terms of creation operators $a^\dag_i$ for a photon in mode $i$. 
-The initial state is then
-\begin{equation}
-|S\rangle = \prod_{i=0}^m \frac{(a_i^\dagger)^{S_i}}{\sqrt{S_i}}|0^n\rangle.
-\end{equation}
-The evolution of the photonic state induced by a linear optical interferometer implementing $U$ can then be expressed as $a_i^\dagger \mapsto \sum_{j = 0}^m U_{i,j}a_j^\dagger$.
-Thus single boson states evolve under linear interferometry just as an $m$ dimensional qudit does under a unitary gate $U$ (sometimes called unary encoding).
-This suggests how quantum circuits simulating photonics might be constructed, as we'll see.
-
-The problem known as Boson Sampling is that of sampling from this probability distribution in the case where the input occupation is specified as $|1^n 0^{n^2 - n}\rangle = \prod_{i = 1}^n a_{i}^\dagger|0\rangle$, and $U$ is drawn Haar randomly from U$(m=n^2)$\cite{aaronson2011}. 
-It was proven by Aaronson and Arkhipov that if there was a polynomial time classical algorithm for sampling from this distribution, then $P^{\#P} = BPP^{NP}$ and the Polynomial Hierarchy would collapse to the third level. 
-They also showed similar results for approximate Boson Sampling, where samples are drawn from a distribution $\mathcal{D}_{\mathcal{O}(U, \epsilon)}$ such that $||\mathcal{D}_{\mathcal{O}(U, \epsilon)} - \mathcal{D}_U|| \leq \epsilon$ for all $U \in \textrm{U}(m)$. 
-%Their proof showed that if someone could perform approximate Boson Sampling on a classical computer in polynomial time, and the Permanent-of-Gaussians and Permanent Anti-Concentration conjectures hold, then again the Polynomial Hierarchy would collapse to the third level~\cite{aaronson2011}.
-
-
-\subsection{Schur-Weyl duality}
-
-Our algorithm can be understood from the perspective of the representation theory of the unitary group U$(m)$ of linear interferometers acting of $m$ modes.
-The irreducible representations, or irreps, are intimately related to those of the symmetric group $\textrm{S}_n$ that permutes the particles.
-Irreps of both of these groups are indexed by ordered partitions $\lambda = (\lambda_1,\lambda_2,\cdots,\lambda_m)$ of $n$ such that $\lambda_i \geq \lambda_{i+1}$ and $\sum_{i = 1}^m \lambda_i = n$.
-We usually suppress zeros in this notation, so for example the totally symmetric irrep $\lambda=(n, 0,\cdots,0)$ is written $(n)$. 
-The number of nonzero $\lambda_i$ is called the length of the partition, $\ell(\lambda)$, and only partitions with $\ell(\lambda) \leq m$ occur, which we will assume in all of our expressions that follow.
-%Following the convention of~\cite{rowe2012}, we shall label irreps of S$_n$ and U$(m)$ indexed by $\lambda$ as $(\lambda)$ and $\{\lambda\}$, respectively.
-
-For the tensor space of $n$ $m$-dimensional qudits, the actions of the symmetric and unitary groups on a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ are explicitly as follows. 
-For a permutation $\sigma \in \textrm{S}_n$, the action permutes the tensor factors. 
-For a unitary matrix $U \in \textrm{U}(m)$, the action is the $n$-fold tensor product $U^{\otimes n}$. 
-It is not hard to see that these two actions commute.
-We can now describe Schur-Weyl duality as the following theorem.
-\begin{theorem}[Schur-Weyl duality~\cite{rowe2012}]
-The Hilbert space of $n$ $m$-dimensional qudits decomposes into irreducible subspaces
-\begin{equation}
-(\mathbb{C}^m)^{\otimes n} \simeq \bigoplus_{\lambda\vdash n} \mathbb{C}^{\{\lambda\}} \otimes \mathbb{C}^{(\lambda)} ,
-\end{equation}
-where $\mathbb{C}^{\{\lambda\}}$ carries irrep $\{\lambda\}$ of $\textrm{U}(m)$ and $\mathbb{C}^{(\lambda)}$ carries irrep $(\lambda)$ of $\textrm{S}_n$, and $\simeq$ indicates a change of basis is involved.
-The dimension of irrep $(\lambda)$ can be viewed as the multiplicity of irrep $\{\lambda\}$, and vice versa.
-\end{theorem}
-
-There is an efficient quantum circuit that implements the Schur-Weyl decomposition.
-Given a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ in the computational basis, this circuit, which we denote $W$, performs the transformation
-\begin{equation}
-W|\Psi\rangle
- = \sum_{\lambda \vdash n} \, \sum_{q_{\lambda}} \, \sum_{p_\lambda}C^\lambda_{q_\lambda,p_\lambda}|\lambda\rangle|q_\lambda\rangle|p_\lambda\rangle , 
-\end{equation}
-where $\lambda$ indexes the irrep, $q_\lambda$ and $p_\lambda$ index bases of irreps $\{\lambda\}$ and $(\lambda)$ respectively, and $C^\lambda_{q_\lambda,p_\lambda}$ is a generalised Clebsch-Gordan coefficient.
-For example, the unitary action of U$(m)$ in this basis is
-\begin{equation}
-U : |\lambda\rangle |q_\lambda\rangle |p\rangle \rightarrow |\lambda\rangle |U\cdot q_\lambda\rangle |p\rangle := |\lambda\rangle \left( \sum_{q_\lambda'} U^\lambda_{q_\lambda, q_\lambda'} |q_\lambda'\rangle \right) |p\rangle ,
-\end{equation}
-where $U^\lambda$ is the irreducible unitary matrix corresponding to $U \in \mathrm{U}(m)$.
-It was proven by Bacon, Chuang and Harrow that this circuit runs in polynomial time in terms of $n$, $m$ and $\log(\delta^{-1})$, where $\delta$ is an accuracy parameter~\cite{bacon2007}.
-
-
 
 \section{A quantum circuit for ideal bosonic sampling}
 \label{sec:qc-bs}
@@ -219,8 +148,6 @@ The probability of measuring a particular computational basis state $|s'\rangle 
 %This becomes the Boson Sampling distribution by mapping back to occupations. 
 The probability of measuring an occupation $S'$ is equal to summing over the probabilities of all states $|s'\rangle$ of type $S'$, of which there are $n!/\prod_{i=1}^m (S_i'!)$.
 We will consider both versions of this circuit in subsequent sections on sampling from distinguishable bosonic distributions.
-
-
 
 \section{A quantum circuit for arbitrarily distinguishable bosonic sampling}
 \label{sec:qc-noisy}
@@ -529,8 +456,7 @@ Without a specific noise model, there are several mixed states we could consider
 \begin{align}
 \label{eq:Werner}
 \rho_\epsilon 
-=& \epsilon\left(\frac{\sum_{\sigma \in  \textrm{S}_n}\sigma|s\rangle}{\sqrt{n!}}\right)\left(\frac{\sum_{\tau \in  \textrm{S}_n}\langle s|\tau^\dagger}{\sqrt{n!}}\right) \\
-& + (1-\epsilon)\left(\frac{\sum_{\sigma \in  \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger}{{n!}}\right).
+=& \epsilon\left(\frac{\sum_{\sigma \in  \textrm{S}_n}\sigma|s\rangle}{\sqrt{n!}}\right)\left(\frac{\sum_{\tau \in  \textrm{S}_n}\langle s|\tau^\dagger}{\sqrt{n!}}\right) + (1-\epsilon)\left(\frac{\sum_{\sigma \in  \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger}{{n!}}\right).
 \end{align}
 Equation~(\ref{eq:ComDis}) tells us that the completely indistinguishable state is maximally mixed on the coincident subspace, and it has been shown that states of the form $\epsilon\ket{\psi}\bra{\psi} + (1-\epsilon)\Id/d$ are separable for sufficiently small $\epsilon$~\cite{braunstein1999, rungta2001}, where $\Id/d$ is the completely mixed state on the entire space (the tensor product $(\mathbb{C}^m)^{\otimes n}$).
 It is therefore tempting to conclude that there is a measurable set of states near the completely distinguishable state that are separable.
@@ -548,18 +474,20 @@ where we have separated the sum over $\sigma$ and $\tau$ into two sums, based on
 Transposing the first qudit will leave the first of these sums invariant, while always affecting the second. 
 The resulting state is
 \begin{align}
-\rho_{\epsilon}^{T_1}=
-\frac{1}{n!} \left((1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\sigma^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|\right)
+\rho_{\epsilon}^{T_1}&=
+\frac{1}{n!} \left((1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
+&\left.+ \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\sigma^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|\right)
 \end{align}
 To work out the trace norm of this density matrix, we need to multiply it by its transpose and take the square root. 
 We can compute $\sqrt{\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}}$ as follows:
 \begin{align}
-&\frac{1}{n!} \left((1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger+ \epsilon^2\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)\\\upsilon^{-1}(1) = \chi^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\chi|s\rangle\langle s|\upsilon^\dagger\right.\\
+&\frac{1}{n!} \left((1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger+ \epsilon^2\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)\\\upsilon^{-1}(1) = \chi^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\chi|s\rangle\langle s|\upsilon^\dagger\right.\nonumber\\
 &\left. + \epsilon\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\upsilon^{-1}(1) \neq \chi^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\sigma^{-1}(1)}|s_{\upsilon^{-1}(1)}\rangle\langle s_{\chi^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|s_{\chi^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right)^{1/2}\\
-&= \frac{1}{n!}\left((1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\\
+&= \frac{1}{n!}\left((1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
 &\left.+ \epsilon^2(n-1)!\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.
 \left. + \epsilon\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right)^{1/2} \\
-&= \frac{1}{n!}\left((1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger + \frac{\epsilon}{(n-1)!}\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right).\label{eqn:mismatched-perms}
+&= \frac{1}{n!}\left((1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
+&+ \left.\frac{\epsilon}{(n-1)!}\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right).\label{eqn:mismatched-perms}
 \end{align}
 From this we can work out the trace norm as
 \begin{align}

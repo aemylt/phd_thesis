@@ -81,120 +81,6 @@ In first quantisation, the input state can be written as~\cite{moylett2018}
 For convenience, we will assume here and throughout the rest of this paper that our photons start in the Fock state $\ket{S}=\ket{1^n0^{m-n}}$. 
 We will use the corresponding first quantized states of this form in the following.%, as long as we have a means of describing the $\mathcal{S}$ matrix.
 
-
-\subsection{Classical simulation of fully (in)-distinguishable lossless Boson Sampling}
-
-Boson Sampling under ideal conditions (lossless indistinguishable single photons) is intractable for sufficiently large $n$. 
-Until recently the only classical simulation method explicitly known was to compute the entire probability distribution before taking a sample, though it was widely believed that more efficient, albeit still exponential time, approaches existed. 
-A brute force method cannot scale, due to both the number of possible outcomes and the complexity of computing even one $n\times n$ complex matrix permanent.
-
-Two major results gave the first explicit classical simulation strategies which were faster than brute-force sampling. 
-The first, by Neville \textit{et al.}~\cite{neville2017}, demonstrated that Boson Sampling experiments with up to 30 photons could be simulated on a single laptop, and suggests that a supercomputer could handle up to 50 photons. 
-This was achieved by starting with the classical distribution of $n$ distinguishable photons, and then using Metropolised Independence Sampling to adapt the distribution to that of ideal Boson Sampling.
-The second result, by Clifford \& Clifford \cite{clifford2017}, gave a classical algorithm for exact Boson Sampling and runs in time equivalent to computing two $n \times n$ matrix  permanents per sample with a polynomial overhead. 
-This is through a combination of optimizations, particularly computing marginal probabilities and sampling via the chain rule.
-Our approach here is to make these more efficient techniques applicable to realistic situations with distinguishability and loss.
-
-It is also worth discussing at this point how to classically simulate boson sampling with completely distinguishable photons, for which a polynomial time algorithm exists \cite{aaronson2014}. In this case, there is no photon interference, so photons can be sampled individually. This is done by taking a photon which starts in mode $i$, and sampling output mode $j$ with probability $|U_{j,i}|^2$. Repeating for all photons gives us the complete sample in $O(mn)$ time.
-
-
-\subsection{Expanding in terms of fixed points}
-\label{sec:renema-review}
-
-In \cite{renema2018, renema2018loss}, Renema \textit{et al.}\ consider a model where inter-photon distinguishability is measured by an inner product of pure states \cite{tamma2014, deguise2014, shchesnovich2015, rohde2015, tamma2015, tichy2015}. 
-The probability distribution of arbitrarily distinguishable bosons is modelled as
-\begin{equation}
-\prob[S'] = \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(M*M^*_{1,\sigma}) ,
-\end{equation}
-where $\mathcal{S}$ is the same matrix describing the distinguishability as in the previous section, $M$ is a matrix defined by the rows and columns of our interferometer $U$ selected based on our photon output $S'$ and input $S$, $M^*_{1,\sigma}$ is the conjugate matrix with the identity permutation applied to rows and permutation $\sigma$ applied to columns, and $*$ denotes element-wise multiplication. 
-They further restrict to a model where the indistinguishability overlap is defined by a single parameter $\mathcal{S}_{i,j} = x + (1-x)\delta_{i,j}, x \in [0,1]$.
-The sum over permutations can be ordered based on how many \emph{fixed points} a permutation has, giving
-\begin{equation}
-\prob[S'] = \sum_{j=0}^n\sum_{\sigma^j}x^j\per(M*M^*_{1,\sigma}) , \label{eqn:renema-state}
-\end{equation}
-where $\sigma^j$ denotes permutations which have $n-j$ elements as fixed points.
-Each permanent can be broken down via the Laplace expansion into a sum of a complex matrix permanent multiplied by a positive matrix permanent:
-\begin{equation}
-\prob[S'] = \sum_{j=0}^n\sum_{\sigma^j}x^j\sum_{\substack{J'\leq S'\\|J'|=j}}\per(M_{J',1}*M^*_{J',\sigma_p})\per(|M_{\bar{J'},\sigma_u}|^2) ,
-\end{equation}
-
-\noindent where $J'$ is an occupation with $j$ photons. Here we are now choosing submatrices of $M$, with $J'$ representing the $\binom{n}{j}$ possible combinations of rows from $M$, $\bar{J'}$ representing the remaining rows, and $\sigma_p$ and $\sigma_u$  representing permuted and unpermuted elements of $\sigma$ respectively.
-The $J' \leq S'$ notation is used to indicate that $J'$ is a Fock state such that $J_i\leq S'_i \,\forall i\in[m]$.
-
-The classical simulation method used truncates the number of non-fixed points in a permutation as being at most $k$, with the remainder of the probability treated as an error margin. 
-It is important to note while these approximations are real, they are not necessarily positive. 
-This is due to the truncation, where positive higher order terms which would have corrected the probability to be positive are now missing from the approximation. 
-To correct this, any negative approximations are rounded up to $0$.
-These probabilities are then used to train a Metropolised Independence Sampler, akin to the technique of \cite{neville2017}. 
-Training this sampler requires approximating a number of probabilities dependent on the underlying distribution, each of which involves computing $O(n^{2k})$ permanents of $k\times k$ complex matrices, and the same number of permanents of $(n-k)\times (n-k)$ matrices with non-negative entries. 
-The permanents of $k\times k$ complex matrices can be computed classically in $O(k2^k)$ time via Ryser's algorithm, and the permanents of matrices with non-negative entries can be approximated up to multiplicative error in polynomial time \cite{jerrum2004,huber2008}. 
-As long as $k$ is independent of $n$, this means that there is a polynomial runtime.
-
-To work out a suitable value $k$, define coefficients $c_j$ as
-
-\begin{equation}
-c_j = \sum_{\sigma^j}\sum_{\substack{J'\leq S'\\|J'|=j}}\per(M_{J',1}*M^*_{J',\sigma_p})\per(|M_{\bar{J'},\sigma_u}|^2)\label{eqn:coefficients}.
-\end{equation}
-
-Assuming the matrices are Gaussian, the variance of each permanent can be bounded as
-
-\begin{equation}
-\var[\per(M_{J',1}*M^*_{J',\sigma_p})] = \frac{j!}{m^{2j}},
-\end{equation}
-and
-\begin{equation}
-\var[\per(|M_{\bar{J'},\sigma_u}|^2)] < \frac{(n-j)!}{m^{2(n-j)}}\sum_{l=0}^{n-j}\frac{1}{l!}.
-\end{equation}
-
-This leads to two key results. The first is that the variance of $c_j$ tends towards a constant value:
-\begin{align}
-\var[c_j] &< \left(\frac{n!}{m^n}\right)^2\frac{1}{e}\sum_{l=0}^{n-j}\frac{1}{l!} \label{eqn:var}\\
-&\rightarrow\left(\frac{n!}{m^n}\right)^2 \textrm{ as } n\rightarrow\infty,
-\end{align}
-and the second is that the covariance for different values of $j$ is zero:
-\begin{equation}
-\cov[c_j,c_j'] = 0\, \forall\, j\neq j'\label{eqn:covar}.
-\end{equation}
-From this one can approximate the variance of the error as a geometric series, which as $n\rightarrow\infty$ tends towards the inequality
-\begin{align}
-\var[\Delta \prob[S']] &= \var[\prob[S']-\prob_k[S']]\\
-&= \sum_{j=k+1}^nx^{2j}\var[c_j]\label{eqn:renema-variance}\\
-&< \left(\frac{n!}{m^n}\right)^2\left(\frac{x^{2(k+1)}}{1-x^2}\right),
-\end{align}
-\noindent where $P_k$ is the probability distribution when truncated at $j\leq k$ for some $k<n$.
-
-Finally one can use a Markov inequality to show that if the variance of the error is of the form $(n!/m^n)^2\epsilon^2$, the average error of the simulation is at most $\epsilon$ \cite{renema2018loss}.
-Crucially, this value of $\epsilon$ is only dependent on $x$ and $k$ and no longer dependent on $n$.
-This means that for any value of $x$, one can choose a suitable value of $k$ to achieve a required error $\epsilon$, and run a classical simulation in time polynomial in $n$.
-
-Although this runtime is polynomial in terms of $n$ and can therefore be considered asymptotically efficient, it might not be classically simulable in practice. 
-There are three main contributions to this: 
-First, the algorithm is reliant on Metropolised Independence Sampling, which potentially requires many probabilities to be approximated per sample. 
-Second, approximating each probability requires $O(n^{2k})$ permanents of $k\times k$ matrices, which even for small $k$ could be a large number of permanents. 
-And third, approximating each probability requires $O(n^{2k})$ permanents of $(n-k)\times(n-k)$ matrices with non-negative elements. 
-Although approximating permanents of matrices with non-negative elements can be achieved in polynomial time, classical algorithms still have a runtime ranging from $O((n-k)^4\log(n-k))$ to $O((n-k)^{7}\log^4(n-k))$, depending on the sparsity of the matrix~\cite{huber2008}. These issues are the main points to address in order to achieve a practical classical algorithm for Boson Sampling. Clifford \& Clifford could help to alleviate these issues, but there is a challenge due to the fact that the approximation used in Renema et al.\ does not correspond to a bosonic state. 
-This in turn leads to negative probabilities, which are not clear how to correct for in the Clifford \& Clifford algorithm.
-
-
-\subsection{Classical simulation of lossy Boson Sampling}
-
-Another common source of imperfections in linear optics is that of photon loss, which arises through a number of different means. 
-Indeed, any large-scale demonstration of Boson Sampling is bound to face photon loss, and therefore needs to take such issues into account. 
-Some results have already shown instances where hardness is still retained, such as when only a constant number of photons are lost \cite{aaronson2016,wang2018}.
-
-Neville \textit{et al.}\ compared the classical simulation of their approach to a Boson Sampling experiment where any photon loss was considered a rejected experiment \cite{neville2017}. 
-In \cite{renema2018loss}, the method described in Sec.\ \ref{sec:renema-review} was adapted to consider uniform loss, showing that the same result can be found, with the only difference being that $x$ is now replaced by $\alpha=\sqrt{\eta}x$, where $\eta$ is the probability of each individual photon surviving. 
-Crucially, this result demonstrated that Boson Sampling where a constant fraction of photons were lost can be simulated in $O(\ell^{2k}k2^k)$, where $\ell$ is the number of photons which survive and $k$ is only dependent on the constant $\ell/n$, distinguishability $x$, and the desired accuracy of the simulation. 
-This can be expanded to classically simulating Boson Sampling under uniform loss by sampling $\ell$ from the binomial distribution before sampling output photons, which offers a runtime of $O(n^{2k}k2^k)$. 
-Novel classical simulations for Boson Sampling under loss have also been considered by use of classically simulable states such as thermal \cite{garciapatron2017} or separable \cite{oszmaniec2018} states.
-
-There has also been some consideration of how classical simulations can be generalised to non-uniform loss. 
-This usually means photon loss that is dependent on the number of optical components, with each component having transmission probability $\tau$. 
-Classical simulation methods can be generalised to this model by identifying a layer of uniform losses from the circuit, followed a non-uniform lossy circuit which can be simulated classically through the use of additional modes for lost photons \cite{garciapatron2017,oszmaniec2018}. 
-These results showed that Boson Sampling under non-uniform loss can be classically simulated as long as the smallest number of components a photon encounters is logarithmic in $n$. More recently, methods were also developed to give a polynomial-time algorithm in the case where some photons experience little or no loss, by extracting losses into a layer of non-uniform loss and simulating via a generalisation of the Clifford \& Clifford algorithm \cite{brod2019}.
-
-
-
 \section{Expanding in terms of states}
 \label{sec:expansion}
 
@@ -300,15 +186,13 @@ We can use the same strategies used in \cite{renema2018,renema2018loss} to deriv
 \end{align}
 where $\prob_k$ is the probability distribution truncated at $k$ indistinguishable photons via our approximation. For a specific outcome $S'$, we can expand the right hand side to
 \begin{align}
-\mean\left[|\prob[S']-\prob_k[S']|\right] = &\mean\left|\sum_{i=0}^k\left(p_i-p_i'\right)\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right.\nonumber\\
-&\quad+\left.\sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|,
+\mean\left[|\prob[S']-\prob_k[S']|\right] = &\mean\left|\sum_{i=0}^k\left(p_i-p_i'\right)\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']+\sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|,
 \end{align}
 where $P_I$ is now the probability distribution with indistinguishable photons defined by set $I$, and $p_i'=p_i/(\sum_{i=0}^kx^i(1-x)^{n-i}\binom{n}{i})$ is the normalised version of the $p_i$ coefficients defined in Sec.\ \ref{sec:expansion}. 
 Note that $P_I$ is the distribution arising from state $\rho_I$ in Sec.\ \ref{sec:expansion}. 
 We can use the triangle inequality to bound this value to
 \begin{align}
-\mean\left[|\prob[S']-\prob_k[S']|\right] &\leq \mean\left|\sum_{i=0}^k\left(p_i-p_i'\right)\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|\nonumber\\
-&+\mean\left|\sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|\\
+\mean\left[|\prob[S']-\prob_k[S']|\right] &\leq \mean\left|\sum_{i=0}^k\left(p_i-p_i'\right)\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|+\mean\left|\sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|\\
 &= \mean[\Delta P_{\leq k}] +\mean[\Delta P_{> k}]\label{eqn:single-outcome-error},
 \end{align}
 where we have introduced variables $\Delta P_{\leq k}$ and $\Delta P_{> k}$ for convenience. 
@@ -451,7 +335,7 @@ Note that in the same way that it doesn't matter which particles are traced out 
 Uniform loss matches that of choosing which subset of photons survive according to the binomial distribution \cite{oszmaniec2018,renema2018loss}. 
 We can combine this model with the distinguishability model of Sec.\ \ref{sec:expansion}, giving
 \begin{align}
-\rho_{n,\eta,x}&=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\left(\frac{1}{\ell!}\sum_{\substack{\sigma,\sigma'\in\symm_n\\\sigma^{-1}(j)=\sigma'^{-1}(j)\forall j \notin I}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\otimes(\ket{0}\bra{0})^{\otimes n-\ell}\\
+\rho_{n,\eta,x}&=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\left(\frac{1}{\ell!}\sum_{\substack{\sigma,\sigma'\in\symm_n\\\sigma^{-1}(j)=\sigma'^{-1}(j)\\\forall j \notin I}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\otimes(\ket{0}\bra{0})^{\otimes n-\ell}\\
 &=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\rho_{L,I}.
 \end{align}
 
@@ -490,8 +374,7 @@ For the worst-case error, we construct analogous states to those in Sec.\ \ref{s
 and note that $\rho_{n,\eta,x}$ is a linear combination of these states. 
 As a result, the worst-case error of this simulation, using the convex properties of the trace distance, can be bounded as
 \begin{align}
-\tdist(\rho_{n,\eta,x},\rho_{\leq k,\eta,x}) &\leq \sum_{\ell=k+1}^n\eta^\ell(1-\eta)^{n-\ell}\binom{n}{\ell}\nonumber\\
-&\quad\times\sum_{i=k+1}^\ell x^i(1-x)^{\ell-i}\binom{\ell}{i}\\
+\tdist(\rho_{n,\eta,x},\rho_{\leq k,\eta,x}) &\leq \sum_{\ell=k+1}^n\eta^\ell(1-\eta)^{n-\ell}\binom{n}{\ell}\times\sum_{i=k+1}^\ell x^i(1-x)^{\ell-i}\binom{\ell}{i}\\
 &=\sum_{i=k+1}^n(\eta x)^i(1-\eta x)^{n-i}\binom{n}{i}\label{eqn:lossy-worst},
 \end{align}
 where in the second line we have used the rule of conditional binomial distributions. 
