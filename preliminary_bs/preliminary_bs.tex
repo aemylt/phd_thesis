@@ -1,6 +1,11 @@
 \chapter{Preliminary Material: Boson Sampling and the Schur Transform}
 
+In the previous part of this thesis we have considered how quantum computers can offer speedups for computationally hard problems, with a particular focus on the NP-Hard Travelling Salesman Problem. But these speedups have focused on asymptotic runtimes, rather than considering how much of a speedup can be achieved in real life. This is particularly crucial when considering the issue of quantum error correction, which is a necessity for these algorithms to work in the real world.
+
+In this part, we shift gears to focusing on an architecture-driven approach. We start by explaining in Section \ref{sec:error-correction}, we explain why this shift is necessary by discussing limitations of what can be achieved by purely focusing on algorithms. We then introduce the problem of Boson Sampling, a non-universal model of quantum computation based on linear optics, with strong connections to representation theory. This architecture will be the focus of this part. In the rest of this chapter, we shall introduce Boson Sampling, its experimental limitations and the representation theory underpinning it. In Chapter \ref{chp:noisy_circuit}, we formalise the link between Boson Sampling and representation theory. In doing so, we show that Boson Sampling can be modelled in the first quantisation, or particle-based picture, as sampling from a particular structure of quantum circuit, and how practical issues can be modelled as decoherence in these circuits. Then in Chapter \ref{chp:classical_sim}, we model particular kinds of imperfections in the first quantisation, and show how this can lead to simpler classical simulation algorithms which we estimate to perform faster when simulating near-term devices.
+
 \section{Estimated speedups in practice and the limitations of quantum error correction}
+\label{sec:error-correction}
 
 At the same time as pursuing theoretical speedups through algorithms such as those described in Chapters \ref{chp:prelim-q-c} and \ref{chp:tsp}, it is worth questioning the extent to which these algorithms can provide speedups in real-world scenarios. Ideally we want a situation where a quantum computer would be able to solve a problem with relevant applications significantly faster than a classical computer.
 
@@ -14,57 +19,506 @@ A potential workaround for this is adapting quantum algorithms to near-term arch
 
 \section{The search for a quantum advantage}
 
-\subsection{Candidate problems}
+So if fault tolerant quantum computing is not currently an option, this begs the question of what is achievable without it, and in particular what can be performed exponentially faster than classical computers in spite of having little or no error correction.
+
+This is a concept that has gone through a few different names, most notably ``quantum computational supremacy.'' In this chapter and throughout the rest of this thesis, we shall use the term ``quantum advantage'' to refer to this area, and refer the reader to \cite{wiesner2017} for further discussion of the issues surrounding the use of ``supremacy.'' Here, the emphasis is on finding a model of quantum computation that is hard to classically simulate. Such a quantum computer need not be universal, or even have practical applications. However, it should be provably hard to simulate classically, under reasonable assumptions, and with little to no error correction required.
+
+For simplicity, we shall not detail the formal proofs of different quantum advantage problems, and instead note a general structure of the proofs of hardness. These problems are typically described as sampling problems, where the aim is to output an output from (approximately) the same probability distribution as the quantum computer. For these proofs to work, we require that approximating one of these probabilities is $\#P$-Hard. If this is true, then a result of Stockmeyer \cite{stockmeyer1983} shows that classically being able to sample from this exact distribution leads to a algorithm that can approximate these probabilities up to a multiplicative error. This would imply a model of computer which can approximately solve $\#P$-Hard problems, which in turn would lead to the collapse of the Polynomial Hierarchy to the third level by Toda's Theorem \cite{toda1991}. This consequence is similar to, though not as strong as, $P=NP$, and is considered equally unlikely.
+
+This proves that if sampling from the exact distribution can be done classically, then the Polynomial Hierarchy collapses to the third level. However, we often want to go further than this claim, and show that to even sample from a distribution which is approximately equal to the target distribution is hard\footnote{By ``approximately equal'' we mean that the total variation distance between the two distributions can be bounded by some value $\epsilon$.}. To do this, we require two further assumptions, in order to reduce sampling from the target distribution to sampling from the approximate distribution. The first is the distribution must anticoncentrate; this means that the distribution is largely spread out rather than having peaks\footnote{Note however that the distribution cannot be too far spread out, otherwise it becomes close to the uniform distribution which can be sampled classically. Some problems, including Boson Sampling, have been proven to be far from uniform, by the construction of an algorithm for distinguishing the two distributions \cite{aaronson2014}.}. The second is that approximating the probability of a random outcome must be hard, not just the worst-case outcome. Using these two assumptions, we can reduce from an exact sampling problem to an approximate one, and then use the argument above to show that even approximately sampling must be hard for the Polynomial Hierarchy to not collapse.
+
+As we shall see in Sections \ref{ssec:qa-examples} and \ref{ssec:cc-bs}, each of the problems have more or less the same argument as that stated above, though what is proven and what remains conjecture tends to vary. It has been proven for some sampling problems that their distributions do anticoncentrate, and it has been proven for some problems that exactly computing the probability of a random outcome is $\#P$-hard. What has not currently been proven for any quantum advantage problem is that it is $\#P$-hard to approximate the probability of a random outcome, though we have some restraints on what techniques will not lead to a successful proof. Aaronson and Chen \cite{aaronson2016chen} proved two details, regarding the use of oracles\footnote{An oracle in complexity theory is a process that an algorithm can query. The overall runtime is the overhead of the algorithm, plus the number of oracle queries multiplied by the oracle's runtime for each query.} in such a proof. The first is that a proof cannot be relative to arbitrary oracles, as there exists an oracle relative to which the complexity classes of classical probabilistic sampling and quantum sampling are equivalent, yet the Polynomial Hierarchy does not collapse. The second is that if the proof is restricted to using an oracle in $P$ with a polynomial advice string that only depends on the size of the input, then in order for the Polynomial Hierarchy to collapse we need to assume that either classical and quantum sampling complexity classical are not equivalent, in which case an oracle is not necessary, or $\np \nsubseteq BPP$, where $BPP$ is the class of what can be solved in polynomial time probabilistically with bounded error. This second assumption is a closely related to a standard assumption in cryptography: That there are functions which are easy to compute but hard to invert, also known as one-way functions.
+
+Another interesting question, though one that will not be explored in great detail in this thesis, is the question of verifying a quantum advantage. That is, given a collection of samples from some distribution, how do we check that this is the (known) target distribution we want, instead of some other (classical) distribution. This is a challenge, primarily for the same reasons that it is hard to simulate these problems in the first place: a combination of having many probabilities close to uniform and the fact that even estimating one probability is exponentially hard. Indeed, Hangleiter et al.~\cite{hangleiter2019} showed that for any sufficiently flat distribution, verifying the distribution purely from samples and a description of the target distribution must require exponentially many samples.
+
+\subsection{Example problems}
+\label{ssec:qa-examples}
+
+\begin{problem}[Instantaneous Quantum Polynomial Time (IQP) Circuit Sampling] Let $C$ be an $n$-qubit polynomial time quantum circuit consisting only of nearest-neighbour controlled phase gates in a 2D lattice. Sample from the distribution corresponding to measuring the state $H^{\otimes n}CH^{\otimes n}|0\rangle^{\otimes n}$ in the computational basis.
+\end{problem}
+
+\begin{problem}[Random Circuit Sampling] Let $U$ be an $n$-qubit polynomial time quantum circuit consisting only of nearest-neighbour random unitary gates in a 2D lattice. Sample from the distribution corresponding to measuring the state $U|0\rangle^{\otimes n}$ in the computational basis.
+\end{problem}
 
 \section{Linear optics and Boson Sampling}
 
 \subsection{Single photons and linear optical components}
 
-\subsection{Universal linear optical interferometers}
+Boson Sampling experiments can be developed from the use of single photons, simple linear optical components and single photon detectors. We shall now summarise how such photons and components can be described in both second and first quantisation. For a more thorough understanding of these concepts we direct the interested reader to \cite{fox2006}.
+
+\subsubsection{Second quantisation}
+
+We shall start with the second quantisation, as the more common and natural way of describing bosonic systems. The second quantisation, written in the bosonic Fock basis, follows a direct product of symmetric tensors:
+
+\begin{equation}
+F(H) = \oplus_{n=0}^\infty\textrm{Sym}(H^{\otimes n}),
+\end{equation}
+
+\noindent where $H$ is a Hilbert space, and $\textrm{Sym}$ denotes the symmetric subspace.
+
+A bosonic Fock state is written as an $m$-dimensional complex vector $\ket{n_1,n_2,\dots,n_m}$, where $n_i$ is the number of photons occupying mode $i$. The number of photons in mode $i$ can be decremented or incremented by annihilation and creation operations $a_i$ and $a_i^\dagger$, respectively:
+
+\begin{equation}
+a_i\ket{n_0,\dots,n_i,\dots,n_m} = \sqrt{n_i}\ket{n_0,\dots,n_i-1,\dots,n_m},
+\end{equation}
+
+\begin{equation}
+a_i\ket{n_0,\dots,n_i,\dots,n_m} = \sqrt{n_+1}\ket{n_0,\dots,n_i+1,\dots,n_m}.
+\end{equation}
+
+We also have commutation relations for these operators, meaning that any creation (resp.\ annihilation) operator commutes with any other creation (resp.\ annihilation) operator, and a creation operator in one mode commutes with an annihilation operator in another mode.
+
+A particular Fock occupation can therefore be described by creation operators acting on the vacuum state:
+
+\begin{equation}
+\ket{n_0,\dots,n_i,\dots,n_m} = \prod_{i=0}^m\frac{(a_i^\dagger)^{n_i}}{\prod_{j=0}^{n_i}\sqrt{j}}\ket{0^m},
+\end{equation}
+
+\noindent where we have used the shorthand notation $i^j$ to denote $j$ adjacent modes all occupied by $i$ photons. We shall use these creation and annihilation operators to describe how we apply optical components to act on the initial state.
+
+There are two basic linear optical components we require to implement Boson Sampling. The first is a phase shifter, which induces a phase on a spatial mode. A phase shifter on mode $j$ induces:
+
+\begin{equation}
+a_j^\dagger \rightarrow e^{i\theta}a_j^\dagger.
+\end{equation}
+
+Physically, a phase shifter can be implemented as a heating component, which can speed up or slow down the transmission of light.
+
+The second component is a beam splitter. This component acts as a 50-50 mirror between two spatial modes. A beam splitter on spatial modes $j$ and $k$ acts as the following:
+
+\begin{equation}
+a_j^\dagger \rightarrow \frac{1}{\sqrt{2}}(ia_j^\dagger + a_k^\dagger),
+\end{equation}
+
+\begin{equation}
+a_k^\dagger \rightarrow \frac{1}{\sqrt{2}}(a_j^\dagger + ia_k^\dagger).
+\end{equation}
+
+Note that reflection induces a $\pi/2$-phase shift on the spatial modes.
+
+Finally, we need to measure the number of photons in each spatial mode. To do this, we can use the photon number measurement $n_i = a_i^\dagger a_i$. It can be seen that this operator is Hermitian and its eigenvectors are the Fock basis for mode $i$, with eigenvalues depending on the number of photons occupying mode $i$. For example, if there are $j$ photons in mode $i$ we see that
+
+\begin{align}
+n_i\ket{j} &= a_i^\dagger a_i\ket{j}\\
+&= \sqrt{j}a_i^\dagger\ket{j-1}\\
+&= \sqrt{j}\sqrt{j-1+1}\ket{j-1+1}\\
+&= j\ket{j}.
+\end{align}
+
+Any linear optical interferometer can be described from the above components.
+
+\subsubsection{First quantisation}
+
+Equivalently, we can describe these effects in the first quantisation, or particle-based, picture. In this picture, our input is a state in the symmetric subspace of $\mathbb{C}^{m\times n}$. This means that each of our $n$ particles is represented as am $m$-dimensional qudit, and the overall state has to be symmetric as no single particle can be uniquely identified. For example, the Fock state $\ket{2,0}$ corresponds to the first quantised state $\ket{11}$, whereas the Fock state $\ket{1,1}$ corresponds to $(\ket{01} + \ket{10})/\sqrt{2}$. In general, the Fock state $\ket{n_1,\dots,n_m}$ corresponds to
+
+\begin{equation}
+\frac{1}{\sqrt{n!\prod_{i=1}^mn_i!}}\left(\sum_{\sigma\in\symm_n}\sigma\bigotimes_{j=1}^m\ket{j}^{\otimes n_j}\right),
+\end{equation}
+
+\noindent where $\symm_n$ means the Symmetric group, or number of ways of permuting $n$ objects. Linear optical components can now be applied to each particle individually as an $m \times m$ unitary matrix. For example, the action of a $\theta$-phase shifter applied to one mode in a two-mode interferometer can be written as
+
+\begin{equation}
+\begin{pmatrix}
+e^{i\theta} & 0\\
+0 & 1
+\end{pmatrix},
+\end{equation}
+
+\noindent and the action of a beam splitter can be written as
+
+\begin{equation}
+\begin{pmatrix}
+\frac{i}{\sqrt{2}} & \frac{1}{\sqrt{2}}\\
+\frac{1}{\sqrt{2}} & \frac{i}{\sqrt{2}}
+\end{pmatrix}.
+\end{equation}
+
+Finally, a measurement simply consists of measuring each qudit in the standard basis.
 
 \subsection{Example linear optical interferometers}
+\label{ssec:example-interferometers}
 
-\subsubsection{Single photon-two modes: The Mach-Zender Interferometer}
+We shall now discuss some example interferometers, and their resulting effects, using the notation described above. This will eventually lead us to talk about Boson Sampling in Section \ref{ssec:bosonic-sampling}.
 
-\subsubsection{Two photons-two modes: The Hong-Ou-Mandel Dip}
+\subsubsection{One-photon-two-modes: The Mach-Zehnder Interferometer}
 
-\subsubsection{One photon-many modes: The quantum walk}
+A Mach-Zender interferometer is a demonstration of how a single photon can interfere with itself \cite{zehnder1891,mach1892}. This experiment uses a single photon in one of two modes, and consists of a beam splitter across both modes, followed by a phase shifter on a single mode, and finally a second beam splitter.
 
-\subsubsection{Many photons-many modes: Boson Sampling}
+In second quantisation, we can describe the Mach Zehnder interferometer as follows, labelling our spatial modes 1 and 2. We start with a single photon in mode 1 $\ket{1,0} = a_1^\dagger\ket{0,0}$. After our first beam splitter we have the state $(ia_1^\dagger + a_2^\dagger)\ket{0,0}/\sqrt{2}.$
+
+We next apply a phase shifter to spatial mode 1, giving $(ie^{i\theta}a_1^\dagger + a_2^\dagger)\ket{0,0}/\sqrt{2}$. Finally, we apply our second beam splitter and find that
+
+\begin{align}
+\frac{1}{\sqrt{2}}(ie^{i\theta}a_1^\dagger + a_2^\dagger)\ket{0,0} &\rightarrow \frac{1}{2}(ie^{i\theta}(ia_1^\dagger+a_2^\dagger) + (a_1^\dagger + ia_2^\dagger))\ket{0,0}\\
+&= \frac{1}{2}((1-e^{i\theta})a_1^\dagger+i(1+e^{i\theta})a_2^\dagger)\ket{0,0}.
+\end{align}
+
+Adjusting our phase $\theta$ determines what output we measure: For $\theta=0$, the photon will be in mode 2; for $\theta=\pi/2$, the photon will be in mode 1, and for other values of $\theta$ the photon will be measured randomly in one of the two modes.
+
+In first quantisation, we see the same outcome. Our input is $\ket{1}$, and  applying the first beam splitter leads to the state $(i\ket{1}+\ket{2})/\sqrt{2}$. The phase shifter on mode 1 results in the state $(ie^{i\theta}\ket{1}+\ket{2})/\sqrt{2}$, and the second beam splitter leaves us with the state
+
+\begin{align}
+\ket{\psi} &= \frac{1}{2}\left(ie^{i\theta}\left(i\ket{1} + \ket{2}\right) + \left(\ket{1} + i\ket{2}\right)\right)\\
+&= \frac{1}{2}\left(\left(1-ie^{i\theta}\right)\ket{1} + i\left(1+e^{i\theta}\right)\ket{2}\right).
+\end{align}
+
+Again, we see that adjusting $\theta$ will determine which spatial mode we detect a photon in.
+
+\subsubsection{Two-photons-two-modes: The Hong-Ou-Mandel Dip}
+
+The Hong-Ou-Mandel Dip is the earliest demonstration of multi-photon interference \cite{hong1987}. It features two spatial modes, each starting with a single photon, and consists of simply a beam splitter across both modes.
+
+In second quantisation, we start with the Fock state $\ket{1,1} = a_1^\dagger a_2^\dagger\ket{0,0}$. Applying the beam splitter gives us
+
+\begin{align}
+a_1^\dagger a_2^\dagger\ket{0,0} &\rightarrow \frac{1}{2}(ia_1^\dagger+a_2^\dagger)(a_1^\dagger+ia_2^\dagger)\ket{0,0}\\
+&= \frac{1}{2}\left(i(a_1^\dagger)^2-a_1^\dagger a_2^\dagger+a_2^\dagger a_1^\dagger+i(a_2^\dagger)^2\right)\ket{0,0}\\
+&= \frac{1}{2}\left(i(a_1^\dagger)^2-a_1^\dagger a_2^\dagger+a_1^\dagger a_2^\dagger+i(a_2^\dagger)^2\right)\ket{0,0}\\
+&= \frac{i\left((a_1^\dagger)^2+(a_2^\dagger)^2\right)}{2}\ket{0,0}\\
+&= \frac{i(\ket{2,0} + \ket{0,2})}{\sqrt{2}}.
+\end{align}
+
+After measurement, we will find that both photons are in the same spatial mode. This example has a strong connection to distinguishability, and we will return to it in Section \ref{ssec:imperfections-distinguishability}.
+
+In first quantisation, we start with the state $(\ket{12} + \ket{21})/\sqrt{2}$. The beam splitter acts on each particle individually, giving
+
+\begin{align}
+\ket{\psi} &= \frac{1}{2\sqrt{2}}\left(\left(i\ket{1} + \ket{2}\right)\left(\ket{1} + i\ket{2}\right) + \left(\ket{1} + i\ket{2}\right)\left(i\ket{1} + \ket{2}\right)\right)\\
+&= \frac{1}{2\sqrt{2}}\left(2i\ket{11} + (i^2+1)\ket{12} + (1+i^2)\ket{21} + 2i\ket{22}\right)\\
+&= \frac{i(\ket{11}+\ket{22})}{\sqrt{2}}.
+\end{align}
+
+Again, we find that only bunching is observed at the output.
+
+\subsection{Bosonic Sampling}
+\label{ssec:bosonic-sampling}
+
+We now define the ideal probability distribution of indistinguishable single bosons interacting on a linear interferometer.
+We'll refer to this as bosonic sampling, as it's a bit more general than Aaronson and Arkhipov's Boson Sampling problem as we describe below.
+The input is $U \in \mathrm{U}(m)$, an $m\times m$ unitary matrix which describes an $m$-mode linear interferometer, and $S = (S_1,S_2,\dots,S_m)$ with $\sum_{i=1}^m S_i =n$, an ordered list of integers that corresponds to an $n$-boson, $m$-mode occupation describing the input state with $S_i$ bosons in mode $i$. 
+Given an output occupation $S'$, define the $n \times n$ (not necessarily unitary) matrix $U_{S',S}$ as that formed by first taking $S_i'$ copies of row $i$ of $U$ in order to create an $m\times n$ matrix, from which we then take $S_j$ copies of column $j$. 
+We can then define $\mathcal{D}_{U,S}$, the probability distribution for measuring an $n$-boson $m$-mode occupation $S'$ for interferometer $U$ and input state $S$, as
+\begin{equation}\label{eqn:bs-distribution}
+\textrm{Pr}_{\mathcal{D}_{U,S}}[S'] = \frac{|\per(U_{S',S})|^2}{\prod_{i=1}^m S_i'! S_i!} ,
+\end{equation}
+where $\per$ is the matrix permanent, defined as
+
+\begin{equation}
+\per(M) = \sum_{\sigma\in\symm_n}\prod_{i=0}^nM_{i,\sigma(i)}.
+\end{equation}
+
+This relationship between linear optics and matrix permanents was originally found by Scheel and Buhmann \cite{scheel2008}, and later proven by Aaronson and Arkhipov using a different approach \cite{aaronson2011}.
+
+In a photonics experiment, this setting is described in terms of creation operators $a^\dag_i$ for a photon in mode $i$. 
+The initial state is then
+\begin{equation}
+|S\rangle = \prod_{i=0}^m \frac{(a_i^\dagger)^{S_i}}{\prod_{j=2}^{S_i}\sqrt{j}}|0^m\rangle.
+\end{equation}
+The evolution of the photonic state induced by a linear optical interferometer implementing $U$ can then be expressed as $a_i^\dagger \mapsto \sum_{j = 0}^m U_{i,j}a_j^\dagger$.
+Thus single boson states evolve under linear interferometry just as an $m$ dimensional qudit does under a unitary gate $U$ (sometimes called unary encoding).
+This suggests how quantum circuits simulating photonics might be constructed, as we'll see.
+
+The problem known as Boson Sampling is that of sampling from this probability distribution in the case where the input occupation is specified as $|1^n 0^{m - n}\rangle = \prod_{i = 1}^n a_{i}^\dagger|0\rangle$, and $U$ is drawn Haar randomly from U$(m)$ with $m=O(n^2)$\cite{aaronson2011}.
+
+It is easy to see that both of the two examples discussed in Section \ref{ssec:example-interferometers} can be described in this picture as well. For the Mach-Zehnder Interferometer, we find that the unitary matrix describing our interferometer is
+
+\begin{align}
+U &= \frac{1}{2}\begin{pmatrix}i&1\\1&i\end{pmatrix}\begin{pmatrix}e^{i\theta}&0\\0&1\end{pmatrix}\begin{pmatrix}i&1\\1&i\end{pmatrix}\\
+&= \frac{1}{2}\begin{pmatrix}ie^{i\theta}&1\\e^{i\theta}&i\end{pmatrix}\begin{pmatrix}i&1\\1&i\end{pmatrix}\\
+&= \frac{1}{2}\begin{pmatrix}1-e^{i\theta}&i(e^{i\theta}+1)\\i(e^{i\theta}+1)&e^{i\theta}-1\end{pmatrix}.
+\end{align}
+
+Assuming our photon is initially in mode 1, the relevant matrices describing our outcomes are the $1\times 1$ matrices $M_{1,1} = 1-e^{i\theta}$ and $M_{1,2} = i(e^{i\theta}+1)$. For $1\times 1$ matrices the permanent is just the single element, and so we find the probabilities are just these matrix elements squared, giving us the expected outcome of controlling the photon output based on $\theta$.
+
+For the Hong-Ou-Mandel Dip, we note that the relevant unitary matrix is the matrix we have for a beam splitter. We then note that the probability of seeing outcome occupation $\ket{1,1}$ is
+
+\begin{align}
+\left|\per\begin{pmatrix}\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\end{pmatrix}\right|^2 &= \frac{|i^2+1|^2}{4}\\
+&= 0.
+\end{align}
+
+Similarly we find that the outcomes for $\ket{2,0}$ and $\ket{0,2}$ are
+
+\begin{align}
+\frac{\left|\per\begin{pmatrix}\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\\\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\end{pmatrix}\right|^2}{2!} &= \frac{|2i|^2}{8}\\
+&= \frac{1}{2},
+\end{align}
+
+\noindent and
+
+\begin{align}
+\frac{\left|\per\begin{pmatrix}\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\\\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\end{pmatrix}\right|^2}{2!} &= \frac{|2i|^2}{8}\\
+&= \frac{1}{2},
+\end{align}
+
+\noindent respectfully. This matches the expected outcome statistics of the coincident output never occurring and the two other possible outcomes happening purely at random.
+
+\subsection{Universal linear optical interferometers}
+
+One of the requirements of Boson Sampling is that the unitary $U$ is be Haar-random. Choosing a unitary purely at random might seem like a challenge at first, but there are examples of linear optical interferometers which are fully reprogrammable. We will give two examples, from which any unitary can be implemented by reprogramming the phase shifters.
+
+The first of these schemes was realised by Hurwitz, and later rediscovered by Reck et al.~\cite{hurwitz1897, reck1994}. This scheme uses a sequence of Mach-Zehnder interferometers arranged in a pyramid-like structure. The universality of this scheme is proven recursively, by decomposing an $m\times m$ unitary matrix into an $(m-1)\times(m-1)$ unitary matrix accompanied by $m$ two-mode transformations in the $m$-th mode. These additional transformations can be implemented as Mach-Zehnder interferometers. However, a potential weakness with this interferometer is that it is of very high depth; a photon starting and finishing in mode 1 might interact with up to $2m-3$ beam splitters. This could result in experiments being impractically large, and also result in issues such as photon loss, something we will discuss further in Section \ref{ssec:imperfections-loss}.
+
+These issues were addressed in a later interferometer designed by Clements et al.~\cite{clements2016}. This design is similarly constructed out of Mach-Zehnder interferometers, arranged in a chequerboard-like design alternating between pairs of modes. The universality of this design is proven by decomposing the diagonals along either side of $U$ into two-mode transformations. This design has depth $m$, lower than that of the Hurwitz scheme above. It is also easy to see that a lower depth scheme is impossible, as a photon in mode 1 would then not be able to reach mode $m$.
 
 \subsection{The computational complexity of Boson Sampling}
+\label{ssec:cc-bs}
+
+\begin{problem}[Boson Sampling] Let $U$ be an $m$-mode linear optical interferometer. Sample from the distribution corresponding to measuring $U|1^n0^{m-n}\rangle$ in the (anti-bunched) Fock basis, where $m=O(n^2)$.
+\end{problem}
+
+It was proven by Aaronson and Arkhipov that if there was a polynomial time classical algorithm for sampling from this distribution, then $P^{\#P} = BPP^{NP}$ and the Polynomial Hierarchy would collapse to the third level \cite{aaronson2011}. 
+Aaronson and Arkhipov also showed the same result for sampling from any approximate distribution up to $\epsilon$ away in total variation distance from Boson Sampling, assuming the conjectures from before.
+
+In comparison to the other quantum advantage problems, the anticoncentration conjecture has not been proven for Boson Sampling. It is also not known if it is $\#P$-hard to approximate the permanent of a random complex matrix, however it has been proven that exactly computing the permanent of a Gaussian matrix is $\#P$-hard \cite{aaronson2011}.
+
+Regarding the question of verifying Boson Sampling, there have been some interesting results. Gogolin et al.~\cite{gogolin2013} argued that if a verifier does not know the underlying distribution, and is therefore only using the samples obtained to verify the distribution, then Boson Sampling requires an exponentially large number of samples to differentiate from the uniform distribution. This was refuted by Aaronson and Arkhipov \cite{aaronson2014}, who argued that this definition of a verifier is poor, akin to arguing that factoring an integer into its prime factors $N=pq$ should not be verified by multiplying $p$ and $q$ together, or that a Hamiltonian cycle in a graph shouldn't be verified by ensuring every vertex is visited exactly once. Aaronson and Arkhipov then develop further on this result, first showing that Boson Sampling is far from the uniform distribution in total variation distance, and then providing an explicit estimator which can discriminate Boson Sampling from the uniform distribution. But there are other classical distributions, notably Boson Sampling with fully distinguishable photons, which the algorithm fails to distinguish. This was resolved in work by Spagnolo et al.~\cite{spagnolo2014}, who experimentally implemented the uniform discriminator and developed another algorithm which could differentiate ideal Boson Sampling from Boson Sampling with fully distinguishable photons. Agresti et al.~\cite{agresti2019} later used the $K$-means clustering algorithm from machine learning, with a three-photon Boson Sampling experiment providing the target data, to discriminate between indistinguishable and distinguishable Boson Sampling as well. Agresti et al.\ then used classical Boson Sampling simulators (see Section \ref{sec:classical-simulations}) to test how effective their discriminator was using the same original test data to distinguish experiments with up to 25 photons across up to 625 modes, and found that in most cases $10^4$ samples were sufficient to distinguish the two distributions.
+
+As we shall see in Section \ref{sec:experimental-achievements}, distinguishing from the two distribution above are commonly used to verify Boson Sampling experiments today \cite{carolan2015, zhong2018, paesani2018, wang2019}. However, it is still unclear what properties can be used to fully distinguish Boson Sampling from other distributions which can be classically simulated. One proposal by Carolan et al.~\cite{carolan2014} was to use photon bunching to characterise effects, but this was quickly refuted by Tichy et al.~\cite{tichy2014}, who gave a Monte Carlo algorithm which could output a distribution with the same properties. Walschaers et al.~\cite{walschaers2016, walschaers2016thesis} later provided more refined statistical features from random matrix theory which can discriminate against all models discussed so far for $m<n^{5.1}$. Giordani et al.~\cite{giordani2018} demonstrate this experimentally, and use machine learning to identify what characteristics give way to these features. However, even with these approaches as $m$ and $n$ increase the distributions start to become more alike.
 
 \subsection{Boson Sampling variants}
+\label{ssec:bs-variants}
 
-\subsubsection{Scattershot Boson Sampling}
+Since originally being proposed, a number of Boson Sampling variants have arisen to varying degrees of success, which aim to fix experimental challenges in vanilla Boson Sampling. We give two particular examples below which have been experimentally realised.
 
-\subsubsection{Gaussian Boson Sampling}
+\begin{problem}[Scattershot Boson Sampling] Let $U$ be an $m$-mode linear optical interferometer. Sample from the distribution corresponding to measuring $U|\bar{n}\rangle$ in the (anti-bunched) Fock basis, where $m=O(n^2)$ and conditioned on sampling $\bar{n}$ from the $\binom{m}{n}$-uniform distribution.
+\end{problem}
+
+One of the largest issues with Boson Sampling is generating the input state $\ket{1^n0^{m-n}}$. This is because we do not currently have deterministic single photon sources. If a single photon source outputs a photon with probability $p$, $n$ independent sources will all generate single photons with probability $p^n$, so we will have to wait an exponentially long time just to generate enough photons.
+
+The idea of Scattershot Boson Sampling is to increase the number of probabilistic photon sources and condition the distribution on which sources output a photon \cite{aaronson2013, lund2014}. This can be implemented experimentally by using heralded sources, which use nonlinear optical effects such as Spontaneous Parametric Down Conversion to generate a pair of photons of different wavelengths \cite{loudon2006}. By measuring one of these photons, we know that a pair of photons were generated in this spatial mode and therefore we can input the other photon to our interferometer. Now if there are $n$ heralded sources each firing with probability $p$, then we expect on average $np$ photons to be input to our interferometer.
+
+It is worth noting that with heralded photon sources there is also a probability that more than one pair of photons is generated by a single source. Although it is not fully clear how the computational hardness is affected when multiple photons are generated in the same mode, it is known that photons generated in the same spatial mode do not interfere with each other. We can avoid this scenario by limiting the probability of a successful herald. Christ and Silberhorn estimate that a heralding probability of $25\%$ is optimal for achieving the best success rate while also minimising multi-photon emissions, and recommend active switching to improve heralding rates even further \cite{christ2012}.
+
+\begin{problem}[Gaussian Boson Sampling] Let $U$ be an $m$-mode linear optical interferometer. Sample from the distribution corresponding to measuring $U|\zeta^n0^{m-n}\rangle$ in the (anti-bunched) Fock basis, where $m=O(n^2)$ and $|\mu\rangle$ is a squeezed vacuum state.
+\end{problem}
+
+Gaussian Boson Sampling is another proposed way of working around the need for single photon sources \cite{hamilton2017}. The idea is to start with $k\approx n$ single mode squeezed states, each generated from the $\ket{0}$ Fock state. These squeezed states are then input into an interferometer and measured in the Fock basis.
+
+Hamilton et al.~\cite{hamilton2017} used arguments akin to Aaronson and Arkhipov to argue that Gaussian Boson Sampling is computationally hard. The main difference between the two is that the probability of a particular output from Gaussian Boson Sampling is proportional to the Hafnian of a $2n\times 2n$ matrix, rather than the permanent of an $n\times n$ matrix. From this starting point the rest of the argument follows through. Another intuitive way of seeing this is in Aaronson, courtesy of Garc\'{i}a-Patr\'{o}n \cite{aaronson2013}, by noting that Scattershot Boson Sampling can be reduced to Gaussian Boson Sampling. To do this, we simply embed the photon pair sources into the Gaussian Boson Sampling experiment by generating two-mode entangled squeezed states and using them as input.
+
+Another unexpected benefit of Gaussian Boson Sampling is that there are some applications demonstrated. Huh, et al.~\cite{huh2015} showed that Gaussian Boson Sampling could be used to simulate the vibronic spectra of molecules. It has also recently been shown by Bradler et al.\ and Schuld et al.\ at Xanadu that graphs can be encoded into Gaussian Boson Sampling experiments in a way such that different graphs provide different measurement statistics, thus giving a way of solving the Graph Isomorphism problem \cite{bradler2018, schuld2019}.
+
+It is worth noting that measuring in the Fock basis is crucial for computational hardness in Gaussian Boson Sampling. In particular, if the measurement is instead a Homodyne measurement for measuring Gaussian states, the resulting distribution is classically simulable in polynomial time \cite{bartlett2003}.
 
 \section{Experimental Achievements}
+\label{sec:experimental-achievements}
+
+Since originally being proposed in 2010, Boson Sampling has taken the interest of a number of quantum optics research groups, each eager to demonstrate a quantum advantage through this process. We provide some of the results of said groups below.
+
+The earliest experimental demonstrations were shown in 2013, by four different groups independently \cite{broome2013, spring2013, tillmann2013, crespi2013}. These results were published simultaneously, with two publications in \emph{Nature Photonics} and two in \emph{Science}. All four results used reprogrammable designs on integrated photonic circuits to implement the unitary transformation. Crespi et al.~\cite{crespi2013} and Tillmann et al.~\cite{tillmann2013} both demonstrated Boson Sampling with up to three photons across five modes. Broome et al.~\cite{broome2013} demonstrated three photons across six spatial modes, while Spring et al.~\cite{spring2013} demonstrated four photons across six modes. Crespi et al., Broome et al., and Spring et al., verified their experimental results by computing the distance between their experimental distribution and the theoretical distribution \cite{spring2013, tillmann2013, crespi2013}, while Tillman et al.\ verified their experiment by estimating the fidelity \cite{tillmann2013}.
+
+Later in 2015, an experiment by Carolan et al.~\cite{carolan2015} demonstrated experimental Boson Sampling with six photons across six modes. This was implemented on a fully reprogrammable integrated silicon circuit. One caveat is that the authors used the input Fock state $\ket{3,3,0,0,0,0}$, rather than the traditional form of having single photons in each mode. The authors justify this in order to use the verification approach of \cite{carolan2014}, though as discussed in Section \ref{ssec:cc-bs} this verification approach has limitations of its own.
+
+The first Boson Sampling demonstration with five single photons was performed in 2017 by Wang et al.~\cite{wang2017}. Wang et al.\ used a triangular array of beam splitters bonded together to create a structure smaller than regular bulk optics but larger than integrated silicon or silica chips, featuring 9 input and output modes. Wang et al.\ state that many interferometers can be generated from this chip by adjusting the polarisation of photons, but acknowledge that the structure itself is not universal. Boson Sampling is verified in this experiment by checking against the uniform and fully distinguishable distributions.
+
+Following this came a few results on up to five photons for Boson Sampling variants. Zhong et al.~\cite{zhong2018} demonstrated Scattershot Boson Sampling with up to five photons across twelve modes, using an interferometer constructed by six trapezoidal quartz blocks covered in film and fused together. Then, Paesani et al.~\cite{paesani2018} demonstrated four photon Scattershot, Gaussian and vanilla Boson Sampling on a single integrated silicon chip, by simply adjusting which state they input to the chip. Finally, Zhong et al.~\cite{zhong2019} demonstrated Gaussian Boson Sampling with up to five photons, using the same interferometer as in \cite{zhong2018}. All of the standard and Scattershot Boson Sampling experiments were validated by comparison to distinguishable and uniform sampling. In the case of Gaussian Boson Sampling, comparisons were also made to thermal states, non-squeezed coherent states and two-mode squeezed states, as well as demonstrating applications related to molecular simulations and graph theory \cite{paesani2018, zhong2019}.
+
+The most recent experimental demonstration of Boson Sampling was performed in 2019 by Wang et al.~\cite{wang2019}. This experiment used a 3D integrated photonic circuit with 60 spatial modes. Wang et al.\ managed to demonstrate standard Boson Sampling with up to 10 photons, as well as Boson Sampling under loss with up to 20 input photons and 14 output photons, both of which were verified by comparison to uniform and distinguishable photon distributions. To date this is the largest demonstration of Boson Sampling publicly announced.
 
 \section{Experimental Imperfections in Linear Optics}
 
-\subsection{Distinguishability}
+We shall now discuss two imperfections that are particularly common in Boson Sampling. The first is distinguishability, when one or more factors make bosons distinct from one another. The second, loss, is when photons which are generated at input are not detected at the output. We shall discuss some ways in which these issues occur, how they affect the probability distributions, and what is known about their computational complexity. In Section \ref{sec:classical-simulations}, we shall discuss some of the classical simulation algorithms that have been developed surrounding these issues.
 
-\subsection{Photon Loss}
+\subsection{Distinguishability}
+\label{ssec:imperfections-distinguishability}
+
+One of the points made when discussing Boson Sampling is that the photons need to be indistinguishable. This means that if we permuted the photons in some way, it would be impossible for someone else to identify which permutation was applied.
+
+A number of internal characteristics about the photons could make them distinguishable. The most visually intuitive one is wavelength: A red photon is definitely distinct from a green photon. But other aspects could also distinguish photons, such as their polarisation, or what time they were generated. The time generation point is particularly important following the discussion in Section \ref{ssec:bs-variants} about the challenges of single photon sources: Not only do all of these single photon sources need to emit a photon, but all of them need to emit photons at the exact same time.
+
+Before we consider Boson Sampling under distinguishability, we will first return to the Hong-Ou-Mandel dip from Section \ref{ssec:example-interferometers} \cite{hong1987}. This time, we will consider one red photon generated in mode $1$, and one photon generated in mode 2 which is red with amplitude $v \in [0,1]$ and green with amplitude $d=\sqrt{1-v^2}$. We can represent this in the second quantisation by introducing additional indexes to our creation and annihilation operators: $a_{i,R}^\dagger$ and $a_{i,G}^\dagger$ to indicate a red or green photon in mode $i$, respectively. Our input is now
+
+\begin{equation}
+a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0_R,0_G,0_R,0_G}.
+\end{equation}
+
+After applying the beam splitter our photons are in the state
+
+\begin{align}
+a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0,0} &\rightarrow \frac{1}{2}\left(ia_{1,R}^\dagger + a_{2,R}^\dagger\right)\left(v\left(a_{1,R}^\dagger + ia_{2,R}^\dagger\right) + d\left(a_{1,G}^\dagger + ia_{2,G}^\dagger\right)\right)\ket{0_R,0_G,0_R,0_G}\\
+&= \frac{1}{2}\left(v\left(i(a_{1,R}^\dagger)^2 - a_{1,R}^\dagger a_{2,R}^\dagger + a_{2,R}^\dagger a_{1,R}^\dagger+i(a_{2,R}^\dagger)^2\right)\right.\\
+&+\left. d\left(ia_{1,R}^\dagger a_{1,G}^\dagger - a_{1,R}^\dagger a_{2,G}^\dagger + a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\right)\ket{0_R,0_G,0_R,0_G}\\
+&= \frac{1}{2}\left(v\left(i(a_{1,R}^\dagger)^2 +i(a_{2,R}^\dagger)^2\right)\right.\\
+&+\left. d\left(ia_{1,R}^\dagger a_{1,G}^\dagger - a_{1,R}^\dagger a_{2,G}^\dagger + a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\right)\ket{0_R,0_G,0_R,0_G}\\
+&= \frac{1}{2}\left(v\left(i(a_{1,R}^\dagger)^2 +i(a_{2,R}^\dagger)^2\right)\right.\nonumber\\
+&+\left. d\left(ia_{1,R}^\dagger a_{1,G}^\dagger - a_{1,R}^\dagger a_{2,G}^\dagger + a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\right)\ket{0_R,0_G,0_R,0_G}.
+\end{align}
+
+Note that in the final line, the terms $a_{1,R}^\dagger a_{2,G}^\dagger$ and $a_{2,R}^\dagger a_{1,G}^\dagger$ do not cancel out, due to the different creation operators from the fact that the photons are different colours. We apply our creation operators to find that
+
+\begin{align}
+a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0,0} &\rightarrow \frac{1}{2}\left(v\left(i\sqrt{2}\ket{2_R,0_G,0_R,0_G} +i\sqrt{2}\ket{0_R,0_G,2_R,0_G}\right)\right.\nonumber\\
+&+\left. d\left(i\ket{1_R,1_G,0_R,0_G} - \ket{1_R,0_G,0_R,1_G} + \ket{0_R,1_G,1_R,0_G}+i\ket{0_R,0_G,1_R,1_G} \right)\right).
+\end{align}
+
+If we only measure what spatial mode our photons is in and discard the wavelength, we will find that we are in the Fock state $\ket{2,0}$ with probability $v^2/2 + d^2/4$ and likewise for $\ket{0,2}$, but we'll also find ourselves in the state $\ket{1,1}$ with probability $d^2/2$. Noting that $d^2 = 1-v^2$, it is easy to see that adjusting $v$ determines how likely we are to see coincidences at the output: if $v=0$, corresponding to completely distinguishable photons, then we see coincidences with probability 1/2; if $v=1$, meaning that our photons are completely indistinguishable, we don't see any photons at all. This is where the ``dip'' in Hong-Ou-Mandel Dip comes from: as our photons become more indistinguishable we see a drop in coincidences. The extent to which we see a dip is known as the visibility of a Hong-Ou-Mandel dip, hence $v$, and is a standard technique when characterising linear optics experiments to determine how distinguishable pairs of photons are.
+
+A rich library of theoretical work has been developed on the topic of Boson Sampling under distinguishability in recent years \cite{rohde2015, shchesnovich2015, tichy2015, tamma2016nonidentical, menssen2017}. Here, we shall follow the notation of Tichy \cite{tichy2015}, but note that this model of distinguishability is equivalent to several of the other models also mentioned. Tichy uses a Gram matrix $\mathcal{S}_{i,j}$ to discribe the indistinguishability between photons generated in mode $i$ and photons generated in mode $j$, noting that any pair of photons generated in the same mode are indistinguishable from one another. Under Tichy's model, the probability of outcome $\ket{S'}$ is
+
+\begin{equation}
+Pr[S'] = \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(U_{S',S}*U_{S',\sigma(S)}^*),
+\end{equation}
+
+\noindent where $*$ denotes element-wise multiplication, $M^*$ is the matrix whose elements are complex conjugates of $M$, and $\sigma(S)$ means the elements of $S$ permuted by $\sigma$. Again, the Hong-Ou-Mandel Dip can be visualised in this instance by noting that $\mathcal{S}_{1,2} = \mathcal{S}_{2,1} = v$:
+
+\begin{align}
+Pr[(1,1)] &= \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\\\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\end{pmatrix}\\
+&= \per\begin{pmatrix}\frac{1}{2}&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{i}{2}&\frac{-i}{2}\\\frac{-i}{2}&\frac{i}{2}\end{pmatrix}\\
+&= \frac{2-2v^2}{4}\\
+&= \frac{1-v^2}{2},
+\end{align}
+
+\noindent matching the result discussed above.
+
+So what can be done to work around distinguishability? One option is apply filtering and discard photons which are too distinguishable. This does end up creating loss as a result, trading one imperfection for another, but this can be tolerable to some extent, as we shall see in Section \ref{ssec:imperfections-loss} \cite{rohde2012, aaronson2016}. Another option, known as Multi-Boson Correlation Sampling \cite{tamma2014, tamma2015, laibacher2015, tamma2016, laibacher2017}, is to measure across some of these characteristics in such a way that the photons end up essentially behaving indistinguishably. Laibacher and Tamma used an example where $n$ photons were of different colours, and showed that a suitable time interval and polarisation could be chosen such that at the detectors the photons appeared indistinguishable. This was later demonstrated experimentally by Wang et al.~\cite{wang2018timebin}, as well as a subsequent experiment by Orre et al.~\cite{orre2019} where frequency-resolving detectors were used to demonstrate Boson Sampling with photons generated at different time.
+
+Finally, we note there are a number of results that link distinguishability in linear optics to representation theory \cite{adamson2008, deguise2014, turner2016, menssen2017, stanisic2018}. We will introduce representation theory in Section \ref{sec:sw-duality}, and explain more about its link to Boson Sampling in Chapter \ref{chp:noisy_circuit}.
+
+\subsection{Loss}
+\label{ssec:imperfections-loss}
 
 \subsection{Other Imperfections}
 
 \section{Classical Simulation Algorithms}
+\label{sec:classical-simulations}
 
 \subsection{Simulation algorithms for ideal Boson Sampling}
 
-\subsubsection{Metropolised Independence Sampling}
+Boson Sampling under ideal conditions (lossless indistinguishable single photons) is intractable for sufficiently large $n$. 
+Until recently the only classical simulation method explicitly known was to compute the entire probability distribution before taking a sample, though it was widely believed that more efficient, albeit still exponential time, approaches existed. 
+A brute force method cannot scale, due to both the number of possible outcomes and the complexity of computing even one $n\times n$ complex matrix permanent.
 
-\subsubsection{Marginal sampling and the chain rule}
+Two major results gave the first explicit classical simulation strategies which were faster than brute-force sampling. 
+The first, by Neville \textit{et al.}~\cite{neville2017}, demonstrated that Boson Sampling experiments with up to 30 photons could be simulated on a single laptop, and suggests that a supercomputer could handle up to 50 photons. 
+This was achieved by starting with the classical distribution of $n$ distinguishable photons, and then using Metropolised Independence Sampling to adapt the distribution to that of ideal Boson Sampling.
+The second result, by Clifford \& Clifford \cite{clifford2017}, gave a classical algorithm for exact Boson Sampling and runs in time equivalent to computing two $n \times n$ matrix  permanents per sample with a polynomial overhead. 
+This is through a combination of optimizations, particularly computing marginal probabilities and sampling via the chain rule.
+Our approach here is to make these more efficient techniques applicable to realistic situations with distinguishability and loss.
 
-\subsection{Simulation algorithms for Boson Sampling with partial distinguishability}
+\subsection{Simulation algorithms for fully distinguishable Boson Sampling}
+
+In the case where the $n$ input photons are fully distinguishable, a simple polynomial time algorithm exists \cite{aaronson2014}. In this case, there is no photon interference, so photons can be sampled individually. This is done by taking a photon which starts in mode $i$, and sampling output mode $j$ with probability $|U_{j,i}|^2$. Repeating for all photons gives us the complete sample in $O(mn)$ time.
 
 \subsection{Simulation algorithms for Boson Sampling with loss}
 
-\subsection{Simulation algorithms for Boson Sampling under multiple imperfections}
+Another common source of imperfections in linear optics is that of photon loss, which arises through a number of different means. 
+Indeed, any large-scale demonstration of Boson Sampling is bound to face photon loss, and therefore needs to take such issues into account. 
+Some results have already shown instances where hardness is still retained, such as when only a constant number of photons are lost \cite{aaronson2016,wang2018}.
+
+Neville \textit{et al.}\ compared the classical simulation of their approach to a Boson Sampling experiment where any photon loss was considered a rejected experiment \cite{neville2017}. 
+In \cite{renema2018loss}, the method described in Sec.\ \ref{sec:renema-review} was adapted to consider uniform loss, showing that the same result can be found, with the only difference being that $x$ is now replaced by $\alpha=\sqrt{\eta}x$, where $\eta$ is the probability of each individual photon surviving. 
+Crucially, this result demonstrated that Boson Sampling where a constant fraction of photons were lost can be simulated in $O(\ell^{2k}k2^k)$, where $\ell$ is the number of photons which survive and $k$ is only dependent on the constant $\ell/n$, distinguishability $x$, and the desired accuracy of the simulation. 
+This can be expanded to classically simulating Boson Sampling under uniform loss by sampling $\ell$ from the binomial distribution before sampling output photons, which offers a runtime of $O(n^{2k}k2^k)$. 
+Novel classical simulations for Boson Sampling under loss have also been considered by use of classically simulable states such as thermal \cite{garciapatron2017} or separable \cite{oszmaniec2018} states.
+
+There has also been some consideration of how classical simulations can be generalised to non-uniform loss. 
+This usually means photon loss that is dependent on the number of optical components, with each component having transmission probability $\tau$. 
+Classical simulation methods can be generalised to this model by identifying a layer of uniform losses from the circuit, followed a non-uniform lossy circuit which can be simulated classically through the use of additional modes for lost photons \cite{garciapatron2017,oszmaniec2018}. 
+These results showed that Boson Sampling under non-uniform loss can be classically simulated as long as the smallest number of components a photon encounters is logarithmic in $n$. More recently, methods were also developed to give a polynomial-time algorithm in the case where some photons experience little or no loss, by extracting losses into a layer of non-uniform loss and simulating via a generalisation of the Clifford \& Clifford algorithm \cite{brod2019}.
+
+\subsection{Simulation under multiple imperfections}
+\label{sec:renema-review}
+
+In \cite{renema2018, renema2018loss}, Renema \textit{et al.}\ consider a model where inter-photon distinguishability is measured by an inner product of pure states \cite{tamma2014, deguise2014, shchesnovich2015, rohde2015, tamma2015, tichy2015}. 
+The probability distribution of arbitrarily distinguishable bosons is modelled as
+\begin{equation}
+\prob[S'] = \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(M*M^*_{1,\sigma}) ,
+\end{equation}
+where $\mathcal{S}$ is the same matrix describing the distinguishability as in the previous section, $M$ is a matrix defined by the rows and columns of our interferometer $U$ selected based on our photon output $S'$ and input $S$, $M^*_{1,\sigma}$ is the conjugate matrix with the identity permutation applied to rows and permutation $\sigma$ applied to columns, and $*$ denotes element-wise multiplication. 
+They further restrict to a model where the indistinguishability overlap is defined by a single parameter $\mathcal{S}_{i,j} = x + (1-x)\delta_{i,j}, x \in [0,1]$.
+The sum over permutations can be ordered based on how many \emph{fixed points} a permutation has, giving
+\begin{equation}
+\prob[S'] = \sum_{j=0}^n\sum_{\sigma^j}x^j\per(M*M^*_{1,\sigma}) , \label{eqn:renema-state}
+\end{equation}
+where $\sigma^j$ denotes permutations which have $n-j$ elements as fixed points.
+Each permanent can be broken down via the Laplace expansion into a sum of a complex matrix permanent multiplied by a positive matrix permanent:
+\begin{equation}
+\prob[S'] = \sum_{j=0}^n\sum_{\sigma^j}x^j\sum_{\substack{J'\leq S'\\|J'|=j}}\per(M_{J',1}*M^*_{J',\sigma_p})\per(|M_{\bar{J'},\sigma_u}|^2) ,
+\end{equation}
+
+\noindent where $J'$ is an occupation with $j$ photons. Here we are now choosing submatrices of $M$, with $J'$ representing the $\binom{n}{j}$ possible combinations of rows from $M$, $\bar{J'}$ representing the remaining rows, and $\sigma_p$ and $\sigma_u$  representing permuted and unpermuted elements of $\sigma$ respectively.
+The $J' \leq S'$ notation is used to indicate that $J'$ is a Fock state such that $J_i\leq S'_i \,\forall i\in[m]$.
+
+The classical simulation method used truncates the number of non-fixed points in a permutation as being at most $k$, with the remainder of the probability treated as an error margin. 
+It is important to note while these approximations are real, they are not necessarily positive. 
+This is due to the truncation, where positive higher order terms which would have corrected the probability to be positive are now missing from the approximation. 
+To correct this, any negative approximations are rounded up to $0$.
+These probabilities are then used to train a Metropolised Independence Sampler, akin to the technique of \cite{neville2017}. 
+Training this sampler requires approximating a number of probabilities dependent on the underlying distribution, each of which involves computing $O(n^{2k})$ permanents of $k\times k$ complex matrices, and the same number of permanents of $(n-k)\times (n-k)$ matrices with non-negative entries. 
+The permanents of $k\times k$ complex matrices can be computed classically in $O(k2^k)$ time via Ryser's algorithm, and the permanents of matrices with non-negative entries can be approximated up to multiplicative error in polynomial time \cite{jerrum2004,huber2008}. 
+As long as $k$ is independent of $n$, this means that there is a polynomial runtime.
+
+To work out a suitable value $k$, define coefficients $c_j$ as
+
+\begin{equation}
+c_j = \sum_{\sigma^j}\sum_{\substack{J'\leq S'\\|J'|=j}}\per(M_{J',1}*M^*_{J',\sigma_p})\per(|M_{\bar{J'},\sigma_u}|^2)\label{eqn:coefficients}.
+\end{equation}
+
+Assuming the matrices are Gaussian, the variance of each permanent can be bounded as
+
+\begin{equation}
+\var[\per(M_{J',1}*M^*_{J',\sigma_p})] = \frac{j!}{m^{2j}},
+\end{equation}
+and
+\begin{equation}
+\var[\per(|M_{\bar{J'},\sigma_u}|^2)] < \frac{(n-j)!}{m^{2(n-j)}}\sum_{l=0}^{n-j}\frac{1}{l!}.
+\end{equation}
+
+This leads to two key results. The first is that the variance of $c_j$ tends towards a constant value:
+\begin{align}
+\var[c_j] &< \left(\frac{n!}{m^n}\right)^2\frac{1}{e}\sum_{l=0}^{n-j}\frac{1}{l!} \label{eqn:var}\\
+&\rightarrow\left(\frac{n!}{m^n}\right)^2 \textrm{ as } n\rightarrow\infty,
+\end{align}
+and the second is that the covariance for different values of $j$ is zero:
+\begin{equation}
+\cov[c_j,c_j'] = 0\, \forall\, j\neq j'\label{eqn:covar}.
+\end{equation}
+From this one can approximate the variance of the error as a geometric series, which as $n\rightarrow\infty$ tends towards the inequality
+\begin{align}
+\var[\Delta \prob[S']] &= \var[\prob[S']-\prob_k[S']]\\
+&= \sum_{j=k+1}^nx^{2j}\var[c_j]\label{eqn:renema-variance}\\
+&< \left(\frac{n!}{m^n}\right)^2\left(\frac{x^{2(k+1)}}{1-x^2}\right),
+\end{align}
+\noindent where $P_k$ is the probability distribution when truncated at $j\leq k$ for some $k<n$.
+
+Finally one can use a Markov inequality to show that if the variance of the error is of the form $(n!/m^n)^2\epsilon^2$, the average error of the simulation is at most $\epsilon$ \cite{renema2018loss}.
+Crucially, this value of $\epsilon$ is only dependent on $x$ and $k$ and no longer dependent on $n$.
+This means that for any value of $x$, one can choose a suitable value of $k$ to achieve a required error $\epsilon$, and run a classical simulation in time polynomial in $n$.
+
+Although this runtime is polynomial in terms of $n$ and can therefore be considered asymptotically efficient, it might not be classically simulable in practice. 
+There are three main contributions to this: 
+First, the algorithm is reliant on Metropolised Independence Sampling, which potentially requires many probabilities to be approximated per sample. 
+Second, approximating each probability requires $O(n^{2k})$ permanents of $k\times k$ matrices, which even for small $k$ could be a large number of permanents. 
+And third, approximating each probability requires $O(n^{2k})$ permanents of $(n-k)\times(n-k)$ matrices with non-negative elements. 
+Although approximating permanents of matrices with non-negative elements can be achieved in polynomial time, classical algorithms still have a runtime ranging from $O((n-k)^4\log(n-k))$ to $O((n-k)^{7}\log^4(n-k))$, depending on the sparsity of the matrix~\cite{huber2008}. These issues are the main points to address in order to achieve a practical classical algorithm for Boson Sampling. Clifford \& Clifford could help to alleviate these issues, but there is a challenge due to the fact that the approximation used in Renema et al.\ does not correspond to a bosonic state. 
+This in turn leads to negative probabilities, which are not clear how to correct for in the Clifford \& Clifford algorithm.
 
 \section{The Schur-Weyl Duality}
+\label{sec:sw-duality}
+
+\subsection{Representation theory}
+
+Our algorithm can be understood from the perspective of the representation theory of the unitary group U$(m)$ of linear interferometers acting of $m$ modes.
+The irreducible representations, or irreps, are intimately related to those of the symmetric group $\textrm{S}_n$ that permutes the particles.
+Irreps of both of these groups are indexed by ordered partitions $\lambda = (\lambda_1,\lambda_2,\cdots,\lambda_m)$ of $n$ such that $\lambda_i \geq \lambda_{i+1}$ and $\sum_{i = 1}^m \lambda_i = n$.
+We usually suppress zeros in this notation, so for example the totally symmetric irrep $\lambda=(n, 0,\cdots,0)$ is written $(n)$. 
+The number of nonzero $\lambda_i$ is called the length of the partition, $\ell(\lambda)$, and only partitions with $\ell(\lambda) \leq m$ occur, which we will assume in all of our expressions that follow.
+%Following the convention of~\cite{rowe2012}, we shall label irreps of S$_n$ and U$(m)$ indexed by $\lambda$ as $(\lambda)$ and $\{\lambda\}$, respectively.
+
+For the tensor space of $n$ $m$-dimensional qudits, the actions of the symmetric and unitary groups on a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ are explicitly as follows. 
+For a permutation $\sigma \in \textrm{S}_n$, the action permutes the tensor factors. 
+For a unitary matrix $U \in \textrm{U}(m)$, the action is the $n$-fold tensor product $U^{\otimes n}$. 
+It is not hard to see that these two actions commute.
+We can now describe Schur-Weyl duality as the following theorem.
+\begin{theorem}[Schur-Weyl duality~\cite{rowe2012}]
+The Hilbert space of $n$ $m$-dimensional qudits decomposes into irreducible subspaces
+\begin{equation}
+(\mathbb{C}^m)^{\otimes n} \simeq \bigoplus_{\lambda\vdash n} \mathbb{C}^{\{\lambda\}} \otimes \mathbb{C}^{(\lambda)} ,
+\end{equation}
+where $\mathbb{C}^{\{\lambda\}}$ carries irrep $\{\lambda\}$ of $\textrm{U}(m)$ and $\mathbb{C}^{(\lambda)}$ carries irrep $(\lambda)$ of $\textrm{S}_n$, and $\simeq$ indicates a change of basis is involved.
+The dimension of irrep $(\lambda)$ can be viewed as the multiplicity of irrep $\{\lambda\}$, and vice versa.
+\end{theorem}
 
 \subsection{Symmetric and Unitary Groups}
 
@@ -73,6 +527,20 @@ A potential workaround for this is adapting quantum algorithms to near-term arch
 \subsection{The Quantum Schur Transform}
 
 \subsubsection{Efficient Quantum Circuits}
+
+There is an efficient quantum circuit that implements the Schur-Weyl decomposition.
+Given a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ in the computational basis, this circuit, which we denote $W$, performs the transformation
+\begin{equation}
+W|\Psi\rangle
+ = \sum_{\lambda \vdash n} \, \sum_{q_{\lambda}} \, \sum_{p_\lambda}C^\lambda_{q_\lambda,p_\lambda}|\lambda\rangle|q_\lambda\rangle|p_\lambda\rangle , 
+\end{equation}
+where $\lambda$ indexes the irrep, $q_\lambda$ and $p_\lambda$ index bases of irreps $\{\lambda\}$ and $(\lambda)$ respectively, and $C^\lambda_{q_\lambda,p_\lambda}$ is a generalised Clebsch-Gordan coefficient.
+For example, the unitary action of U$(m)$ in this basis is
+\begin{equation}
+U : |\lambda\rangle |q_\lambda\rangle |p\rangle \rightarrow |\lambda\rangle |U\cdot q_\lambda\rangle |p\rangle := |\lambda\rangle \left( \sum_{q_\lambda'} U^\lambda_{q_\lambda, q_\lambda'} |q_\lambda'\rangle \right) |p\rangle ,
+\end{equation}
+where $U^\lambda$ is the irreducible unitary matrix corresponding to $U \in \mathrm{U}(m)$.
+It was proven by Bacon, Chuang and Harrow that this circuit runs in polynomial time in terms of $n$, $m$ and $\log(\delta^{-1})$, where $\delta$ is an accuracy parameter~\cite{bacon2007}.
 
 \subsubsection{Applications}
 
