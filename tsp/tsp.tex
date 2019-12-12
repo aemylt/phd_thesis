@@ -1,16 +1,20 @@
 \chapter{Quantum speedup of the Travelling Salesman Problem for bounded-degree graphs}
 \label{chp:tsp}
 
-Here we apply known quantum-algorithmic techniques to accelerate more recent classical TSP algorithms for the important special case of bounded-degree graphs. We say that a graph $G$ is degree-$k$ if the maximal degree of any vertex in $G$ is at most $k$. A recent line of research has produced a sequence of algorithms which improve on the $O^*(2^n)$ runtime of the general Held-Karp algorithm in this setting, where the notation $O^*(c^n)$ omits polynomial factors in $n$. First, Eppstein presented algorithms which solve the TSP on degree-3 graphs in time $O^*(2^{n/3}) \approx O^*(1.260^n)$, and on degree-4 graphs in time $O^*((27/4)^{n/3}) \approx O^*(1.890^n)$~\cite{eppstein2007}. The algorithms are based on the standard classical technique of {\em backtracking}, an approach where a tree of partial solutions is explored to find a complete solution to a problem (see Section \ref{sec:backtrack} for an introduction to this technique). Following subsequent improvements~\cite{iwama2007,liskiewicz14}, the best classical runtimes known for algorithms based on this general approach are $O^*(1.232^n)$ for degree-3 graphs~\cite{xiao2016degree3}, and $O^*(1.692^n)$ for degree-4 graphs~\cite{xiao2016degree4}, in each case due to Xiao and Nagamochi. All of these algorithms use polynomial space in $n$.
+\section{Introduction}
 
-An algorithm of Bodlaender et al.~\cite{bodlaender15} achieves a faster runtime of $O^*(1.219^n)$ for solving the TSP in degree-3 graphs, which is the best known; however, this algorithm uses exponential space. Similarly, an algorithm of Cygan et al.~\cite{cygan11} solves the TSP in unweighted degree-4 graphs in $O^*(1.588^n)$ time and exponential space. Both of these algorithms use an approach known as cut-and-count, and a quantum speedup is not known for either algorithm.
+Here we apply known quantum-algorithmic techniques to accelerate more recent classical TSP algorithms for the important special case of bounded-degree graphs. We say that a graph $G$ is degree-$k$ if the maximal degree of any vertex in $G$ is at most $k$. Although a sub-instance of the general Travelling Salesman Problem, this restriction is still NP-Hard for graphs of degree greater than 3 \cite{akiyama1980}.
+
+A recent line of research has produced a sequence of algorithms which improve on the $O^*(2^n\log L)$ runtime of the general Held-Karp algorithm in this setting. First, Eppstein presented algorithms which solve the TSP on degree-3 graphs in time $O^*(2^{n/3}\log L) \approx O^*(1.260^n\log L)$, and on degree-4 graphs in time $O^*((27/4)^{n/3}\log L) \approx O^*(1.890^n\log L)$~\cite{eppstein2007}. The algorithms are based on the standard classical technique of {\em backtracking}, an approach where a tree of partial solutions is explored to find a complete solution to a problem (see Section \ref{sec:backtrack} for an introduction to this technique). Following subsequent improvements~\cite{iwama2007,liskiewicz14}, the best classical runtimes known for algorithms based on this general approach are $O^*(1.232^n\log L)$ for degree-3 graphs~\cite{xiao2016degree3}, and $O^*(1.692^n\log L)$ for degree-4 graphs~\cite{xiao2016degree4}, in each case due to Xiao and Nagamochi. All of these algorithms use polynomial space in $n$.
+
+An algorithm of Bodlaender et al.~\cite{bodlaender15} achieves a faster runtime of $O^*(1.219^n\log L)$ for solving the TSP in degree-3 graphs, which is the best known; however, this algorithm uses exponential space. Similarly, an algorithm of Cygan et al.~\cite{cygan11} solves the TSP in unweighted degree-4 graphs in $O^*(1.588^n\log L)$ time and exponential space. Both of these algorithms use an approach known as cut-and-count, and a quantum speedup is not known for either algorithm.
 
 In the case where we have an upper bound $L$ on the maximum edge cost in the graph, Bj\"orklund~\cite{bjorklund14} gave a randomised algorithm which solves the TSP on arbitrary graphs in $O^*(1.657^n L)$ time and polynomial space, which is an improvement on the runtime of the Xiao-Nagamochi algorithm for degree-4 graphs when $L$ is subexponential in $n$. Again, the techniques used in this algorithm do not seem obviously amenable to quantum speedup.
 
 Here we use the quantum speedup to backtracking described in Section \ref{sec:q-backtrack} to speed up the algorithms of Xiao and Nagamochi in order to find Hamiltonian cycles shorter than a given upper bound, if such cycles do exist. We run this algorithm several times, using binary search to specify what our upper bound should be, in order to find the shortest Hamiltonian cycle and solve the Travelling Salesman Problem. In doing so, we achieve a near-quadratic reduction in the runtimes:
 
 \begin{theorem}
-There are bounded-error quantum algorithms which solve the TSP on degree-3 graphs in time $O^*(1.110^n \log L \log \log L)$ and on degree-4 graphs in time $O^*(1.301^n \log L \log \log L)$, where $L$ is the maximum edge cost. The algorithms use $\poly(n)$ space.
+There are bounded-error quantum algorithms which solve the TSP on degree-3 graphs in time $O^*(1.110^n \log^2 L \log \log L)$ and on degree-4 graphs in time $O^*(1.301^n \log^2 L \log \log L)$, where $L$ is the maximum edge cost. The algorithms use $\poly(n)\log L$ space.
 \label{thm:deg34}
 \end{theorem}
 
@@ -20,7 +24,7 @@ Next, we show that degree-5 and degree-6 graphs can be dealt with via a randomis
 
 \begin{theorem}
 \label{thm:deg6}
-There is a bounded-error quantum algorithm which solves the TSP on degree-5 and degree-6 graphs in time $O^*(1.680^n\log L \log \log L)$. The algorithm uses $\poly(n)$ space.
+There is a bounded-error quantum algorithm which solves the TSP on degree-5 and degree-6 graphs in time $O^*(1.680^n\log^2 L \log \log L)$. The algorithm uses $\poly(n)\log L$ space.
 \end{theorem}
 
 We summarise our results in Table \ref{tab:summary}.
@@ -29,8 +33,8 @@ We summarise our results in Table \ref{tab:summary}.
 \begin{center}
 \begin{tabularx}{\textwidth}{|c|c|C|c|}
 \hline Degree & Quantum & Classical (poly space) & Classical (exp space) \\
-\hline 3 & $O^*(1.110^n \polylog L)$ & $O^*(1.232^n)$~\cite{xiao2016degree3} & $O^*(1.219^n)$~\cite{bodlaender15} \\
- 4 & $O^*(1.301^n \polylog L)$ & $O^*(1.692^n)$~\cite{xiao2016degree4}, $O^*(1.657^n L)$~\cite{bjorklund14} & $O^*(1.588^n)$~\cite{cygan11}\\
+\hline 3 & $O^*(1.110^n \polylog L)$ & $O^*(1.232^n\log L)$~\cite{xiao2016degree3} & $O^*(1.219^n\log L)$~\cite{bodlaender15} \\
+ 4 & $O^*(1.301^n \polylog L)$ & $O^*(1.692^n\log L)$~\cite{xiao2016degree4}, $O^*(1.657^n L)$~\cite{bjorklund14} & $O^*(1.588^n\log L)$~\cite{cygan11}\\
  5, 6 & $O^*(1.680^n \polylog L)$ & $O^*(1.657^n L)$~\cite{bjorklund14} & --- \\
 \hline
 \end{tabularx}
@@ -60,7 +64,7 @@ The intuition behind why backtracking is a useful technique for solving the TSP 
 
 To analyse the performance of backtracking algorithms for the TSP, a problem size measure is often defined that is at least 0 and at most $n$ (e.g.\ the number of vertices minus the number of forced edges). Note that if there are more than $n$ forced edges then it is impossible to form a Hamiltonian cycle that includes every forced edge, so the number of forced edges is at most $n$. At the start of the backtracking algorithm, there are no forced edges so the problem size is $n$. Each step of the backtracking algorithm reduces the problem size until the size is $0$, at which point either the $n$ forced edges form a Hamiltonian cycle or a Hamiltonian cycle that includes every forced edge cannot be found. A quasiconvex programming problem can be developed based on how the backtracking algorithm reduces the problem size. Solving this quasiconvex problem determines the number of recursive calls the backtracking algorithm needs to make before the problem size has been reduced to $0$. This is a runtime for the algorithm in terms of the problem size, which can be re-written in terms of $n$ due to the problem size being at most $n$.
 
-It was proposed by D\"orn \cite{dorn2007} that amplitude amplification could be applied to speed up the runtime of Eppstein's algorithm for the TSP on degree-3 graphs~\cite{eppstein2007} from $O^*(2^{n/3})$ to $O^*(2^{n/6})$. Amplitude amplification can be used in this setting by associating a bit-string with each sequence of choices of whether to force or delete an edge, and searching over bit-strings to find the shortest valid Hamiltonian cycle. However, as suggested by the discussion in Section \ref{sec:q-backtrack}, a difficulty with this approach is that some branches of the recursion, as shown in Fig.~\ref{fig:size-decrease-by-two}, only reduce the problem size by 2 (as measured by the number of vertices $n$, minus the number of forced edges). The longest branch of the recursion can, as a result, be more than $n/3$ levels deep. In the worst case, this depth could be as large as $n/2$ levels. Specifying the input to the checking function $f$ could then require up to $n/2$ bits, giving a search space of size $O(2^{n/2})$. Under these conditions, searching for the solution via amplitude amplification could require up to $O^*(2^{n/4})$ time in the worst case. To yield a better runtime, we must take more of an advantage of the structure of our search space to avoid instances which will definitely not succeed.
+It was proposed by D\"orn \cite{dorn2007} that amplitude amplification could be applied to speed up the runtime of Eppstein's algorithm for the TSP on degree-3 graphs~\cite{eppstein2007} from $O^*(2^{n/3}\log L)$ to $O^*(2^{n/6}\log L)$. Amplitude amplification can be used in this setting by associating a bit-string with each sequence of choices of whether to force or delete an edge, and searching over bit-strings to find the shortest valid Hamiltonian cycle. However, as suggested by the discussion in Section \ref{sec:q-backtrack}, a difficulty with this approach is that some branches of the recursion, as shown in Fig.~\ref{fig:size-decrease-by-two}, only reduce the problem size by 2 (as measured by the number of vertices $n$, minus the number of forced edges). The longest branch of the recursion can, as a result, be more than $n/3$ levels deep. In the worst case, this depth could be as large as $n/2$ levels. Specifying the input to the checking function $f$ could then require up to $n/2$ bits, giving a search space of size $O(2^{n/2})$. Under these conditions, searching for the solution via amplitude amplification could require up to $O^*(2^{n/4}\log L)$ time in the worst case. To yield a better runtime, we must take more of an advantage of the structure of our search space to avoid instances which will definitely not succeed.
 
 The same issue with amplitude amplification applies to other classical algorithms for the TSP which are based on backtracking~\cite{xiao2016degree3,xiao2016degree4}. In the case of the Xiao-Nagamochi algorithm for degree-3 graphs, although the overall runtime bound proven for the problem means that the number of vertices in the tree is $O(2^{3n/10})$, several of the branching vectors used in their analysis have branches that reduce the problem size by less than $10/3$, leading to a branch in the tree that could be more than $3n/10$ levels deep.
 
@@ -189,7 +193,7 @@ Return the cost of an optimal tour\;
 \caption{\label{alg:tsp3} The Xiao-Nagamochi algorithm for solving the TSP on degree-3 graphs.}
 \end{algorithm}
 
-Xiao and Nagamochi looked at how the steps of the algorithm, and in particular the branching step, reduced the size of the problem for different graph structures. From this they derived a quasiconvex program corresponding to $19$ branching vectors, each describing how the problem size is reduced at the branching step in different circumstances. Analysis of this quasiconvex program showed that the algorithm runs in $O^*(2^{3n/10})$ time and polynomial space \cite{xiao2016degree3}.
+Xiao and Nagamochi looked at how the steps of the algorithm, and in particular the branching step, reduced the size of the problem for different graph structures. From this they derived a quasiconvex program corresponding to $19$ branching vectors, each describing how the problem size is reduced at the branching step in different circumstances. Analysis of this quasiconvex program showed that the algorithm runs in $O^*(2^{3n/10}\log L)$ time and polynomial space \cite{xiao2016degree3}.
 
 \subsection{Quantum speedup of the Xiao-Nagamochi algorithm}
 \label{sec:deg3speedup}
@@ -300,21 +304,21 @@ One might ask if an edge could be part of two circuits, in which case our algori
 
 \subsection{Analysis}
 
-All procedures in the reduction algorithm can be completed in polynomial time~\cite{xiao2016degree3}. All of these steps also reduce the size of a problem by at least a constant amount, so only a polynomial number of these steps are needed. Step 2(b) is constant time and step 2(c) can be run in polynomial time as the circuit is now reducible. All steps are only repeated $O(m)$ times, so the whole reduction algorithm runs in polynomial time in terms of $m$.
+All procedures in the reduction algorithm can be completed in polynomial time in $n$ and $\log L$~\cite{xiao2016degree3}. All of these steps also reduce the size of a problem by at least a constant amount, so only a polynomial number of these steps are needed. Step 2(b) is constant time and step 2(c) can be run in polynomial time as the circuit is now reducible. All steps are only repeated $O(m)$ times, so the whole reduction algorithm runs in polynomial time in terms of $m$.
 
 The remaining steps in the heuristic subroutine run in polynomial time as searching for a good circuit in a component can be done in polynomial time \cite{xiao2016degree3}. Likewise, remaining steps in the predicate function involve looking for certain structures in the graph that can be found in polynomial time. As a result, the runtimes for the \FnPredicatethree and \FnHeuristicthree functions are both polynomial in $m$.
 
 By Theorem \ref{thm:backtrack}, the number of calls to \FnPredicatethree and \FnHeuristicthree we make in order to find a Hamiltonian cycle with failure probability $\delta$ is $O(\sqrt{T}\poly(m)\log (1/\delta))$, where $T$ is the size of the backtracking tree, which in our case is equal to the number of times the Xiao-Nagamochi algorithm branches on a circuit. \FnPredicatethree and \FnHeuristicthree both run in polynomial time and as a result can be included in the $\poly(m)$ term of the runtime. Because $m \leq 3n/2$, the polynomial term in this bound is also polynomial in terms of $n$.
 
-The behaviour of the \FnPredicatethree and \FnHeuristicthree subroutines is designed to reproduce the behaviour of Xiao and Nagamochi's TSP3 algorithm~\cite{xiao2016degree3}. It is shown in~\cite[Theorem 1]{xiao2016degree3} that this algorithm is correct, runs in time $O^*(2^{3n/10})$ and uses polynomial space. As the runtime of the TSP3 algorithm is an upper bound on the number of branching steps it makes, the algorithm branches on a circuit $O^*(2^{3n/10})$ times. Therefore, the quantum backtracking algorithm finds a Hamiltonian cycle, if one exists, with failure probability at most $\delta$ in time $O^*(2^{3n/20} \log(1/\delta)) \approx O^*(1.110^n \log(1/\delta))$ and polynomial space.
+The behaviour of the \FnPredicatethree and \FnHeuristicthree subroutines is designed to reproduce the behaviour of Xiao and Nagamochi's TSP3 algorithm~\cite{xiao2016degree3}. It is shown in~\cite[Theorem 1]{xiao2016degree3} that this algorithm is correct, runs in time $O^*(2^{3n/10})$ and uses polynomial space. As the runtime of the TSP3 algorithm is an upper bound on the number of branching steps it makes, the algorithm branches on a circuit $O^*(2^{3n/10})$ times. Therefore, the quantum backtracking algorithm finds a Hamiltonian cycle, if one exists, with failure probability at most $\delta$ in time $O^*(2^{3n/20}\log L \log(1/\delta)) \approx O^*(1.110^n\log L \log(1/\delta))$ and polynomial space.
 
 Finding the shortest Hamiltonian cycle requires repeating the algorithm $O(\log L')$ times, where $L'$ is given in Equation \ref{eqn:l}. By using a union bound over all the runs of the algorithm, to ensure that all runs succeed with high probability it is sufficient for the failure probability $\delta$ of each run to be at most $O(1/(\log L'))$. From this we obtain the following result, proving the first part of Theorem \ref{thm:deg34}:
 
 \begin{theorem}
-There is a bounded-error quantum algorithm which solves the TSP on degree-3 graphs in time $O^*(1.110^n \log L \log \log L)$, where $L$ is the maximum edge cost. The algorithm uses $\poly(n)$ space.
+There is a bounded-error quantum algorithm which solves the TSP on degree-3 graphs in time $O^*(1.110^n \log^2 L \log \log L)$, where $L$ is the maximum edge cost. The algorithm uses $\poly(n)$ space.
 \end{theorem}
 
-Note that we have used the bound $L' \le n L$, where the extra factor of $n$ is simply absorbed into the hidden $\poly(n)$ term.
+Note that we have used the bound $L' \le n L$, where the extra factor of $n$ is simply absorbed into the hidden $\poly(n)$ suppression.
 
 \section{Extending to higher-degree graphs \label{sec:higher-bound}}
 
@@ -325,7 +329,7 @@ We next consider degree-$k$ graphs for $k \ge 4$. We start with degree-4 graphs 
 Here we will show the following, which is the second part of Theorem \ref{thm:deg34}:
 
 \begin{theorem}
-There is a bounded-error quantum algorithm which solves the TSP for degree-4 graphs in time $O^*(1.301^n\log L \log \log L)$, where $L$ is the maximum edge cost. The algorithm uses $\poly(n)$ space.
+There is a bounded-error quantum algorithm which solves the TSP for degree-4 graphs in time $O^*(1.301^n\log^2 L \log \log L)$, where $L$ is the maximum edge cost. The algorithm uses $\poly(n)$ space.
 \end{theorem}
 
 As the argument is very similar to the degree-3 case, we only sketch the proof.
@@ -351,7 +355,7 @@ The third reduction process is more involved, but can still be computed in polyn
 
 The heuristic is more involved than previously, but essentially consists of selecting a degree-4 vertex $v$ incident to a forced edge and branching on an edge incident to that vertex. If no such vertex exists then we select a degree-3 vertex $v$ incident to a forced edge and branch on an edge incident to a vertex at most two edges away from $v$. We shall omit details on how the branching edge is chosen for simplicity, but note that these conditions can be computed in polynomial time.
 
-We apply the quantum backtracking algorithm as before, finding a Hamiltonian cycle with failure probability $\delta$ in $O^*(1.301^n\log(1/\delta))$ time. We then use binary search to find the shortest Hamiltonian cycle after $O(\log L)$ repetitions of the algorithm, rejecting if the total length of the forced edges is above a given threshold. To achieve overall failure probability $1/3$, the algorithm runs in $O^*(1.301^n\log L\log \log L)$ time.
+We apply the quantum backtracking algorithm as before, finding a Hamiltonian cycle with failure probability $\delta$ in $O^*(1.301^n\log L\log(1/\delta))$ time. We then use binary search to find the shortest Hamiltonian cycle after $O(\log L)$ repetitions of the algorithm, rejecting if the total length of the forced edges is above a given threshold. To achieve overall failure probability $1/3$, the algorithm runs in $O^*(1.301^n\log^2 L\log \log L)$ time.
 \end{proof}
 
 \subsection{Degree-5 and degree-6 graphs}
@@ -458,7 +462,7 @@ To deal with degree-5 and degree-6 graphs, we reduce them to the degree-4 case. 
 
 \begin{theorem}
 \label{thm:deg5}
-There is a bounded-error quantum algorithm which solves the TSP for degree-5 graphs in time $O^*(1.680^n\log L\log \log L)$.
+There is a bounded-error quantum algorithm which solves the TSP for degree-5 graphs in time $O^*(1.680^n\log^2 L\log \log L)$.
 \end{theorem}
 
 \begin{proof}
@@ -470,7 +474,7 @@ If there are $f$ vertices of degree $5$, then there are $10^f$ possible ways of 
 %
 \begin{align}
 &O^*\left(\left(\frac{10}{6}\right)^{\frac{f}{2}}1.301^n\log L \log \log L\right)\\
- = &O^*(1.680^n\log L \log \log L).
+ = &O^*(1.680^n\log^2 L \log \log L).
 \end{align}
 \end{proof}
 %
@@ -478,13 +482,13 @@ It is also possible to split a vertex of degree $5$ into three vertices of degre
 %
 \begin{align}
 &O^*\left(\left(\frac{15}{6}\right)^{\frac{f}{2}}1.110^n\log L \log \log L\right)\\
- = &O^*(1.754^n\log L \log \log L)
+ = &O^*(1.754^n\log^2 L \log \log L)
 \end{align}
 %
 \noindent which performs worse than Theorem \ref{thm:deg5}. We next turn to degree-6 graphs, for which the argument is very similar.
 
 \begin{theorem}
-There is a quantum algorithm which solves the TSP for degree-$6$ graphs with failure probability $1/3$ in time $O^*(1.680^n\log L \log \log L)$.
+There is a quantum algorithm which solves the TSP for degree-$6$ graphs with failure probability $1/3$ in time $O^*(1.680^n\log^2 L \log \log L)$.
 \end{theorem}
 
 \begin{proof}
@@ -496,13 +500,14 @@ We can extend the idea of Theorem \ref{thm:deg5} to degree-6 graphs by splitting
 We next consider extending the algorithm to degree-7 graphs by partitioning degree-7 vertices into one of degree $5$ and another of degree $4$, connected by a forced edge. We can split a vertex of degree $7$ into a vertex of degree $4$ and another of degree $5$ in $\binom{7}{4} = 35$ ways, of which $\binom{7-2}{4-2} + \binom{7-2}{3-2} = 15$ will not preserve the shortest Hamiltonian cycle. We then use the same process as for the degree-5 and degree-6 case, halting after $O((35/20)^{k/2})$ iterations and returning either the shortest Hamiltonian cycle found or reporting if no Hamiltonian cycle exists. From this, our overall runtime is
 %
 \begin{align}
-&O^*\left(\left(\frac{35}{20}\right)^{k/2}1.680^n\log L \log \log L\right)\\
+&O^*\left(\left(\frac{35}{20}\right)^{k/2}1.680^n\log^2 L \log \log L\right)\\
 =&O^*(2.222^n\log L \log \log L).
 \end{align}
 %
 This is the point where we no longer see a quantum speedup over the fastest classical algorithms using this approach, as classical algorithms such as those of Held-Karp~\cite{held1962} and Bj{\"o}rklund et al.~\cite{bjorklund2008} run in $O^*(2^n)$ and $O^*(1.984^n)$ time, respectively.
 
 \section{Arbitrary degree graphs}
+\label{sec:arbitrary-degree}
 
 We conclude this section with a brief note on what speedups can be obtained from graphs of arbitrary degree. To achieve a speedup, we can apply the quantum speedup for dynamic programming by Ronagh \cite{ronagh2019} to the algorithm of Bj\"orklund et al.\ for graphs of degree $k$ \cite{bjorklund2008}.
 
@@ -518,13 +523,23 @@ Runtimes for small instances of $k$ are given in Table \ref{tab:degree-k}, with 
 \begin{center}
 \begin{tabularx}{\textwidth}{|c|c|C|c|}
 \hline Degree $k$ & Quantum & Classical (poly space) & Classical (exp space) \\
-\hline 5 & $O^*(1.390^n L^4)$ & $O^*(1.989^n)$ & $O^*(1.932^n)$ \\
- 6 & $O^*(1.403^n L^4)$ & $O^*(1.996^n)$ & $O^*(1.967^n)$\\
- 7 & $O^*(1.409^n L^4)$ & $O^*(1.998^n L)$ & $O^*(1.984)$ \\
- 8 & $O^*(1.411^n L^4)$ & $O^*(1.999^n L)$ & $O^*(1.991)$ \\
+\hline 5 & $O^*(1.390^n L^4)$ & $O^*(1.989^n\log L)$ & $O^*(1.932^n\poly(L))$ \\
+ 6 & $O^*(1.403^n L^4)$ & $O^*(1.996^n\log L)$ & $O^*(1.967^n\poly(L))$\\
+ 7 & $O^*(1.409^n L^4)$ & $O^*(1.998^n L\log L)$ & $O^*(1.984\poly(L))$ \\
+ 8 & $O^*(1.411^n L^4)$ & $O^*(1.999^n L\log L)$ & $O^*(1.991\poly(L))$ \\
 \hline
 \end{tabularx}
 \end{center}
-\caption[Runtimes of the quantum speedup of Bj"orklund et al.]{Runtimes of the quantum speedup achieved by applying the quantum speedup of dynamic programming by Ronagh to the bounded-degree TSP algorithm of Bj\"orklund et al. Classical runtimes given in Bj\"orklund et al.\ \cite{bjorklund2008}.}
+\caption[Runtimes of the quantum speedup of Bj\"orklund et al.]{Runtimes of the quantum speedup achieved by applying the quantum speedup of dynamic programming by Ronagh to the bounded-degree TSP algorithm of Bj\"orklund et al. Classical runtimes given in Bj\"orklund et al.\ \cite{bjorklund2008}.}
 \label{tab:degree-k}
 \end{table}
+
+\section{Conclusion}
+
+In this work we have given examples of where quantum algorithms can provide polynomial (up to quadratic) speedups for the Travelling Salesman Problem in the NP-hard case of bounded-degree graphs. In particular, we are able to offer polynomial speedups for graphs of up to degree 6 in general, and speedups for graphs of arbitrary bounded degree when the edge weights are at most $\poly(n)$. Furthermore, the quantum computing space requirements of all our algorithms are polynomial.
+
+Since the initial publication of the main results in this work a number of other results along these lines have arisen independently \cite{ambainis2018, ronagh2019, ge2019}. We note from Section \ref{ssec:q-dynamic} that the algorithm of Ambainis et al.\ has a runtime of $O^*(1.728^n\log L)$, and therefore does not perform better than our algorithm for degree below 7. Another cost with Ambainis' algorithm is that the algorithm requires an exponentially large amount of space, in order to store all optimal subpaths of length $n(1-\alpha)/4$ in a quantum random access memory. Ronagh's algorithm does perform better then our original algorithm, with a runtime of $O*(2^{n/2}L^4)$, though only for degree-5 and degree-6 graphs, and even then only when the edge weights of the graph are bounded by $\poly(n)$. Furthermore, we argue in Section \ref{sec:arbitrary-degree} that it is possible to adapt Ronagh's original algorithm to the bounded degree setting to provide even better performance. We will discuss the algorithm of Ge and Dunjko more in Section \ref{sec:error-correction}, but for the meantime note that it has a runtime of at best $O^*(2^{n/4})$, which matches the runtime of D\"{o}rn \cite{dorn2007} given in Section \ref{sec:backtrack-tsp} but is slower than our result.
+
+There are several interesting further questions with this research. One is the question of whether or not these algorithms can offer speedups for degree-7 graphs and beyond. On the one hand, in principle any improvements to the classical backtracking algorithms in lower-degree cases will naturally lead to an improvement in the higher-degree cases, due to the reductions. On the other hand, there is a large jump in performance required to move from $O^*(2.222^n\polylog L)$ to $O^*(1.984^n\log L)$, and an even larger one to beat the $O^*(1.728^n\log L)$ runtime of Ambainis et al.~\cite{ambainis2018}. And even if such an improvement is made, there will eventually be a degree at which our current algorithm will not perform better, due to the exponential overhead required for the reduction.
+
+Another interesting question is what other classical algorithms for these problems can be sped up. There are several algorithms which could be interestin in this regard. One example is cut-and-count algorithms which use a combination of Monte-Carlo and dynamic programming \cite{bjorklund14,bodlaender15,cygan11}. Both of these subroutines have quantum speedups \cite{montanaro2015mc, ronagh2019}, but it is unclear if they can both be applied to these algorithms. Another example are branch-and-bound and branch-and-cut algorithms such \cite{little1963, padberg1991}, which offers the best current classical algorithm for solving the Travelling Salesman Problem in practice \cite{applegate2006}. Again, quantum speedups exist for these algorithms \cite{montanaro2019}. However, performance of these algorithms is evaluated by implementing and benchmarking the algorithms, rather than by analytical means. To determine speedups available would require a (logical) gate and qubit decomposition of the quantum algorithm, which is the main challenge.
