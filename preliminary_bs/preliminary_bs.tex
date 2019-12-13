@@ -357,13 +357,13 @@ If we only measure what spatial mode our photons is in and discard the wavelengt
 A rich library of theoretical work has been developed on the topic of Boson Sampling under distinguishability in recent years \cite{rohde2015, shchesnovich2015, tichy2015, tamma2016nonidentical, menssen2017}. Here, we shall follow the notation of Tichy \cite{tichy2015}, but note that this model of distinguishability is equivalent to several of the other models also mentioned. Tichy uses a Gram matrix $\mathcal{S}_{i,j}$ to discribe the indistinguishability between photons generated in mode $i$ and photons generated in mode $j$, noting that any pair of photons generated in the same mode are indistinguishable from one another. Under Tichy's model, the probability of outcome $\ket{S'}$ is
 
 \begin{equation}
-Pr[S'] = \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(U_{S',S}*U_{S',\sigma(S)}^*),
+\prob[S'] = \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(U_{S',S}*U_{S',\sigma(S)}^*),
 \end{equation}
 
 \noindent where $*$ denotes element-wise multiplication, $M^*$ is the matrix whose elements are complex conjugates of $M$, and $\sigma(S)$ means the elements of $S$ permuted by $\sigma$. Again, the Hong-Ou-Mandel Dip can be visualised in this instance by noting that $\mathcal{S}_{1,2} = \mathcal{S}_{2,1} = v$:
 
 \begin{align}
-Pr[(1,1)] &= \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\\\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\end{pmatrix}\\
+\prob[(1,1)] &= \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\\\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\end{pmatrix}\\
 &= \per\begin{pmatrix}\frac{1}{2}&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{i}{2}&\frac{-i}{2}\\\frac{-i}{2}&\frac{i}{2}\end{pmatrix}\\
 &= \frac{2-2v^2}{4}\\
 &= \frac{1-v^2}{2},
@@ -373,15 +373,43 @@ Pr[(1,1)] &= \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\fra
 
 So what can be done to work around distinguishability? One option is apply filtering and discard photons which are too distinguishable. This does end up creating loss as a result, trading one imperfection for another, but this can be tolerable to some extent, as we shall see in Section \ref{ssec:imperfections-loss} \cite{rohde2012, aaronson2016}. Another option, known as Multi-Boson Correlation Sampling \cite{tamma2014, tamma2015, laibacher2015, tamma2016, laibacher2017}, is to measure across some of these characteristics in such a way that the photons end up essentially behaving indistinguishably. Laibacher and Tamma used an example where $n$ photons were of different colours, and showed that a suitable time interval and polarisation could be chosen such that at the detectors the photons appeared indistinguishable. This was later demonstrated experimentally by Wang et al.~\cite{wang2018timebin}, as well as a subsequent experiment by Orre et al.~\cite{orre2019} where frequency-resolving detectors were used to demonstrate Boson Sampling with photons generated at different time.
 
-Finally, we note there are a number of results that link distinguishability in linear optics to representation theory \cite{adamson2008, deguise2014, turner2016, menssen2017, stanisic2018}. We will introduce representation theory in Section \ref{sec:sw-duality}, and explain more about its link to Boson Sampling in Chapter \ref{chp:noisy_circuit}.
+Finally, we note there are a number of results that link distinguishability in linear optics to representation theory \cite{adamson2008, deguise2014, turner2016, menssen2017, stanisic2018}. We will introduce representation theory in Section \ref{sec:sw-duality}, and explain its link to Boson Sampling in more detail in Chapter \ref{chp:noisy_circuit}.
 
 \subsection{Loss}
 \label{ssec:imperfections-loss}
 
+We now turn to photon loss, where we know that some photons were generated at the input but not detected at the output. There are a wide variety of reasons for why this might occur, including coupling between optical components, two-photon absorption, Rayleigh scattering and detector efficiencies.
+
+Consider a Boson Sampling experiment which starts with $n$ photons, of which only $k$ are detected. Crucially, not only does loss reduce the number of photons, but also we do not know which of the photons have been lost. This leads to the probability distribution forming a convex sum over different subsets of input photons
+
+\begin{equation}
+\prob[K'] = \sum_{\substack{K \subseteq S\\|K| = k}}p_{K}|\per(U_{K',K})|^2,
+\end{equation}
+
+\noindent where $p_K$ is the probability of the photons which started in input modes $K$ surviving, with $\sum_Kp_K = 1$.
+
+One known complexity result is by Aaronson and Brod \cite{aaronson2016}, who considered Boson Sampling with uniform loss, meaning that $p_K=1/\binom{n}{k}\forall K$. Aaronson and Brod showed that in this model, Boson Sampling remains classically hard if $k=n-\ell$ for some constant $\ell$. This was proven by showing that if someone could estimate a convex sum of squared permanents of submatrices of an $(n)\times(n)$ matrix, then one can estimate the squared permanent of an $(n-\ell)\times(n-\ell)$ matrix with bounded probability. However, this only works if a constant number of photons are lost, regardless of how large $n$ is. No hardness proofs exist even for the case of a constant fraction of photons being lost.
+
+Two papers have experimentally explored Boson Sampling under loss. The first, in 2018 by Wang et al.~\cite{wang2018}, considers five, six and seven photon Boson Sampling with one and two photons lost. The second, as mentioned in Section \ref{sec:experimental-achievements}, was performed in 2019 by Wang et al.~\cite{wang2019}, and demonstrates Boson Sampling with 20 input photons of which up to 14 survive.
+
 \subsection{Other Imperfections}
+
+Before we move on to classical simulations, we will briefly mention here other imperfections that might occur or be considered in a Boson Sampling experiment, as well as what results are known for these models.
+
+\subsubsection{Low depth interferometers}
+
+Loss is more likely to occur in Boson Sampling if the interferometer has a high depth. An intuitive question to ask in this case is what can be done with a Boson Sampling circuit of reduced depth? A hardness proof for exact sampling was given Brod \cite{brod2015}, showing that even four layers of beam splitters was sufficient to ensure hardness in the exact case. Classical algorithms for these instances were later devised, by taking advantage of the low depth to only simulate interference between photons which could actually cross paths \cite{deshpande2018, maskara2019}. Note that these classical simulation algorithms inherently assume the photons are not all generated adjacently from each other.
+
+\subsubsection{Dark counts and Gaussian noise}
+
+Dark counts occur when a detector registers a photon even though one was not present. This is most often due to thermal noise within the single photon detector, meaning that even if the detector was in complete darkness it would still claim that photons were present.
+
+Dark counts themselves are not much of a challenge in Boson Sampling experiments; superconducting nanowire single photon detectors have sufficiently low dark counts that false clicks can be noticed easily and the experiment discarded \cite{kitaygorsky2005}. However, where they become challenging is when loss is also involved: It is very difficult to differentiate between a photon not being lost and a photon being lost combined with a false click at the detector. Shchesnovich \cite{shchesnovich2019} argued that this is akin to a model of Boson Sampling by Kalai and Kindler \cite{kalai2014}. Under Kalai and Kindler, Boson Sampling experiences a model of noise where the probability is still related to the permanent of a matrix, but now  the matrix in question is $\sqrt{1-\epsilon}U_{S',S}+\sqrt{\epsilon}X$ for some Gaussian matrix $X$ that acts as our noise. Kalai and Kindler suggest that for $\epsilon=\omega(1/n)$, vanilla Boson Sampling and Boson Sampling under Gaussian noise are already uncorrelated, and furthermore for $\epsilon = \Omega(1)$, that the probability of an outcome of Boson Sampling under Gaussian noise can be approximated by up to constant error. Shchesnovich \cite{shchesnovich2019} uses this result to propose a classical simulation algorithm, using techniques similar to those used for classically simulating Boson Sampling under distinguishability \cite{renema2018, renema2018loss}, which we shall explore further in Section \ref{sec:renema-review}.
 
 \section{Classical Simulation Algorithms}
 \label{sec:classical-simulations}
+
+Having introduced distinguishability and loss, we are now ready to discuss classical simulation algorithms for these imperfections. We will start by explaining classical algorithms for vanilla Boson Sampling, which were the original classical simulators devised. We will then discuss Boson Sampling under fully distinguishable photons, as well as Boson Sampling under various models of loss. Finally, we shall consider the classical simulation algorithms of \cite{renema2018, renema2018loss}, which were the first known classical algorithms to consider both distinguishability and loss.
 
 \subsection{Simulation algorithms for ideal Boson Sampling}
 
@@ -396,7 +424,7 @@ The second result, by Clifford \& Clifford \cite{clifford2017}, gave a classical
 This is through a combination of optimizations, particularly computing marginal probabilities and sampling via the chain rule.
 Our approach here is to make these more efficient techniques applicable to realistic situations with distinguishability and loss.
 
-\subsection{Simulation algorithms for fully distinguishable Boson Sampling}
+\subsection{A simulation algorithm for fully distinguishable Boson Sampling}
 
 In the case where the $n$ input photons are fully distinguishable, a simple polynomial time algorithm exists \cite{aaronson2014}. In this case, there is no photon interference, so photons can be sampled individually. This is done by taking a photon which starts in mode $i$, and sampling output mode $j$ with probability $|U_{j,i}|^2$. Repeating for all photons gives us the complete sample in $O(mn)$ time.
 
