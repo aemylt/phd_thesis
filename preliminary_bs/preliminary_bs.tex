@@ -525,22 +525,61 @@ This in turn leads to negative probabilities, which are not clear how to correct
 \section{The Schur-Weyl Duality}
 \label{sec:sw-duality}
 
+We'll now turn to the Schur-Weyl duality, a theorem related to the irreducible representations of the symmetric and unitary groups. We will start by introducing representation theory, before explaining the Schur-Weyl duality in detail. At the end of this section we shall consider its connection to quantum information, and in Chapter \ref{chp:noisy_circuit} how it is linked to Boson Sampling specifically. For further reading we direct the reader to \cite{fulton2004, harrow2005}.
+
 \subsection{Representation theory}
 
-Our algorithm can be understood from the perspective of the representation theory of the unitary group U$(m)$ of linear interferometers acting of $m$ modes.
-The irreducible representations, or irreps, are intimately related to those of the symmetric group $\textrm{S}_n$ that permutes the particles.
-Irreps of both of these groups are indexed by ordered partitions $\lambda = (\lambda_1,\lambda_2,\cdots,\lambda_m)$ of $n$ such that $\lambda_i \geq \lambda_{i+1}$ and $\sum_{i = 1}^m \lambda_i = n$.
-We usually suppress zeros in this notation, so for example the totally symmetric irrep $\lambda=(n, 0,\cdots,0)$ is written $(n)$. 
-The number of nonzero $\lambda_i$ is called the length of the partition, $\ell(\lambda)$, and only partitions with $\ell(\lambda) \leq m$ occur, which we will assume in all of our expressions that follow.
-%Following the convention of~\cite{rowe2012}, we shall label irreps of S$_n$ and U$(m)$ indexed by $\lambda$ as $(\lambda)$ and $\{\lambda\}$, respectively.
+Let $G$ be a group and $X$ a set. We define an action of $G$ on $X$ as a map $\Phi\colon G\times X \rightarrow X$ such that the action of the identity element $e\in G$ is the identity map, $\Phi_e(x) = \Phi(e, x) = x$, and the following relation holds:
 
-For the tensor space of $n$ $m$-dimensional qudits, the actions of the symmetric and unitary groups on a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ are explicitly as follows. 
-For a permutation $\sigma \in \textrm{S}_n$, the action permutes the tensor factors. 
-For a unitary matrix $U \in \textrm{U}(m)$, the action is the $n$-fold tensor product $U^{\otimes n}$. 
-It is not hard to see that these two actions commute.
-We can now describe Schur-Weyl duality as the following theorem.
+\begin{equation}
+\Phi_{g_1}(\Phi_{g_2}(x)) = \Phi_{g_1g_2}(x).
+\end{equation}
+
+One trivial example is the action of the permutation group $S_n$ on the set of numbers from 1 to $n$, defined as $\Phi_\sigma(i) = \sigma(i)$. Note that $\Phi$ need not be injective with respect to $G$, so another trivial example is the identity action, which is $\Phi_g(x) = x \forall g \in G$.
+
+A representation is defined as a vector space $V$ combined with an action $\Phi: G \times V \rightarrow V$ with the additional constraint that $\Phi$ is a linear map over $V$:
+
+\begin{equation}
+\Phi(g, u+v) = \Phi(g, u) + \Phi(g, v).
+\end{equation}
+
+Now let $W \subseteq V$ be a vector subspace. We say that $W$ is invariant with respect to the action of $\{\Phi_g\colon g\in G\}$ if
+
+\begin{equation}
+\Phi_g(w) \in W \forall g \in G, w \in W.
+\end{equation}
+
+Two trivial example of invariant subspaces are the full vector space $W=V$ and the empty vector space $W=\{0\}$. We call a vector subspace $W$ invariant if the above holds and $W$ is not equal to $V$ or $\{0\}$.
+
+This finally brings us to the topic of irreducible representations. A representation $V, \Phi$ of $G$ is irreducible, also known as an irrep, if it contains no proper invariant subspaces. If $V$ does contain a proper invariant subspace, then we say that $V$ is reducible.
+
+\subsection{Symmetric and Unitary Groups}
+
+The main interest of this thesis is the representation theory of the unitary group U$(m)$, and their action on the space of $(\mathbb{C}^{m})^{\otimes n}$. The intuition for linking this to Boson Sampling is that each vector in $\mathbb{C}^m$ is referring to a photon which could be in one of $m$ modes, and the action of $U \in \unitary(m)$ will be our interferometer.
+As we shall see, the irreducible representations for $\unitary(m)$ are intimately related to those of the symmetric group $\textrm{S}_n$.
+
+For the tensor space of $(\mathbb{C}^{m})^{\otimes n}$, the actions of the symmetric and unitary groups on a tensor $v_1\otimes\dots\otimes v_n \in (\mathbb{C}^m)^{\otimes n}$ are explicitly as follows. 
+For a permutation $\sigma \in \textrm{S}_n$, the action permutes the tensor factors,
+
+\begin{equation}
+\Phi_\sigma(v_1\otimes\dots\otimes v_n) = v_{\sigma^{-1}(1)}\otimes\dots\otimes v_{\sigma^{-1}(n)},
+\end{equation}
+
+\noindent and for a unitary matrix $U \in \textrm{U}(m)$, the action is the $n$-fold tensor product $\Phi_U = U^{\otimes n}$.
+
+It is a simple exercise to see that these two actions commute:
+
+\begin{align}
+\Phi_U(\Phi_\sigma(v_1\otimes\dots\otimes v_n)) &= \Phi_U(v_{\sigma^{-1}(1)}\otimes\dots\otimes v_{\sigma^{-1}(n)})\\
+&= (Uv_{\sigma^{-1}(1)})\otimes\dots\otimes(Uv_{\sigma^{-1}(n)})\\
+&= \Phi_\sigma((Uv_1)\otimes\dots\otimes (Uv_n))\\
+&= \Phi_\sigma(\Phi_U(v_1\otimes\dots\otimes v_n)).
+\end{align}
+
+The Schur-Weyl duality describes how $(\mathbb{C}^m)^{\otimes n}$ can be decomposed into irreps for the direct product group $\unitary(m)\otimes\symm_n$.
+
 \begin{theorem}[Schur-Weyl duality~\cite{rowe2012}]
-The Hilbert space of $n$ $m$-dimensional qudits decomposes into irreducible subspaces
+The complex vector space of $(\mathbb{C}^m)^{\otimes n}$ decomposes into irreducible subspaces
 \begin{equation}
 (\mathbb{C}^m)^{\otimes n} \simeq \bigoplus_{\lambda\vdash n} \mathbb{C}^{\{\lambda\}} \otimes \mathbb{C}^{(\lambda)} ,
 \end{equation}
@@ -548,16 +587,25 @@ where $\mathbb{C}^{\{\lambda\}}$ carries irrep $\{\lambda\}$ of $\textrm{U}(m)$ 
 The dimension of irrep $(\lambda)$ can be viewed as the multiplicity of irrep $\{\lambda\}$, and vice versa.
 \end{theorem}
 
-\subsection{Symmetric and Unitary Groups}
-
-\subsection{Irreducible Representations}
+It is common to label irreps of both of these groups by ordered partitions $\lambda = (\lambda_1,\lambda_2,\cdots,\lambda_m)$ of $n$ such that $\lambda_i \geq \lambda_{i+1}$ and $\sum_{i = 1}^m \lambda_i = n$.
+We usually suppress zeros in this notation, so for example the totally symmetric irrep $\lambda=(n, 0,\dots,0)$ is written $(n)$. 
+The number of nonzero $\lambda_i$ is called the length of the partition, $\ell(\lambda)$, and only partitions with $\ell(\lambda) \leq m$ occur, which we will assume in all of our expressions that follow.
+%Following the convention of~\cite{rowe2012}, we shall label irreps of S$_n$ and U$(m)$ indexed by $\lambda$ as $(\lambda)$ and $\{\lambda\}$, respectively.
 
 \subsection{The Quantum Schur Transform}
 
-\subsubsection{Efficient Quantum Circuits}
+The Quantum Schur Transform is an equivalent form for the Schur-Weyl Duality, but written as a quantum circuit. This circuit takes as input a state in the basis $(\mathbb{C}^m)^{\otimes n}$, and decomposes it into a basis of states labelled by which irrep $\lambda$ they are in.
 
-There is an efficient quantum circuit that implements the Schur-Weyl decomposition.
-Given a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ in the computational basis, this circuit, which we denote $W$, performs the transformation
+The canonical example of the Quantum Schur Transform is when $m=n=2$. In this case, the only partitions available are $\lambda=(2,0)$ and $\lambda=(1,1)$. Our representation labelled by $\lambda=(2,0)$ is defined by the basis states $\ket{00}$, $\ket{11}$ and $(\ket{01}+\ket{10})/\sqrt{2}$, while our $(1,1)$ irrep is simply the state $(\ket{01}-\ket{10})/\sqrt{2}$. This is equivalent to the triplet and singlet states of two electrons:
+
+\begin{align}
+\ket{j=1,m=1} &= \ket{00},\\
+\ket{j=1,m=0} &= \frac{\ket{01}+\ket{10}}{\sqrt{2}},\\
+\ket{j=1,m=-1} &= \ket{11},\\
+\ket{j=0,m=0} &= \frac{\ket{01}-\ket{10}}{\sqrt{2}}.
+\end{align}
+
+This can generalise further to describe $n$ qubits, noting that $j=(\lambda_1-\lambda_2)/2$. The Quantum Schur Transform is even more general, offering a mapping for any collection of $m$-level qudits. Given a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ in the computational basis, the Quantum Schur Transform, which we denote as the quantum circuit $W$, performs the transformation
 \begin{equation}
 W|\Psi\rangle
  = \sum_{\lambda \vdash n} \, \sum_{q_{\lambda}} \, \sum_{p_\lambda}C^\lambda_{q_\lambda,p_\lambda}|\lambda\rangle|q_\lambda\rangle|p_\lambda\rangle , 
@@ -568,8 +616,23 @@ For example, the unitary action of U$(m)$ in this basis is
 U : |\lambda\rangle |q_\lambda\rangle |p\rangle \rightarrow |\lambda\rangle |U\cdot q_\lambda\rangle |p\rangle := |\lambda\rangle \left( \sum_{q_\lambda'} U^\lambda_{q_\lambda, q_\lambda'} |q_\lambda'\rangle \right) |p\rangle ,
 \end{equation}
 where $U^\lambda$ is the irreducible unitary matrix corresponding to $U \in \mathrm{U}(m)$.
-It was proven by Bacon, Chuang and Harrow that this circuit runs in polynomial time in terms of $n$, $m$ and $\log(\delta^{-1})$, where $\delta$ is an accuracy parameter~\cite{bacon2007}.
+
+\subsubsection{Efficient Quantum Circuits}
+
+The first demonstration of an efficient quantum circuit was for $m=2$, proven in 2004 and later published in 2006 by Bacon, Chuang and Harrow \cite{bacon2004}. This circuit worked by decomposing the Schur Transform into a sequence of $n$ Clebsch-Gordan Transforms, each coupling pairs of qubits together. The individual Clebsch-Gordan transformations could then be implemented using two Controlled-Not gates and a single doubly-controlled rotation gate in the $y$-direction, which can be implemented up to precision $\epsilon$ in $O(\polylog(1/\epsilon))$ gates \cite{nielsen2010}. Thus, the overall runtime of this circuit was $O(n\polylog(1/\epsilon))$.
+
+This result was subsequently generalised to arbitrary $m$ in Aram Harrow's PhD thesis \cite{harrow2005, bacon2007}. Now the Schur transform was decomposed into Clebsch-Gordan Transforms applied to pairs of qudits. The $m$-dimensional Clebsch-Gordan Transformation could be implemented efficiently by recursively applying the $(m-1)$-dimensional Clebsch-Gordan Transform followed by a reduced Wigner Transform. This Wigner Transform can, like the Clebsch-Gordan Transform for $m=2$, be implemented as two Controlled-Not Operations followed by a doubly-controlled rotation, the angles for which can be computed efficiently and for which an efficient circuit can be decomposed \cite{nielsen2010}. As a result, this circuit can be implemented in polynomial time in $m, n$ and $\log(1/\epsilon)$. Harrow also briefly mentions in a footnote that if $d \gg n$, then the runtime can be reduced to polynomial in $\log d$ by mapping to a state in $(\mathbb{C}^n)^{\otimes n}$, though this is not formally proven.
+
+Recently there has been some interest in making this quantum circuit more efficient. Kirby and Strauch \cite{kirby2018} went into the original Bacon, Chuang and Harrow circuit for $m=2$ in more detail in order to offer a more explicit  analysis of what the quantum computer needed to do, from which they provided a number of simplifications. The result was a quantum circuit which requires $O(n^4\log(n/\epsilon))$ operators using a Clifford+$T$ gate set. They then extended this algorithm to the qudit setting, where they were able to find a circuit which uses $O(m^{1+p}n^{3m}\log^p(mn/\epsilon))$ operations from any universal set of quantum gates, where $p\approx 3.97$. Note that the number of gates grows superexponentially with $m$, due to the $n^m$ term, so while this is efficient for a constant $m$, we shall see that this circuit does not benefit our work. Another recent result by Krovi \cite{Krovi2019} gives an explicit quantum circuit which is polynomial in $n, \log m$ and $\log(1/\epsilon)$. Krovi's circuit works by first block-diagonalising the state into permutation modules, and then block-diagonalising each permutation module into irreps. Krovi argues that this circuit can be thought of as a dual  of Harrow's, as it uses the representation theory of the Symmetric Group, whereas Harrow's circuit uses that of the Unitary Group.
 
 \subsubsection{Applications}
+
+With efficient circuits for the Quantum Schur Transform now described, we will briefly discuss some example application. Further applications can be found in Aram Harrow's PhD Thesis \cite{harrow2005}.
+
+Many applications exist which simply take advantage of measuring the irreps of a quantum state. One example is estimating the spectrum of a quantum state $\rho$ from $n$ copies of the state $\rho^{\otimes n}$. Vidal et al.~\cite{vidal1999} used irreps of the Symmetric Group to find optimal measurements for fixed numbers of particles. Later, Keyl and Werner \cite{keyl2001} gave an approximator from measuring the irreps of a state, and showed that the probability of an error decreased exponentially with $n$.
+
+Another such application is quantum state compression, the task of encoding a large quantum state in a smaller one. Hayashi and Matsumoto \cite{hayashi2002, hayashi2002simple} gave a scheme for compressing an arbitrary quantum state by weakly measuring the irrep $\lambda$ and then applying an encoding process. This scheme is variable-length, meaning that the output was not guaranteed to be bounded but the scheme would ensure that no information was lost in decoding. Hayashi and Matsumoto also showed that the probability of this scheme returning an encoded state whose size was larger than a particular bound (also known as an overflow) is optimal in terms of its exponent.
+
+One final use, proven by Bartlett, Rudolph and Spekkens\cite{bartlett2001}, is quantum communication. One issue with communicating quantum states is that the receiver might not have the same reference frame as the sender, and so the two parties might not be working in the same basis. Bartlett, Rudolph and Spekkens gave a work-around for this, by encoding information in basis states of the Symmetric Group's irrep. A difference in reference frames will mean some unitary acting as $U^{\otimes n}$ on the communicated state, but this will only affect the irrep of the Unitary Group irrep and not the Symmetric Group where the data is actually encoded.
 
 \subsection{Classical Simulability}
