@@ -3,31 +3,7 @@
 
 \section{Introduction}
 
-Since the idea of quantum computers was first proposed, there has been significant interest in demonstrating how much more powerful they are than their classical counterparts. 
-This has been shown for a number of problems, from factoring integers~\cite{shor1997} to solving linear equations~\cite{harrow2009}. 
-However, these algorithms require large fault-tolerant quantum computers, which have proven challenging to develop. 
-This has led to the search for a so called quantum advantage: a quantum experiment that can be demonstrated in the near future, yet is hard to simulate on a classical computer~\cite{harrow2017}. 
-Numerous proposals have been made~\cite{bremner2016, boixo2016}, with perhaps the best known being Boson Sampling~\cite{aaronson2011}, which considers the complexity of sampling from the same probability distribution as $n$ indistinguishable photons output from an $m$-mode linear optical interferometer, shown to be determined by matrix permanents~\cite{scheel2008}.
-
-In their breakthrough article, Aaronson and Arkhipov showed that the ability to exactly simulate Boson Sampling in polynomial time would imply that $P^{\#P} = BPP^{NP}$ and the Polynomial Hierarchy would collapse to the third level. 
-The same result was also shown for approximately sampling from the same distribution, modulo two conjectures related to the permanents of Gaussian matrices~\cite{aaronson2011}. 
-This has led to the development of numerous experiments~\cite{broome2013, spring2013, tillmann2013, crespi2013}, with demonstrations as large as five and six photons~\cite{carolan2015, wang2017}.
-
-However, going from these small demonstrations to being able to significantly outperform classical simulation is not a simple task, as recently highlighted by two papers. 
-The first, by Neville et al.~\cite{neville2017}, gives an empirical evaluation of approximately sampling from the boson distribution when there are no collisions via a Markov Chain Monte Carlo algorithm, showing that they could produce 250 samples for 30 bosons across 900 modes in under five hours. 
-The second, by Clifford and Clifford~\cite{clifford2017}, gives the first algorithm for exact Boson Sampling that is more efficient than computing the entire probability distribution, sampling from $n$ photons across $m$ modes in $O(n2^n + \poly(n,m))$ time and $O(m)$ space.
-
-Any claim of a quantum advantage will furthermore need to take into account the practical challenges associated with Boson Sampling. 
-One such challenge, which will be the focus of this work, is the need for indistinguishable single bosons. 
-It is also clear that the particles being indistinguishable is to some extent a requirement for the problem to remain computationally hard, as there are known algorithms when the bosons are perfectly distinguishable~\cite{aaronson2014}.
-Generating large numbers of indistinguishable photons is infeasible with current techniques, with the probability scaling as $p^n$ where $p$ is the probability of generating a single photon~\cite{gard2015}. 
-
-In recent years there has been a wealth of theory on linear optical interferometry with partially distinguishable photons~\cite{rohde2015, shchesnovich2015, tichy2015, tillmann2015, menssen2017, laibacher2017, spagnolo2014, giordani2018}, which has lead to some known results on the computational complexity of sampling. 
-Renema et al.~\cite{renema2017} give a classical algorithm for approximate sampling, which they use as a lower bound for how indistinguishable the photons must be in order to achieve a significant quantum advantage. 
-Shchesnovich used average mutual fidelity to give an upper bound on the problem's complexity, stating that a sampling experiment is more powerful when the single-photon mode mismatch scales as $O(n^{-3/2})$ for $n$ photons~\cite{shchesnovich2014}. 
-Rohde and Ralph~\cite{rohde2012} also briefly discuss this problem, using narrowband filtering to relate distinguishability to loss in order to give an upper bound.
-
-In this paper we explore the problem of sampling from a collection of $n$ partially distinguishable single bosons interacting on a $m$-mode interferometer from the opposite direction, that is, from the perspective of quantum simulation. 
+In this chapter we explore the problem of sampling from a collection of $n$ partially distinguishable single bosons interacting on a $m$-mode interferometer from the opposite direction, that is, from the perspective of quantum simulation. 
 We do so by observing that ideal Boson Sampling is equivalent to sampling from the totally symmetric representation of the unitary group, and that partial distinguishability generalises this to the problem of sampling from arbitrary irreducible representations.
 We show that quantum circuits for the Schur transform~\cite{bacon2007} can therefore be used to give a polynomial time quantum algorithm for sampling from the same probability distribution as bosons emerging from a linear interferometer, regardless of distinguishability.
 
@@ -40,7 +16,7 @@ An example of such a method for the ideal (indistinguishable) case is by Aaronso
 Here we show explicitly how nonideal linear optics can be viewed as a quantum computation, allowing a wider range of realistic experimental situations to be considered.
 Our approach shows that while the ideal case is intimately related to the symmetric representation of the unitary group through matrix permanents, in the nonideal case all representations play a role.
 
-The paper is structured as follows. 
+The chapter is structured as follows. 
 We provide a simple quantum circuit for ideal indistinguishable photon sampling in Section \ref{sec:qc-bs}, before introducing the full circuit for sampling with distinguishable particles in Section \ref{sec:qc-noisy}. 
 In Section \ref{sec:uu-duality}, we provide some further explanation as to why these circuits work, via what is known as unitary-unitary duality.
 Following this result, we discuss a few interesting consequences: in Section \ref{sec:post-bs}, we show how postselection can be used with this circuit to sample from the indistinguishable distribution when given a distinguishable input; in Section \ref{sec:nc-loss}, we consider how the circuit can be used to simulate Boson Sampling when photons are lost; and in Section \ref{sec:mixture}, we consider the multipartite entanglement of the output in the partially distinguishable case. 
