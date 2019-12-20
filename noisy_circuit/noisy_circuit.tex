@@ -185,7 +185,7 @@ To see that this distribution matches that of partially distinguishable bosons, 
 There, each boson is assigned an ``internal'' state $|\Phi_i\rangle$, where $i=1, \cdots, m$.
 Thus, in our terminology, every boson in System mode $i$ has a Label state given by $\Phi_i$.
 The probability distribution given there for sampling from partially distinguishable bosons is (in our notation)
-\begin{equation}\label{eq:nc-TichyDist}
+\begin{equation}\label{eq:TichyDist}
 \textrm{Pr}[S'] =  \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau'}(k)}} \mathcal{S}_{{\tau'(k)},{\tau(k)}},
 \end{equation}
 where $\mathcal{S}_{k,l} = \langle \Phi_{s_k}|\Phi_{s_l}\rangle$ is a Hermitian positive-definite $n \times n$ distinguishability matrix, $s_k$ gives the mode occupied by particle $k$, and we've included a factor to account for the possibility of multiple bosons in the same output mode.
@@ -221,7 +221,7 @@ When we apply the action of the interferometer $U$ on the $m$-dimensional System
  &= \frac{\sum_{\sigma, \sigma' \in \textrm{S}_n} \prod_{k=1}^n \langle s'_k|U|s_{\sigma^{-1}(k)}\rangle\langle s_{\sigma'^{-1}(k)}|U^\dagger|s'_k\rangle\mathcal{S}_{\sigma'^{-1}(k),\sigma^{-1}(k)}}{n!\prod_{i=1}^m S_i!}\\
  &= \frac{\sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^*_{s'_k,s_{\tau'(k)}} \mathcal{S}_{\tau'(k),\tau(k)}}{n!\prod_{i=1}^m S_i!}.
 \end{align}
-Up to a factor, this is the desired probability distribution of Eq.(\ref{eq:nc-TichyDist}).
+Up to a factor, this is the desired probability distribution of Eq.(\ref{eq:TichyDist}).
 As discussed at the end of the last section, this factor could be handled either by applying a second Schur transform on the System and sampling the $q$-register, or by classical post processing.
 
 Counting resources goes much the same as it did in the ideal case, though now we have $mn$-dimensional qudits that are made up of pairs of $m$- and $n$-dimensional qudits.

@@ -16,9 +16,8 @@ We combine this with the well-studied model of uniform loss, where each photon i
 This gives rise to a method which is able to naturally apply the Clifford \& Clifford algrithm and take advantage of its efficiency. This algorithm also offers a worst-case error bound for \textit{any} linear optical interferometer, rather than a random one.
 Although this approach only offers a polynomial improvement compared to the runtime for ideal Boson Sampling (unlike the exponential improvement shown in \cite{renema2018,renema2018loss}) we use analytical bounds to show that for photon numbers of experimental interest our algorithm can make a significant improvement over alternative approaches. 
 
-This article is laid out as follows.
-In Sec.\ \ref{sec:background}, we give an overview of distinguishability in first quantization, and summarise the work of classical simulation algorithms including \cite{renema2018, renema2018loss}. 
-In Sec.\ \ref{sec:expansion}, we show what the model of distinguishability looks like in first quantization, and provide an alternative classical simulation. 
+This chapter is laid out as follows.
+In Sec.\ \ref{sec:expansion}, we show what the Renema et al.~\cite{renema2018, renema2018loss} model of distinguishability looks like in first quantization, and provide an alternative classical simulation. 
 In Sec.\ \ref{sec:average-case}, we consider average error bounds for a Haar-random unitary interferometer, via the methods explained in Sec.\ \ref{sec:renema-review}. 
 In Sec.\ \ref{sec:worst-case}, we improve this bound to a worst-case error bound, by computing an upper bound for the trace distance between our approximation and the model. 
 In Sec.\ \ref{sec:loss}, we expand these results to consider uniform loss, and show how distinguishability and loss relate to each other. 
@@ -26,47 +25,162 @@ In Sec.\ \ref{sec:empirical-errors}, we explore these error bounds for experimen
 Finally, we briefly consider \emph{non}-uniform loss, where loss is a function of the number of optical components, and use the methods of \cite{garciapatron2017, oszmaniec2018} to show that classical simulations with non-uniform loss also become easier when distinguishability is introduced.
 We conclude with some open research questions in Sec.\ \ref{sec:conclusion}.
 
+\section{Limitations of other classical simulation algorithms}
 
+Before disucssing our classical algorithm, we shall look at other classical potential classical simulation algorithms and explain some of their limitations when applied to Boson Sampling under distinguishability. In particular, we shall discuss adapting the methods of \cite{havlicek2018, havlicek2019} and \cite{oszmaniec2018} to Boson Sampling under distinguishability and loss.
 
-\section{Preliminaries}
-\label{sec:background}
+\subsection{Classical Tractability}
 
-\subsection{Partial distinguishability in first quantization}
+We shall start by discussing the issue with employing the Classical Tractability method of Van den Nest \cite{vandennest2011}, similarly to the technique used by Havl\'{i}\v{c}ek and Strelchuk \cite{havlicek2018}. There are some promising initial results for using this technique to approximate the transition amplitudes of imperfect Boson Sampling, but it very quickly becomes clear that this is not efficiently possible in general.
 
-Studying photonics in first quantization allows an arbitrary linear optical experiment to be expressed in the quantum circuit model ~\cite{moylett2018, stanisic2018, oszmaniec2018}.
-Bosonic symmetrisation can be implemented efficiently, e.g. through use of the quantum Schur transform \cite{bacon2007}, and the main sources of errors in linear optics can be modelled: loss as erasure of qudits and distinguishability as correlation to extra photonic degrees of freedom, both of which lead to decoherence of the quantum circuit.
+Recall from Section \ref{ssec:schur-simulation} that a state is Classically Tractable if we can efficiently approximate its amplitudes and sample from measuring the state in the computational basis up to polynomial multiplicative error \cite{vandennest2011}. It is easy to see in this case that the input state to Boson Sampling in the first quantisation is a CT state, as the only basis states with non-zero amplitude are those which are permutations of $[n]$, and those states have uniform amplitudes. More formally, the amplitude of a state $\ket{a}\in(\mathbb{C}^m)^{\otimes n}$ is
 
-We start by considering arbitrary distinguishability of photonic scattering, models of which have been proposed in \cite{tamma2015, laibacher2015, tichy2015}. 
-Let $m,n$ be integers such that $m\in O(n^2)$. 
-Let $U\in \unitary(m)$ be an $m$-mode linear optical interferometer, and let $S,S'$ be $n$-photon $m$-mode Fock vectors, meaning that $S=(S_0,\dots,S_m)$, $S'=(S'_0,\dots,S'_m)$, and $\sum_{i=0}^mS_i=\sum_{i=0}^mS'_i=n$. 
-The probability of seeing output occupation $S'$ from input $S$ with interferometer $U$ is
-\begin{equation}\label{eq:TichyDist}
-\prob[S'] =  \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau'}(k)}} \mathcal{S}_{{\tau'(k)},{\tau(k)}},
-\end{equation}
-where $\mathcal{S}_{k,l}$ is an $n \times n$ Gram matrix describing the (in)distinguishability of pairs of photons, $S$ is a Fock array describing the arrangement of input photons, $s$ is the corresponding array of single particle states in first quantisation, likewise for $S'$ and $s'$, $U$ is an $m\times m$ unitary matrix describing the interferometer, and S$_n$ is the group of permutations of $n$ particles.
-Of particular note is that when $\mathcal{S}$ is the all-1 matrix, we have
-\begin{align}
-\prob[S'] &= \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau'}(k)}}\\
-&= \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} \sum_{\tau' \in \textrm{S}_n} \prod_{k=1}^nU^\ast_{s'_k,s_{{\tau'}(k)}}\\
-&= \frac{1}{\prod_{i=1}^m S_i! S'_i!} \per(U_{S,S'})\per(U^\ast_{S,S'})\\
-&=  \frac{1}{\prod_{i=1}^m S_i! S'_i!} |\per(U_{S,S'})|^2,
-\end{align}
-where $U_{S,S'}$ is a matrix defined by taking rows and columns of $U$ according to $S$ and $S'$~\cite{scheel2008}. 
-This is the output probability distribution for Boson Sampling with indistinguishable photons. 
-Likewise, we can see that when $\mathcal{S}$ is the identity matrix, we have
-\begin{align}
-\prob[S'] &= \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau}(k)}}\\
-&= \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau \in \textrm{S}_n} \prod_{k=1}^n |U_{s'_k,s_{\tau(k)}}|^2\\
-&=  \frac{1}{\prod_{i=1}^m S_i! S'_i!} \per(|U_{S,S'}|^2),
-\end{align}
-which is the distribution for fully distinguishable photons. 
-In first quantisation, the input state can be written as~\cite{moylett2018}
 \begin{equation}
-\rho
-=\frac{1}{n!\prod_{i=1}^m S_i!}\sum_{\sigma,\sigma'\in\textrm{S}_n}\sigma|s\rangle\langle s|\sigma'^\dagger \prod_{k=1}^n \mathcal{S}_{{\sigma'}^{-1}(k),\sigma^{-1}(k)}, \label{eqn:dist-state}
+\psi_a = \begin{cases}1/\sqrt{n!} & \quad \textrm{if } \exists \sigma\in\symm_n \textrm{ s.t. } \sigma(a_i) = i \forall i\in[n]\\0 & \quad{otherwise}\end{cases}.
 \end{equation}
-For convenience, we will assume here and throughout the rest of this paper that our photons start in the Fock state $\ket{S}=\ket{1^n0^{m-n}}$. 
-We will use the corresponding first quantized states of this form in the following.%, as long as we have a means of describing the $\mathcal{S}$ matrix.
+
+Similarly, a measurement in the computational basis can be efficiently sampled by sampling a permutation $\sigma \in \symm_n$ uniformly at random and outputting $\sigma(1), \sigma(2),\dots,\sigma(n)$. Thus our input state meets the requirements for Computational Tractability.
+
+This seems promising, as the entanglement was believed to be the hard part of Section \ref{sec:mixture}, and now this provides a way of classically simulating that step. However, we shall see that in this setting the action of the interferometer leads to classical simulation being hard.
+
+In order to approximate the probability of an outcome, the operation we apply to the input state needs to be Efficiently Computable Sparse (ECS). From Van den Nest \cite{vandennest2011}, this means that each row and column of the matrix has at most $\poly(n)$ non-zero elements and each element of the matrix can be approximated to polynomial multiplicative error in polynomial time. In our case, this operator is $U^{\otimes n}$.
+
+Each element of this operator can be efficiently approximated as a product of different elements of $U$. However, the matrix is very large, with $m^n$ elements in each row and column. This is especially poor in the case where $m = O(n^2)$, believed to be the regime required for Boson Sampling to provide a quantum advantage.
+
+There are some potentially positive directions in this area. If there are a small number of non-zero elements in each row and column of $U$, then many of the elements in $U^{\otimes n}$ would also be zero, and then the matrix could be interpreted as ECS. This could be true if, for example, the photonic circuit is low depth. Another potential direction is to use this method to simulate Boson Sampling under photon loss, which would reduce the exponent. However, it is unclear how either of these methods would lead to a faster simulation than ones that are already known.
+
+\subsection{Distance from the fully distinguishable state}
+
+In this section we shall consider limitations with simply using a separable state. This is inspired by the work on Oszmaniec and Brod \cite{oszmaniec2018}, who showed that with sufficient amounts of loss the Boson Sampling input state is arbitrarily close to a known separable state. However, it is also similar to the technique used by Deshpande et al.~\cite{deshpande2018} and Maskara et al.~\cite{maskara2019}, who used the input state of fully distinguishable particles to classically simulate Boson Sampling with low-depth circuits.
+
+The most natural state to use to classically simulate Boson Sampling under distinguishability is the fully distinguishable state
+
+\begin{equation}
+\rho_D = \frac{1}{n!}\sum_{\sigma\in\symm_n}\sigma\ket{s}\bra{s}\sigma^\dagger,
+\end{equation}
+
+\noindent where $\ket{s} = \bigotimes_{i=1}^n\ket{i}$. We shall also use 
+
+\begin{equation}
+\rho_I = \sum_{\sigma, \sigma' \in \symm_n}\sigma\ket{s}\bra{s}\sigma'^\dagger
+\end{equation}
+
+\noindent to indicate the fully indistinguishable input state.
+
+As already noted in Section \ref{ssec:fully-dist-sim}, this state is completely separable, and an interferometer acting on it can be classically simulated in polynomial time. In this section, we shall compute the trace distance between this state and various other Boson Sampling input states which could be interesting. For this, note that the trace distance between mixed states $\rho, \rho'$ is defined as
+
+\begin{equation}
+\delta_{\trace}
+(\rho, \rho') = \trace(\sqrt{(\rho - \rho')(\rho-\rho')^\dagger}).
+\end{equation}
+
+We start by subtracting $\rho_I$ from $\rho_D$, which gives the matrix\begin{align}
+\rho_I - \rho_D &= \frac{1}{n!}\left(\sum_{\sigma,\sigma'\in\textrm{S}_n}\sigma\ket{s}\bra{s}\sigma'^\dagger - \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right)\\
+&= \frac{1}{n!}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right).
+\end{align}
+
+Multiplying this matrix by its Hermitian adjoint gives the positive semidefinite matrix
+
+\begin{align}
+(\rho_I - \rho_D)(\rho_I - \rho_D)^\dagger &= \frac{1}{(n!)^2}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\left(\sum_{\substack{\tau,\tau'\in\textrm{S}_n\\\tau\neq\tau'}}\tau'\ket{s}\bra{s}\tau^\dagger\right)\\
+&= \frac{1}{(n!)^2}\left((n! - 2)\sum_{\sigma,\tau\in\textrm{S}_n}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
+\end{align}
+
+As the above matrix is positive semidefinite, we can find its square root as
+
+\begin{align}
+\sqrt{(\rho_I - \rho_D)(\rho_I - \rho_D)^\dagger} &= \frac{1}{n!}\left(\left(\frac{n!-2}{n!}\right)\sum_{\sigma,\tau\in\textrm{S}_n}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
+\end{align}
+
+From this we can work out the trace difference between the two states to be
+
+\begin{align}
+\delta_{\mathrm{tr}}(\rho_I, \rho_D) &= \frac{1}{2\times n!}\left(\left(\frac{n!-2}{n!}\right)n! + n!\right)\\
+&= \frac{1}{2}\left(\frac{n!-2}{n!} + 1\right)\\
+&= \frac{2 \times n! - 2}{2 \times n!}\\
+&= 1 - \frac{1}{n!}.
+\end{align}
+
+We next consider the singly distinguishable state, as considered by Stanisic and Turner \cite{stanisic2018}. If we denote the distinguishable photon as the photon in mode $i$, the first quantisation state looks like
+
+$$\rho_{SD} = \frac{1}{n!}\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)}}\sigma\ket{s}\bra{s}\sigma'^\dagger.$$
+
+Following the same structure as with fully indistinguishable photons, we find that subtracting the two matrices gives
+
+\begin{align}
+\rho_{SD} - \rho_D &= \frac{1}{n!}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)}}\sigma\ket{s}\bra{s}\sigma'^\dagger - \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right)\\
+&= \frac{1}{n!}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right).
+\end{align}
+
+Multiplying the matrix by its adjoint gives the positive semidefinite matrix
+
+\begin{align}
+(\rho_{SD} - \rho_D)(\rho_{OBE} - \rho_D)^\dagger &= \frac{1}{(n!)^2}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\left(\sum_{\substack{\tau,\tau'\in\textrm{S}_n\\\tau^{-1}(i)=\tau'^{-1}(i)\\\tau\neq\tau'}}\tau'\ket{s}\bra{s}\tau^\dagger\right)\\
+&= \frac{1}{(n!)^2}\left(((n-1)! - 2)\sum_{\substack{\sigma,\tau\in\textrm{S}_n\\\sigma^{-1}(i)=\tau^{-1}(i)}}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
+\end{align}
+
+We can then work out the square root of this positive semidefinite matrix as the positive matrix
+
+\begin{align}
+\sqrt{(\rho_{OBE} - \rho_D)(\rho_{OBE} - \rho_D)^\dagger} &= \frac{1}{n!}\left(\left(\frac{(n-1)!-2}{(n-1)!}\right)\sum_{\substack{\sigma,\tau\in\textrm{S}_n\\\sigma^{-1}(i)=\tau^{-1}(i)}}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
+\end{align}
+
+Finally, we work out the trace of this matrix, and find the trace distance to be
+
+\begin{align}
+\delta_{\mathrm{tr}}(\rho_{SD}, \rho_D) &= \frac{1}{2\times n!}\left(\left(\frac{(n-1)!-2}{(n-1)!}\right)n! + n!\right)\\
+&= \frac{1}{2}\left(\frac{(n-1)!-2}{(n-1)!} + 1\right)\\
+&= \frac{2 \times (n-1)! - 2}{2 \times (n-1)!}\\
+&= 1 - \frac{1}{(n-1)!}.
+\end{align}
+
+An intuitive question to ask at this point is to make sure this distance still applies after applying the Schur transform again, thus matching the method used by Stanisic and Turner \cite{stanisic2018}.
+
+The fully distinguishable state in this picture is
+
+\begin{equation}
+\rho_D = \frac{1}{n!} \sum_{\lambda \vdash n} \sum_{q_\lambda^\mathrm{coin}} \sum_{p_\lambda} |\lambda,p_\lambda,q_\lambda\rangle\langle \lambda,p_\lambda,q_\lambda|.
+\end{equation}
+
+Depending on choice of Schur basis, we can describe the Singly Distinguishable state as
+
+\begin{equation}
+\rho_{SD} = \frac{1}{n}\left(\ket{(n),1,\underline{1},1}\bra{(n),1,\underline{1},1} + \sum_{p}\ket{(n-1,1),p,\underline{1},1}\bra{(n-1,1),p,\underline{1},1}\right),
+\end{equation}
+
+\noindent where we have written $q_\lambda$ as an occupation number and multiplicity.
+
+The terms in the singly distinguishable case have amplitudes of $(1/n!)$ in the fully distinguishable case, so these terms will be $1-n - 1/n! = ((n-1)!-1)/n!$ in the difference matrix, with other diagonal terms having $0$ apart from $n!-n$ which appear in $\rho_D$ but not in $\rho_{SD}$, which have value $1/n!$. The trace distance thus ends up being
+
+\begin{align}
+\delta_{\mathrm{tr}}(\rho_{OBE},\rho_{D}) &= \frac{1}{2}\left(\frac{(n-1)!-1}{n!}\times n + \frac{n!-n}{n!}\right)\\
+&= \frac{1}{2}\left(2\times\frac{n!-n}{n!}\right)\\
+&= \frac{n!-n}{n!}\\
+&= 1 - \frac{1}{(n-1)!}.
+\end{align}
+
+Therefore either technique produces the same trace distance.
+
+We can easily generalise the two results above to a case where $k$ photons are fully indistinguishable, and the remaining $n-k$ are fully distinguishable. Now we specify that $\sigma^{-1}(i)=\sigma'^{-1}(i)\forall i \in \bar{K}$, where $\bar{K}$ is the set of $n-k$ distinguishable photons. The only other change is that the $(n-1)!$ terms become $k!$. The final trace distance will be $1-1/k!$. Even more generally, it seems likely that if we have two states with indistinguishable photons defined by set $K$ and $K'$, then the trace distance would equal $|K\cap K'|!/|K\cap K'|!$, though this has not been formally proven.
+
+As can be seen from the above, for $k$ indistinguishable photons and $n-k$ photons which are fully distinguishable from every other photon, we have the trace distance $\delta_{\mathrm{tr}}$ reducing as $1 - 1/k!$.
+
+The property which the trace distance is useful for is that it is an upper bound of the total variation distance. According to Oszmaniec and Brod, this is helpful for loss as the trace distance tends to $0$ as more photons are lost. But even when only two photons are indistinguishable, we still have a trace distance of $1/2$, and this error only increases with the number of indistinguishable photons.
+
+We shall conclude this section by considering a somewhat more positing case: the state $\rho_\epsilon$, as described in Equation \ref{eq:Werner} from Section \ref{sec:mixture}:
+
+\begin{equation}
+\rho_\epsilon = (1-\epsilon)\rho_D + \epsilon\rho_I.
+\end{equation}
+
+The trace distance between this state and the fully distinguishable state is
+
+\begin{align}
+\delta_{\textrm{tr}}(\rho_\epsilon,\rho_D) &\leq (1-\epsilon)\delta_{\textrm{tr}}(\rho_D,\rho_D) + \delta_{\textrm{tr}}(\epsilon\rho_I,\rho_D)\\
+&= \epsilon-\frac{\epsilon}{n!},
+\end{align}
+
+\noindent where we have used the fact that the trace distance in convex. Noting that $\lim_{n\rightarrow\infty}\epsilon/n! = 0$, we can conclude that as $n\rightarrow\infty$ this state tends to $\epsilon$. This is an interesting change from the previous sections, but not particularly surprising, given that we are asking for the classical part of the state to essentially dominate the result.
 
 \section{Expanding in terms of states}
 \label{sec:expansion}
@@ -519,7 +633,9 @@ s>\frac{\log n-\log 1/x-\log k}{\log1/\tau}.
 This matches results in \cite{garciapatron2017,oszmaniec2018}, showing that boson sampling can be classically simulated if each photon encounters at least a logarithmic number of lossy components. 
 It also shows how distinguishability can affect the simulability of lossy components in Boson Sampling: if our photons are more distinguishable, corresponding to a smaller value of $x$, then we can simulate shallower (i.e.\ less total loss) optical circuits.
 
+\section{Computing the exact trace distance}
 
+\section{Expansion in terms of representations}
 
 \section{Conclusion}
 \label{sec:conclusion}
