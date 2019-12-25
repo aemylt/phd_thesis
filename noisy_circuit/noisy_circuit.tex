@@ -233,7 +233,6 @@ The circuit runs in polynomial time and space in terms of $m, n, \log(\delta^{-1
 \label{thm:noisy-bs}
 \end{theorem}
 
-
 \subsection{Complete (in)distinguishability}
 
 The two extreme cases of completely indistinguishability and complete distinguishability are of interest.
@@ -307,6 +306,7 @@ Because the Schur transformations on each register are local to the System and L
 For example, the completely distinguishable state that from Eq.(\ref{eq:ComDis}) is seen to have Schmidt rank $n!$ in the computational basis, and therefore must be of the form
 \begin{equation}
 \frac{1}{\sqrt{n!}} \sum_{\lambda \vdash n} \sum_{q_\lambda^\mr{coin}} \sum_{p_\lambda} |\lambda,q_\lambda,p_\lambda\rangle_{\textrm{Sys}}|\lambda,q_\lambda,p_\lambda\rangle_{\textrm{Lab}},
+\label{distinguishable-irreps}
 \end{equation}
 where the sum over $q_\lambda^\mr{coin}$ is taken over the coincident subspace, that is, the irrep basis states with pattern weight (or type) $(11\cdots 1)$.
 That the dimensions of these spaces are the same can be shown combinatorially and follows from the theorem.

@@ -50,6 +50,7 @@ Each element of this operator can be efficiently approximated as a product of di
 There are some potentially positive directions in this area. If there are a small number of non-zero elements in each row and column of $U$, then many of the elements in $U^{\otimes n}$ would also be zero, and then the matrix could be interpreted as ECS. This could be true if, for example, the photonic circuit is low depth. Another potential direction is to use this method to simulate Boson Sampling under photon loss, which would reduce the exponent. However, it is unclear how either of these methods would lead to a faster simulation than ones that are already known.
 
 \subsection{Distance from the fully distinguishable state}
+\label{ssec:fixed-dist-distance}
 
 In this section we shall consider limitations with simply using a separable state. This is inspired by the work on Oszmaniec and Brod \cite{oszmaniec2018}, who showed that with sufficient amounts of loss the Boson Sampling input state is arbitrarily close to a known separable state. However, it is also similar to the technique used by Deshpande et al.~\cite{deshpande2018} and Maskara et al.~\cite{maskara2019}, who used the input state of fully distinguishable particles to classically simulate Boson Sampling with low-depth circuits.
 
@@ -635,7 +636,82 @@ It also shows how distinguishability can affect the simulability of lossy compon
 
 \section{Computing the exact trace distance}
 
-\section{Expansion in terms of representations}
+In our analysis of the worst-case error bounds, we have simply used the property of the trace distance being convex. However, this is only an upper bound, and it could be that the actual trace distance is lower. How much can we improve this bound by more direct calculation?
+
+Sadly there is not an easy way of calculating the exact trace distance, as we have managed to do for the fixed distinguishability cases in Section \ref{ssec:fixed-dist-distance}. In lieu of this, we use analytical code to compute the trace distance for small numbers of photons. Using symbolic programming in Mathematica, we are able to compute the exact trace distance in terms of $x$ for varying $k$ and up to four photons. Furthermore, we can use analytical programming in Matlab to produce figures plotting the trace distance over $x$ for varying values of $k$ and up to eight photons.
+
+\section{Expanding in terms of representations}
+
+Another natural question is if we can instead expand in terms of representations rather than in terms of state. This would provide us with an alternative decomposition where rather than needing to sample which photons are indistinguishable, we would instead be sampling an immanant to compute. It is hard to analytically work out how the different immanants contribute for general $n$, but in this section we will use results noted by Stanisic and Turner \cite{stanisic2018} to show the decompositions for two and three particles, as well as offer some general comments on why this technique might not necessarily provide a better classical simulation but could still be of theoretical interest.
+
+We shall start with the simpler case of two photons, which we shall assume to be in the first two spatial modes. As noted earlier, the state takes the form
+
+\begin{equation}
+\rho_x = x^2\rho_{\{1,2\}} + x(1-x)(\rho_{\{1\}} + \rho_{\{2\}}) + (1-x)^2\rho_{\emptyset},
+\end{equation}
+
+\noindent where $\rho_I$ is the state corresponding to photons in modes $I\subseteq\{1,2\}$ being indistinguishable. The state corresponding to the fully indistinguishable case is fully symmetric, giving us
+
+\begin{equation}
+\rho_{\{1,2\}} = \ket{\young(12)}\bra{\young(12)},
+\end{equation}
+
+\noindent where we have suppressed notation for the irrep as it is implied by the Young tableaux, and we have suppressed the Symmetric irrep basis as it is one dimensional in the two particle cases. Note that states where only one photon is in the indistinguishable set are effectively fully distinguishable as well. As a result, all other states can be described in the irrep basis as the fully distinguishable state as given in Equation \ref{distinguishable-irreps}, giving us
+
+\begin{equation}
+\frac{1}{2}\left(\ket{\young(12)}\bra{\young(12)}+\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right).
+\end{equation}
+
+The overall state can therefore be written as
+
+\begin{align}
+\rho_x &= x^2\ket{\young(12)}\bra{\young(12)} + frac{(2x(1-x)+(1-x)^2)}{2}\left(\ket{\young(12)}\bra{\young(12)}+\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right)\\
+&= \frac{1}{2}\left((2x^2 + 2x(1-x)+(1-x)^2)\ket{\young(12)}\bra{\young(12)}+(2x(1-x)+(1-x)^2)\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right)\\
+&= \frac{1+x^2}{2}\ket{\young(12)}\bra{\young(12)}+\frac{1-x^2}{2}\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|.
+\end{align}
+
+As $x\rightarrow 1$, this tends towards only the fully symmetric irrep contributing, as expected. However, even as $x\rightarrow 0$, the fully symmetric irrep still contributes to half of the outcome probability.
+
+We can also work out the explicit decomposition for three particles, again assuming our photons start in the first three modes. The state is now
+
+\begin{equation}
+\rho_x = x^3\rho_{\{1,2,3\}} + x^2(1-x)(\rho_{\{1,2\}}+\rho_{\{1,3\}}+\rho_{\{2,3\}}) + x(1-x)^2(\rho{\{1\}}+\rho{\{2\}}+\rho{\{3\}}) + (1-x)^3\rho_\emptyset.
+\end{equation}
+
+The fully indistinguishable state is similar to before:
+
+\begin{equation}
+\rho_{\{1,2,3\}} = \ket{\young(123)}\bra{\young(123)}.
+\end{equation}
+
+Rather than writing out the full Young-Yagamouchi basis, we shall use the same notation as in \cite{stanisic2018} to simply use a 1 or 2 subscript to denote the multiplicity of the $(1,2)$ irrep of the Unitary group. With this in mind, the uniform mixture of all three singly distinguishable states is
+
+\begin{align}
+\rho_{\{1,2\}}+\rho_{\{1,3\}}+\rho_{\{2,3\}} &= \ket{\young(123)}\bra{\young(123)} + \frac{1}{2}\left(\left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\nonumber\\
+&+ \frac{1}{2}\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right|\right).
+\end{align}
+
+Finally, we note that the fully distinguishable states can be written as
+
+\begin{align}
+&\frac{1}{6}\left(\ket{\young(123)}\bra{\young(123)} + \left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\nonumber\\
+&+\frac{1}{6}\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right| + \left|\young(1,2,3)\right\rangle\left\langle\young(1,2,3)\right|\right).
+\end{align}
+
+The overall state can be expanded as
+
+\begin{align}
+\rho_x &= \frac{1}{6}\left((1+3x^2+2x^3)\ket{\young(123)}\bra{\young(123)} + (1-x^3)\left(\left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\right)\nonumber\\
+&+\frac{1}{6}\left((1-x^3)\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right|\right) + (1-3x^2+2x^3)\left|\young(1,2,3)\right\rangle\left\langle\young(1,2,3)\right|\right).
+\end{align}
+
+It is again possible to verify that as $x\rightarrow 1$ then only the symmetric irrep contributes, and as $x \rightarrow 0$ then all irreps contribute uniformly.
+
+We now go back to the question at the start of this section, as to whether or not this could lead to another simulation. A potential method of simulation, akin to the point and state truncation methods, would be to truncate which irrep we sample from. In other words, we sample an irrep with at least $n-k$ nonzero rows for some truncation level $k$, and then perform sampling conditioned on that irrep.
+
+There are a few limitations with this approach. The first is that this expansion is nontrivial, and we do not currently have a convenient general form for it, unlike with state truncation where we simply follow the binomial distribution. The second is that, even in the fully distinguishable case, the matrix permanent still plays a role in the distribution, so for any value of $x$ including $x=0$ we are going to have some error if we truncate before the symmetric irrep. And the third is that it is unclear how to classically simulate these irrep states under unitary action; it seems reasonable for them to be related to matrix immanants in some way \`{a} la Tichy and M\o lmer \cite{tichy2017}, but even if so classical algorithms for computing more general immanants are less well-known, though some do exist \cite{hartmann1985, barvinok1990, burgisser2000}. Obviously classical algorithms for the special cases of the permanent and determinant are well-known with exponential \cite{glynn2010} and polynomial \cite{fisikopoulos2016} runtimes, respectively.
+
+So if this decomposition does not provide us with faster classical algorithms, what might it be useful for? Well, there are some instances of $\lambda$ for which matrix imminants are known to be hard. The best-known of these is the permanent \cite{valiant1979, aaronson2011}, but other forms of immanant are also know to be $\#P$-hard \cite{hartmann1985, burgisser2000, brylinski2003, mertens2013}. If one is able to construct a form of distinguishable-photon Boson Sampling such that the probability ends up being largely concentrated in these hard instances, and show that computing the sum of these immanants is at least as hard as computing a single immanant, then this could potentially lead to new proofs of hardness for Boson Sampling under distinguishability. We leave this question as future work.
 
 \section{Conclusion}
 \label{sec:conclusion}

@@ -95,17 +95,17 @@ a_j^\dagger \rightarrow e^{i\theta}a_j^\dagger.
 
 Physically, a phase shifter can be implemented as a heating component, which can speed up or slow down the transmission of light.
 
-The second component is a beam splitter. This component acts as a 50-50 mirror between two spatial modes. A beam splitter on spatial modes $j$ and $k$ acts as the following:
+The second component is a beam splitter. This component acts as a partial mirror between two spatial modes, transmitting some light and reflecting other light. A beam splitter on spatial modes $j$ and $k$ with reflectivity $r \& r'$ and transmittance $t \& t'$ acts as the following:
 
 \begin{equation}
-a_j^\dagger \rightarrow \frac{1}{\sqrt{2}}(ia_j^\dagger + a_k^\dagger),
+a_j^\dagger \rightarrow ra_j^\dagger + t'a_k^\dagger,
 \end{equation}
 
 \begin{equation}
-a_k^\dagger \rightarrow \frac{1}{\sqrt{2}}(a_j^\dagger + ia_k^\dagger).
+a_k^\dagger \rightarrow ta_j^\dagger + r'a_k^\dagger,
 \end{equation}
 
-Note that reflection induces a $\pi/2$-phase shift on the spatial modes.
+\noindent where we have the constraints that $|r|=|r'|, |t|=|t'|, |r|^2+|t|^2=1$ and $r^*t' + r't^* = r^*t+r't'^*=0$. Of particular note is the 50-50 beam splitter, where exactly half the light is reflected and the other half is transmitted. In this case, $r=r'=1/\sqrt{2}$ and $t=t'=i/\sqrt{2}$. Note the $\pi/2$ phase difference between reflection and transmission, which is important for the interferometers we shall be discussing in Section \ref{ssec:example-interferometers}.
 
 Finally, we need to measure the number of photons in each spatial mode. To do this, we can use the photon number measurement $n_i = a_i^\dagger a_i$. It can be seen that this operator is Hermitian and its eigenvectors are the Fock basis for mode $i$, with eigenvalues depending on the number of photons occupying mode $i$. For example, if there are $j$ photons in mode $i$ we see that
 
@@ -132,15 +132,24 @@ Equivalently, we can describe these effects in the first quantisation, or partic
 \begin{pmatrix}
 e^{i\theta} & 0\\
 0 & 1
-\end{pmatrix},
+\end{pmatrix}.
 \end{equation}
 
-\noindent and the action of a beam splitter can be written as
+The action of a beam splitter with reflectivity $r \& r'$ and transmittance $t \& t'$ can be written as
 
 \begin{equation}
 \begin{pmatrix}
-\frac{i}{\sqrt{2}} & \frac{1}{\sqrt{2}}\\
-\frac{1}{\sqrt{2}} & \frac{i}{\sqrt{2}}
+r & t'\\
+t & r'
+\end{pmatrix},
+\end{equation}
+
+\noindent with the same restraints as in first quantisation. Of particular note, the 50-50 beam splitter has unitary matrix
+
+\begin{equation}
+\begin{pmatrix}
+\frac{1}{\sqrt{2}} & \frac{i}{\sqrt{2}}\\
+\frac{i}{\sqrt{2}} & \frac{1}{\sqrt{2}}
 \end{pmatrix}.
 \end{equation}
 
@@ -155,22 +164,22 @@ We shall now discuss some example interferometers, and their resulting effects, 
 
 A Mach-Zender interferometer is a demonstration of how a single photon can interfere with itself \cite{zehnder1891,mach1892}. This experiment uses a single photon in one of two modes, and consists of a beam splitter across both modes, followed by a phase shifter on a single mode, and finally a second beam splitter.
 
-In second quantisation, we can describe the Mach Zehnder interferometer as follows, labelling our spatial modes 1 and 2. We start with a single photon in mode 1 $\ket{1,0} = a_1^\dagger\ket{0,0}$. After our first beam splitter we have the state $(ia_1^\dagger + a_2^\dagger)\ket{0,0}/\sqrt{2}.$
+In second quantisation, we can describe the Mach Zehnder interferometer as follows, labelling our spatial modes 1 and 2. We start with a single photon in mode 1 $\ket{1,0} = a_1^\dagger\ket{0,0}$. After our first beam splitter we have the state $(a_1^\dagger + ia_2^\dagger)\ket{0,0}/\sqrt{2}.$
 
-We next apply a phase shifter to spatial mode 1, giving $(ie^{i\theta}a_1^\dagger + a_2^\dagger)\ket{0,0}/\sqrt{2}$. Finally, we apply our second beam splitter and find that
+We next apply a phase shifter to spatial mode 1, giving $(e^{i\theta}a_1^\dagger + ia_2^\dagger)\ket{0,0}/\sqrt{2}$. Finally, we apply our second beam splitter and find that
 
 \begin{align}
-\frac{1}{\sqrt{2}}(ie^{i\theta}a_1^\dagger + a_2^\dagger)\ket{0,0} &\rightarrow \frac{1}{2}(ie^{i\theta}(ia_1^\dagger+a_2^\dagger) + (a_1^\dagger + ia_2^\dagger))\ket{0,0}\\
-&= \frac{1}{2}((1-e^{i\theta})a_1^\dagger+i(1+e^{i\theta})a_2^\dagger)\ket{0,0}.
+\frac{1}{\sqrt{2}}(e^{i\theta}a_1^\dagger + ia_2^\dagger)\ket{0,0} &\rightarrow \frac{1}{2}(e^{i\theta}(a_1^\dagger+ia_2^\dagger) + i(ia_1^\dagger + a_2^\dagger))\ket{0,0}\\
+&= \frac{1}{2}((e^{i\theta}-1)a_1^\dagger+i(e^{i\theta}+1)a_2^\dagger)\ket{0,0}.
 \end{align}
 
 Adjusting our phase $\theta$ determines what output we measure: For $\theta=0$, the photon will be in mode 2; for $\theta=\pi/2$, the photon will be in mode 1, and for other values of $\theta$ the photon will be measured randomly in one of the two modes.
 
-In first quantisation, we see the same outcome. Our input is $\ket{1}$, and  applying the first beam splitter leads to the state $(i\ket{1}+\ket{2})/\sqrt{2}$. The phase shifter on mode 1 results in the state $(ie^{i\theta}\ket{1}+\ket{2})/\sqrt{2}$, and the second beam splitter leaves us with the state
+In first quantisation, we see the same outcome. Our input is $\ket{1}$, and  applying the first beam splitter leads to the state $(\ket{1}+i\ket{2})/\sqrt{2}$. The phase shifter on mode 1 results in the state $(e^{i\theta}\ket{1}+i\ket{2})/\sqrt{2}$, and the second beam splitter leaves us with the state
 
 \begin{align}
-\ket{\psi} &= \frac{1}{2}\left(ie^{i\theta}\left(i\ket{1} + \ket{2}\right) + \left(\ket{1} + i\ket{2}\right)\right)\\
-&= \frac{1}{2}\left(\left(1-ie^{i\theta}\right)\ket{1} + i\left(1+e^{i\theta}\right)\ket{2}\right).
+\ket{\psi} &= \frac{1}{2}\left(e^{i\theta}\left(\ket{1} + i\ket{2}\right) + i\left(i\ket{1} + \ket{2}\right)\right)\\
+&= \frac{1}{2}\left(\left(e^{i\theta}-1\right)\ket{1} + i\left(e^{i\theta}+1\right)\ket{2}\right).
 \end{align}
 
 Again, we see that adjusting $\theta$ will determine which spatial mode we detect a photon in.
@@ -182,9 +191,9 @@ The Hong-Ou-Mandel Dip is the earliest demonstration of multi-photon interferenc
 In second quantisation, we start with the Fock state $\ket{1,1} = a_1^\dagger a_2^\dagger\ket{0,0}$. Applying the beam splitter gives us
 
 \begin{align}
-a_1^\dagger a_2^\dagger\ket{0,0} &\rightarrow \frac{1}{2}(ia_1^\dagger+a_2^\dagger)(a_1^\dagger+ia_2^\dagger)\ket{0,0}\\
-&= \frac{1}{2}\left(i(a_1^\dagger)^2-a_1^\dagger a_2^\dagger+a_2^\dagger a_1^\dagger+i(a_2^\dagger)^2\right)\ket{0,0}\\
-&= \frac{1}{2}\left(i(a_1^\dagger)^2-a_1^\dagger a_2^\dagger+a_1^\dagger a_2^\dagger+i(a_2^\dagger)^2\right)\ket{0,0}\\
+a_1^\dagger a_2^\dagger\ket{0,0} &\rightarrow \frac{1}{2}(a_1^\dagger+ia_2^\dagger)(ia_1^\dagger+a_2^\dagger)\ket{0,0}\\
+&= \frac{1}{2}\left(i(a_1^\dagger)^2+a_1^\dagger a_2^\dagger-a_2^\dagger a_1^\dagger+i(a_2^\dagger)^2\right)\ket{0,0}\\
+&= \frac{1}{2}\left(i(a_1^\dagger)^2+a_1^\dagger a_2^\dagger-a_1^\dagger a_2^\dagger+i(a_2^\dagger)^2\right)\ket{0,0}\\
 &= \frac{i\left((a_1^\dagger)^2+(a_2^\dagger)^2\right)}{2}\ket{0,0}\\
 &= \frac{i(\ket{2,0} + \ket{0,2})}{\sqrt{2}}.
 \end{align}
@@ -194,8 +203,8 @@ After measurement, we will find that both photons are in the same spatial mode. 
 In first quantisation, we start with the state $(\ket{12} + \ket{21})/\sqrt{2}$. The beam splitter acts on each particle individually, giving
 
 \begin{align}
-\ket{\psi} &= \frac{1}{2\sqrt{2}}\left(\left(i\ket{1} + \ket{2}\right)\left(\ket{1} + i\ket{2}\right) + \left(\ket{1} + i\ket{2}\right)\left(i\ket{1} + \ket{2}\right)\right)\\
-&= \frac{1}{2\sqrt{2}}\left(2i\ket{11} + (i^2+1)\ket{12} + (1+i^2)\ket{21} + 2i\ket{22}\right)\\
+\ket{\psi} &= \frac{1}{2\sqrt{2}}\left(\left(\ket{1} + i\ket{2}\right)\left(i\ket{1} + \ket{2}\right) + \left(i\ket{1} + \ket{2}\right)\left(\ket{1} + i\ket{2}\right)\right)\\
+&= \frac{1}{2\sqrt{2}}\left(2i\ket{11} + (1+i^2)\ket{12} + (i^2+1)\ket{21} + 2i\ket{22}\right)\\
 &= \frac{i(\ket{11}+\ket{22})}{\sqrt{2}}.
 \end{align}
 
@@ -234,31 +243,31 @@ The problem known as Boson Sampling is that of sampling from this probability di
 It is easy to see that both of the two examples discussed in Section \ref{ssec:example-interferometers} can be described in this picture as well. For the Mach-Zehnder Interferometer, we find that the unitary matrix describing our interferometer is
 
 \begin{align}
-U &= \frac{1}{2}\begin{pmatrix}i&1\\1&i\end{pmatrix}\begin{pmatrix}e^{i\theta}&0\\0&1\end{pmatrix}\begin{pmatrix}i&1\\1&i\end{pmatrix}\\
-&= \frac{1}{2}\begin{pmatrix}ie^{i\theta}&1\\e^{i\theta}&i\end{pmatrix}\begin{pmatrix}i&1\\1&i\end{pmatrix}\\
-&= \frac{1}{2}\begin{pmatrix}1-e^{i\theta}&i(e^{i\theta}+1)\\i(e^{i\theta}+1)&e^{i\theta}-1\end{pmatrix}.
+U &= \frac{1}{2}\begin{pmatrix}1&i\\i&1\end{pmatrix}\begin{pmatrix}e^{i\theta}&0\\0&1\end{pmatrix}\begin{pmatrix}1&i\\i&1\end{pmatrix}\\
+&= \frac{1}{2}\begin{pmatrix}e^{i\theta}&i\\ie^{i\theta}&1\end{pmatrix}\begin{pmatrix}1&i\\i&1\end{pmatrix}\\
+&= \frac{1}{2}\begin{pmatrix}e^{i\theta}-1&i(e^{i\theta}+1)\\i(e^{i\theta}+1)&1-e^{i\theta}\end{pmatrix}.
 \end{align}
 
-Assuming our photon is initially in mode 1, the relevant matrices describing our outcomes are the $1\times 1$ matrices $M_{1,1} = 1-e^{i\theta}$ and $M_{1,2} = i(e^{i\theta}+1)$. For $1\times 1$ matrices the permanent is just the single element, and so we find the probabilities are just these matrix elements squared, giving us the expected outcome of controlling the photon output based on $\theta$.
+Assuming our photon is initially in mode 1, the relevant matrices describing our outcomes are the $1\times 1$ matrices $M_{1,1} = e^{i\theta}-1$ and $M_{1,2} = i(e^{i\theta}+1)$. For $1\times 1$ matrices the permanent is just the single element, and so we find the probabilities are $|e^{i\theta}-1|^2$ and $|e^{i\theta}+1|^2$, giving us the expected outcome of controlling the photon output based on $\theta$.
 
 For the Hong-Ou-Mandel Dip, we note that the relevant unitary matrix is the matrix we have for a beam splitter. We then note that the probability of seeing outcome occupation $\ket{1,1}$ is
 
 \begin{align}
-\left|\per\begin{pmatrix}\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\end{pmatrix}\right|^2 &= \frac{|i^2+1|^2}{4}\\
+\left|\per\begin{pmatrix}\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\\\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\end{pmatrix}\right|^2 &= \frac{|1+i^2|^2}{4}\\
 &= 0.
 \end{align}
 
 Similarly we find that the outcomes for $\ket{2,0}$ and $\ket{0,2}$ are
 
 \begin{align}
-\frac{\left|\per\begin{pmatrix}\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\\\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\end{pmatrix}\right|^2}{2!} &= \frac{|2i|^2}{8}\\
+\frac{\left|\per\begin{pmatrix}\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\\\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\end{pmatrix}\right|^2}{2!} &= \frac{|2i|^2}{8}\\
 &= \frac{1}{2},
 \end{align}
 
 \noindent and
 
 \begin{align}
-\frac{\left|\per\begin{pmatrix}\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\\\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\end{pmatrix}\right|^2}{2!} &= \frac{|2i|^2}{8}\\
+\frac{\left|\per\begin{pmatrix}\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\\\frac{i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\end{pmatrix}\right|^2}{2!} &= \frac{|2i|^2}{8}\\
 &= \frac{1}{2},
 \end{align}
 
@@ -278,7 +287,7 @@ These issues were addressed in a later interferometer designed by Clements et al
 \begin{problem}[Boson Sampling] Let $U$ be an $m$-mode linear optical interferometer. Sample from the distribution corresponding to measuring $U|1^n0^{m-n}\rangle$ in the (anti-bunched) Fock basis, where $m=O(n^2)$.
 \end{problem}
 
-It was proven by Aaronson and Arkhipov that if there was a polynomial time classical algorithm for sampling from this distribution, then $P^{\#P} = BPP^{NP}$ and the Polynomial Hierarchy would collapse to the third level \cite{aaronson2010, aaronson2010}. 
+It was proven by Aaronson and Arkhipov that if there was a polynomial time classical algorithm for sampling from this distribution, then $P^{\#P} = BPP^{NP}$ and the Polynomial Hierarchy would collapse to the third level \cite{aaronson2010, aaronson2010}. This is done using the fact that the permanent of a matrix is $\#P$-hard, even to approximate \cite{valiant1979, aaronson2011sharpp}. 
 Aaronson and Arkhipov also showed the same result for sampling from any approximate distribution up to $\epsilon$ away in total variation distance from Boson Sampling, assuming the conjectures from before.
 
 In comparison to the other quantum advantage problems, the anticoncentration conjecture has not been proven for Boson Sampling. It is also not known if it is $\#P$-hard to approximate the permanent of a random complex matrix, however it has been proven that exactly computing the permanent of a Gaussian matrix is $\#P$-hard \cite{aaronson2010, aaronson2010}.
@@ -336,7 +345,7 @@ We shall now discuss two imperfections that are particularly common in Boson Sam
 
 One of the points made when discussing Boson Sampling is that the photons need to be indistinguishable. This means that if we permuted the photons in some way, it would be impossible for someone else to identify which permutation was applied.
 
-A number of internal characteristics about the photons could make them distinguishable. The most visually intuitive one is wavelength: A red photon is definitely distinct from a green photon. But other aspects could also distinguish photons, such as their polarisation, or what time they were generated. The time generation point is particularly important following the discussion in Section \ref{ssec:bs-variants} about the challenges of single photon sources: Not only do all of these single photon sources need to emit a photon, but all of them need to emit photons at the exact same time.
+A number of internal characteristics about the photons could make them distinguishable. The most visually intuitive one is wavelength: A red photon is definitely distinct from a green photon. But other aspects could also distinguish photons, such as their polarisation, or what time they were generated. The time generation point is particularly important following the discussion in Section \ref{ssec:bs-variants} about the challenges of single photon sources: Not only do all of these single photon sources need to emit a photon, but all of them need to emit photons at the exact same time. We can model distinguishability by introducing additional modes to describe the internal state. Throughout this thesis, we will use spatial or system modes to describe where a photon is, and internal or label modes to describe its distinguishable characteristics.
 
 Before we consider Boson Sampling under distinguishability, we will first return to the Hong-Ou-Mandel dip from Section \ref{ssec:example-interferometers} \cite{hong1987}. This time, we will consider one red photon generated in mode $1$, and one photon generated in mode 2 which is red with amplitude $v \in [0,1]$ and green with amplitude $d=\sqrt{1-v^2}$. We can represent this in the second quantisation by introducing additional indexes to our creation and annihilation operators: $a_{i,R}^\dagger$ and $a_{i,G}^\dagger$ to indicate a red or green photon in mode $i$, respectively. Our input is now
 
@@ -347,25 +356,42 @@ a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0_R,0_G,0_R
 After applying the beam splitter our photons are in the state
 
 \begin{align}
-a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0,0} &\rightarrow \frac{1}{2}\left(ia_{1,R}^\dagger + a_{2,R}^\dagger\right)\left(v\left(a_{1,R}^\dagger + ia_{2,R}^\dagger\right) + d\left(a_{1,G}^\dagger + ia_{2,G}^\dagger\right)\right)\ket{0_R,0_G,0_R,0_G}\\
-&= \frac{1}{2}\left(v\left(i(a_{1,R}^\dagger)^2 - a_{1,R}^\dagger a_{2,R}^\dagger + a_{2,R}^\dagger a_{1,R}^\dagger+i(a_{2,R}^\dagger)^2\right)\right.\\
-&+\left. d\left(ia_{1,R}^\dagger a_{1,G}^\dagger - a_{1,R}^\dagger a_{2,G}^\dagger + a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\right)\ket{0_R,0_G,0_R,0_G}\\
-&= \frac{1}{2}\left(v\left(i(a_{1,R}^\dagger)^2 +i(a_{2,R}^\dagger)^2\right)\right.\\
-&+\left. d\left(ia_{1,R}^\dagger a_{1,G}^\dagger - a_{1,R}^\dagger a_{2,G}^\dagger + a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\right)\ket{0_R,0_G,0_R,0_G}\\
-&= \frac{1}{2}\left(v\left(i(a_{1,R}^\dagger)^2 +i(a_{2,R}^\dagger)^2\right)\right.\nonumber\\
-&+\left. d\left(ia_{1,R}^\dagger a_{1,G}^\dagger - a_{1,R}^\dagger a_{2,G}^\dagger + a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\right)\ket{0_R,0_G,0_R,0_G}.
+a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0,0} &\rightarrow \frac{1}{2}\left(a_{1,R}^\dagger + ia_{2,R}^\dagger\right)\left(v\left(ia_{1,R}^\dagger + a_{2,R}^\dagger\right) + d\left(ia_{1,G}^\dagger + a_{2,G}^\dagger\right)\right)\ket{0_R,0_G,0_R,0_G}\\
+&= \frac{v}{2}\left(i(a_{1,R}^\dagger)^2 + a_{1,R}^\dagger a_{2,R}^\dagger - a_{2,R}^\dagger a_{1,R}^\dagger+i(a_{2,R}^\dagger)^2\right)\nonumber\\
+&+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\ket{0_R,0_G,0_R,0_G}\\
+&= \frac{v}{2}\left(i(a_{1,R}^\dagger)^2 +i(a_{2,R}^\dagger)^2\right)\nonumber\\
+&+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\ket{0_R,0_G,0_R,0_G}\\
+&= \frac{v}{2}\left(i(a_{1,R}^\dagger)^2 +i(a_{2,R}^\dagger)^2\right)\nonumber\\
+&+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\ket{0_R,0_G,0_R,0_G}.
 \end{align}
 
-Note that in the final line, the terms $a_{1,R}^\dagger a_{2,G}^\dagger$ and $a_{2,R}^\dagger a_{1,G}^\dagger$ do not cancel out, due to the different creation operators from the fact that the photons are different colours. We apply our creation operators to find that
+Note that in the final line, the terms $a_{1,R}^\dagger a_{2,G}^\dagger$ and $a_{2,R}^\dagger a_{1,G}^\dagger$ do not cancel out, due to the different creation operators from the fact that the photons are different colours. We apply our creation operators to reach the final state
 
 \begin{align}
-a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0,0} &\rightarrow \frac{1}{2}\left(v\left(i\sqrt{2}\ket{2_R,0_G,0_R,0_G} +i\sqrt{2}\ket{0_R,0_G,2_R,0_G}\right)\right.\nonumber\\
-&+\left. d\left(i\ket{1_R,1_G,0_R,0_G} - \ket{1_R,0_G,0_R,1_G} + \ket{0_R,1_G,1_R,0_G}+i\ket{0_R,0_G,1_R,1_G} \right)\right).
+&\frac{1}{2}\left(v\left(i\sqrt{2}\ket{2_R,0_G,0_R,0_G} +i\sqrt{2}\ket{0_R,0_G,2_R,0_G}\right)\right)\nonumber\\
+&+\frac{1}{2}\left( d\left(i\ket{1_R,1_G,0_R,0_G} + \ket{1_R,0_G,0_R,1_G} - \ket{0_R,1_G,1_R,0_G}+i\ket{0_R,0_G,1_R,1_G} \right)\right).
 \end{align}
 
 If we only measure what spatial mode our photons is in and discard the wavelength, we will find that we are in the Fock state $\ket{2,0}$ with probability $v^2/2 + d^2/4$ and likewise for $\ket{0,2}$, but we'll also find ourselves in the state $\ket{1,1}$ with probability $d^2/2$. Noting that $d^2 = 1-v^2$, it is easy to see that adjusting $v$ determines how likely we are to see coincidences at the output: if $v=0$, corresponding to completely distinguishable photons, then we see coincidences with probability 1/2; if $v=1$, meaning that our photons are completely indistinguishable, we don't see any photons at all. This is where the ``dip'' in Hong-Ou-Mandel Dip comes from: as our photons become more indistinguishable we see a drop in coincidences. The extent to which we see a dip is known as the visibility of a Hong-Ou-Mandel dip, hence $v$, and is a standard technique when characterising linear optics experiments to determine how distinguishable pairs of photons are.
 
-A rich library of theoretical work has been developed on the topic of Boson Sampling under distinguishability in recent years \cite{rohde2015, shchesnovich2015, tichy2015, tamma2016nonidentical, menssen2017}. Here, we shall follow the notation of Tichy \cite{tichy2015}, but note that this model of distinguishability is equivalent to several of the other models also mentioned. Tichy uses a Gram matrix $\mathcal{S}_{i,j}$ to discribe the indistinguishability between photons generated in mode $i$ and photons generated in mode $j$, noting that any pair of photons generated in the same mode are indistinguishable from one another. Under Tichy's model, the probability of outcome $\ket{S'}$ is
+In first quantisation, we can likewise realise this interference by introducing a second register noting which colour our photons are in. Our state is now
+
+\begin{equation}
+\ket{\psi} = \frac{1}{\sqrt{2}}\left(v(\ket{12}+\ket{21})\ket{RR}+d(\ket{12}\ket{RG} + \ket{21}\ket{GR})\right).
+\end{equation}
+
+Our unitary $U$ will act as $U\otimes U$ on the spatial modes and $I\otimes I$ on the label modes. Thus, our state evolves to
+
+\begin{align}
+U^{\otimes 2}I^{\otimes 2}\ket{\psi} &= \frac{v}{2\sqrt{2}}\left((2i\ket{11}+(1+i^2)\ket{12}+(i^2+1)\ket{21}+2i\ket{22})\ket{RR}\right)\nonumber\\
+&+\frac{d}{2\sqrt{2}}\left(i\ket{11}(\ket{RG}+\ket{GR})+\ket{12}(\ket{RG}-\ket{GR})+\ket{21}(\ket{GR}-\ket{RG}) + i\ket{22}(\ket{RG}+\ket{GR})\right)\\
+&= \frac{iv}{\sqrt{2}}\left((\ket{11}+\ket{22})\ket{RR}\right)\nonumber\\
+&+\frac{d}{2\sqrt{2}}\left(i(\ket{11}+\ket{22})(\ket{RG}+\ket{GR})+(\ket{12}-\ket{21})(\ket{RG}-\ket{GR})\right).
+\end{align}
+
+Again, we see that coincidences occur with probability $d^2/2$, matching the first quantisation result.
+
+A rich library of theoretical work has been developed on the topic of Boson Sampling under distinguishability in recent years \cite{rohde2015, shchesnovich2015, tichy2015, tamma2016nonidentical, menssen2017}. Here, we shall follow the notation of Tichy \cite{tichy2015}, but note that this model of distinguishability is equivalent to several of the other models also mentioned. Tichy uses an $m\times m$ Gram matrix $\mathcal{S}_{i,j}$ to discribe the indistinguishability between photons generated in mode $i$ and photons generated in mode $j$, noting that any pair of photons generated in the same mode are indistinguishable from one another. Under Tichy's model, the probability of outcome $\ket{S'}$ is
 
 \begin{equation}
 \prob[S'] = \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(U_{S',S}*U_{S',\sigma(S)}^*),
@@ -375,8 +401,8 @@ A rich library of theoretical work has been developed on the topic of Boson Samp
 \noindent where $*$ denotes element-wise multiplication, $M^*$ is the matrix whose elements are complex conjugates of $M$, and $\sigma(S)$ means the elements of $S$ permuted by $\sigma$. Again, the Hong-Ou-Mandel Dip can be visualised in this instance by noting that $\mathcal{S}_{1,2} = \mathcal{S}_{2,1} = v$:
 
 \begin{align}
-\prob[(1,1)] &= \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\\\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\end{pmatrix}\\
-&= \per\begin{pmatrix}\frac{1}{2}&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{i}{2}&\frac{-i}{2}\\\frac{-i}{2}&\frac{i}{2}\end{pmatrix}\\
+\prob[(1,1)] &= \per\begin{pmatrix}\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\\\frac{i}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}&\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}\\\frac{i}{\sqrt{2}}\times\frac{1}{\sqrt{2}}&\frac{1}{\sqrt{2}}\times\frac{-i}{\sqrt{2}}\end{pmatrix}\\
+&= \per\begin{pmatrix}\frac{1}{2}&\frac{1}{2}\\\frac{1}{2}&\frac{1}{2}\end{pmatrix} + v^2 \per\begin{pmatrix}\frac{-i}{2}&\frac{i}{2}\\\frac{i}{2}&\frac{-i}{2}\end{pmatrix}\\
 &= \frac{2-2v^2}{4}\\
 &= \frac{1-v^2}{2},
 \end{align}
@@ -629,6 +655,59 @@ For example, the unitary action of U$(m)$ in this basis is
 U : |\lambda\rangle |q_\lambda\rangle |p\rangle \rightarrow |\lambda\rangle |U\cdot q_\lambda\rangle |p\rangle := |\lambda\rangle \left( \sum_{q_\lambda'} U^\lambda_{q_\lambda, q_\lambda'} |q_\lambda'\rangle \right) |p\rangle ,
 \end{equation}
 where $U^\lambda$ is the irreducible unitary matrix corresponding to $U \in \mathrm{U}(m)$.
+
+Although this notation will largely not be used in this thesis, we will briefly describe how the basis states of $\{\lambda\}$ and $(\lambda)$ are denoted. An equivalent way of writing irrep $\lambda$, rather than using partitions, is to use Young diagrams. These are diagrams of $n$ boxes across $m$ rows such that the number of boxes in row $i$ is at most the number of boxes in row $i-1$. A simple mapping from partitions $\lambda$ to Young diagrams is then that row $i$ of the diagram has $\lambda_i$ boxes. Using $m=n=3$ as an example, the possible irreps are as follows:
+
+\begin{equation}
+(3) \equiv \yng(3),
+\end{equation}
+
+\begin{equation}
+(2,1) \equiv \yng(2,1),
+\end{equation}
+
+\begin{equation}
+(1,1,1) \equiv \yng(1,1,1).
+\end{equation}
+
+The advantage of using Young diagrams is that they also give convenient notation for the basis states of $\{\lambda\}$ and $(\lambda)$. For $\{\lambda\}$, our unitary irreps, we use the Gelfand-Tsetlin basis. In this basis, we denote basis states by semistandard Young tableaux, which are Young diagrams with each box filled with an integer from $1,\dots,m$ such that each row is non-decreasing and each column is strictly ascending. The Gelfand-Tsetlin bases for $m=n=3$ for instance are the following:
+
+\begin{align}
+\{(3)\} = &\left\{\ket{\young(111)}, \ket{\young(112)}, \ket{\young(113)}, \ket{\young(122)}, \ket{\young(123)},\right.\\ 
+&\left.\ket{\young(133)}, \ket{\young(222)}, \ket{\young(223)}, \ket{\young(233)}, \ket{\young(333)}\right\},
+\end{align}
+
+\begin{equation}
+\{(2,1)\} = \left\{\left|\young(11,2)\right\rangle, \left|\young(12,2)\right\rangle, \left|\young(13,2)\right\rangle, \left|\young(11,3)\right\rangle, \left|\young(12,3)\right\rangle, \left|\young(13,3)\right\rangle, \left|\young(22,3)\right\rangle, \left|\young(23,3)\right\rangle\right\},
+\end{equation}
+
+\begin{equation}
+\{(1,1,1)\} = \left\{\left|\young(1,2,3)\right\rangle\right\}.
+\end{equation}
+
+To index the basis states of $(\lambda)$, we can use the Young-Yagamouchi basis. This basis denotes states by standard Young tableaux, where each box is filled with numbers from $1$ to $n$ such that each integer occurs exactly once and all rows and columns are strictly ascending. The Young-Yagamouchi bases for $m=n=3$ for instance are the following:
+
+\begin{align}
+((3)) = &\left\{\ket{\young(123)}\right\},
+\end{align}
+
+\begin{equation}
+((2,1)) = \left\{\left|\young(12,3)\right\rangle, \left|\young(13,2)\right\rangle\right\},
+\end{equation}
+
+\begin{equation}
+((1,1,1)) = \left\{\left|\young(1,2,3)\right\rangle\right\}.
+\end{equation}
+
+Note that for the fully symmetric $(3)$ and antisymmetric $(1,1,1)$ irreps there is only one state, but for $\lambda = (2,1)$ there are two basis states. This creates a multiplicity, leading to two equivalent bases for the $(2,1)$ irrep of the Unitary group, with permutations mapping from one irrep to the other. The total dimensionality across these basis representations is
+
+\begin{equation}
+1\times 10+2\times 8 + 1\times 1 = 27,
+\end{equation}
+
+\noindent which is the same size as our basis $(\mathbb{C}^3)^{\otimes 3}$.
+
+Of course, we have not stated explicitly how these basis states map to the standard basis. We shall omit these details for simplicity, but simply note that algorithms for explicitly computing these bases do exist, by starting with a highest-weighted vector in the basis and applying lowering operators to find lower-weight vectors. Explicit algorithms can be found in, for example, \cite{alex2011, dhand2015}.
 
 \subsubsection{Efficient Quantum Circuits}
 
