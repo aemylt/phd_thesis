@@ -17,13 +17,13 @@ This gives rise to a method which is able to naturally apply the Clifford \& Cli
 Although this approach only offers a polynomial improvement compared to the runtime for ideal Boson Sampling (unlike the exponential improvement shown in \cite{renema2018,renema2018loss}) we use analytical bounds to show that for photon numbers of experimental interest our algorithm can make a significant improvement over alternative approaches. 
 
 This chapter is laid out as follows.
-In Sec.\ \ref{sec:expansion}, we show what the Renema et al.~\cite{renema2018, renema2018loss} model of distinguishability looks like in first quantization, and provide an alternative classical simulation. 
-In Sec.\ \ref{sec:average-case}, we consider average error bounds for a Haar-random unitary interferometer, via the methods explained in Sec.\ \ref{sec:renema-review}. 
-In Sec.\ \ref{sec:worst-case}, we improve this bound to a worst-case error bound, by computing an upper bound for the trace distance between our approximation and the model. 
-In Sec.\ \ref{sec:loss}, we expand these results to consider uniform loss, and show how distinguishability and loss relate to each other. 
-In Sec.\ \ref{sec:empirical-errors}, we explore these error bounds for experimentally interesting numbers of photons, and show that there are some cases where our algorithm offers an improvement. 
+In Section \ref{sec:expansion}, we show what the Renema et al.~\cite{renema2018, renema2018loss} model of distinguishability looks like in first quantization, and provide an alternative classical simulation. 
+In Section \ref{sec:average-case}, we consider average error bounds for a Haar-random unitary interferometer, via the methods explained in Section \ref{sec:renema-review}. 
+In Section \ref{sec:worst-case}, we improve this bound to a worst-case error bound, by computing an upper bound for the trace distance between our approximation and the model. 
+In Section \ref{sec:loss}, we expand these results to consider uniform loss, and show how distinguishability and loss relate to each other. 
+In Section \ref{sec:empirical-errors}, we explore these error bounds for experimentally interesting numbers of photons, and show that there are some cases where our algorithm offers an improvement. 
 Finally, we briefly consider \emph{non}-uniform loss, where loss is a function of the number of optical components, and use the methods of \cite{garciapatron2017, oszmaniec2018} to show that classical simulations with non-uniform loss also become easier when distinguishability is introduced.
-We conclude with some open research questions in Sec.\ \ref{sec:conclusion}.
+We conclude with some open research questions in Section \ref{sec:conclusion}.
 
 \section{Limitations of other classical simulation algorithms}
 
@@ -208,7 +208,7 @@ We instead look at an alternative expansion, in order to decompose the model int
 \end{align}
 where $\rho_I$ is the state where photons in modes $j \in I$ are fully indistinguishable from each other, all other photons are fully distinguishable, and $0 \leq p_i \leq 1$ is a coefficient dependent on $x$ and $n$ determining the probability of a state with $i$ indistinguishable single photons.
 
-Note that unlike Eq.\ (\ref{eqn:rhoni}), where permutations must differ in exactly $i$ points, in Eq.\ (\ref{eqn:state-expansion}) we allow permutations to differ in \emph{at most} $i$ points. 
+Note that unlike Equation (\ref{eqn:rhoni}), where permutations must differ in exactly $i$ points, in Equation (\ref{eqn:state-expansion}) we allow permutations to differ in \emph{at most} $i$ points. 
 This means that elements closer to and along the diagonal of the density matrix are also part of this summation, and this means that each $\sigma,\sigma' \in \symm_n$ term forms a valid density matrix.
 
 Already we can see how a classical simulation might work -- if we are able to sample $p_i$ efficiently, then we can choose $\rho_I$ by selecting $i$ photons uniformly at random to be indistinguishable. 
@@ -290,8 +290,8 @@ where $\prob_k$ is the probability distribution truncated at $k$ indistinguishab
 \begin{align}
 \mean\left[|\prob[S']-\prob_k[S']|\right] = &\mean\left|\sum_{i=0}^k\left(p_i-p_i'\right)\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']+\sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|,
 \end{align}
-where $P_I$ is now the probability distribution with indistinguishable photons defined by set $I$, and $p_i'=p_i/(\sum_{i=0}^kx^i(1-x)^{n-i}\binom{n}{i})$ is the normalised version of the $p_i$ coefficients defined in Sec.\ \ref{sec:expansion}. 
-Note that $P_I$ is the distribution arising from state $\rho_I$ in Sec.\ \ref{sec:expansion}. 
+where $P_I$ is now the probability distribution with indistinguishable photons defined by set $I$, and $p_i'=p_i/(\sum_{i=0}^kx^i(1-x)^{n-i}\binom{n}{i})$ is the normalised version of the $p_i$ coefficients defined in Section \ref{sec:expansion}. 
+Note that $P_I$ is the distribution arising from state $\rho_I$ in Section \ref{sec:expansion}. 
 We can use the triangle inequality to bound this value to
 \begin{align}
 \mean\left[|\prob[S']-\prob_k[S']|\right] &\leq \mean\left|\sum_{i=0}^k\left(p_i-p_i'\right)\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|+\mean\left|\sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}P_I[S']\right|\\
@@ -306,7 +306,7 @@ Using the Laplace expansion, we find that
 \end{align}
 where $U_{I,J}$ is a matrix defined from our interferometer $U$ by selecting columns according to $I$ and rows according to $J$, and $|U_{\bar{I}\bar{J}}|^2$ is a matrix whose elements are the absolute values squared of $U_{\bar{I},\bar{J}}$.
 
-We next need to consider the expected values of the matrix permanents in Eq.\ (\ref{eqn:laplace}) for a Haar random unitary. 
+We next need to consider the expected values of the matrix permanents in Equation (\ref{eqn:laplace}) for a Haar random unitary. 
 To do this, we shall assume the matrix describing our interferometer is Gaussian. 
 This allows us to assume that each entry of $U_{I,J}$ and $|U_{\bar{I},\bar{J}}|^2$ is independent, and that the two matrices are independent of each other. 
 Starting with $\per(|U_{\bar{I},\bar{J}}|^2)$, we note that this is a Gaussian matrix of size $(n-i)\times(n-i)$, and each entry is the square of two independent Gaussians, meaning that each entry of $|U_{\bar{I},\bar{J}}|^2$ has expected value $1/m$. 
@@ -327,7 +327,7 @@ Because the two matrices are independent~\cite{renema2018}, we can express the e
 \mean\left[|\per(U_{I,J})|^2\per(|U_{\bar{I},\bar{J}}|^2)\right] &= \frac{(n-i)!}{m^{n-i}}\times\frac{i!}{m^{i}}\\
 &= \frac{(n-i)!i!}{m^n}.
 \end{align}
-Plugging this into Eq.\ (\ref{eqn:laplace}), we find that
+Plugging this into Equation (\ref{eqn:laplace}), we find that
 \begin{align}
 \mean[\Delta P_{>k}] &= \sum_{i=k+1}^np_i\sum_{\substack{I\subseteq[n]\\|I|=i}}\sum_{\substack{J\leq S'\\|J|=j}}\frac{(n-i)!i!}{m^n}\\
 &= \sum_{i=k+1}^np_i\binom{n}{i}^2\frac{(n-i)!i!}{m^n}\\
@@ -360,7 +360,7 @@ and use this expansion as well as the value of $p_i$ to calculate
 &= \frac{n!}{m^n}\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}\label{eqn:leqk}.
 \end{align}
 
-We plug our values for Eqs.\ \ref{eqn:gtk} \& \ref{eqn:leqk} into Eq.\ \ref{eqn:single-outcome-error} to bound our error for a single outcome as
+We plug our values for Equations \ref{eqn:gtk} \& \ref{eqn:leqk} into Equation \ref{eqn:single-outcome-error} to bound our error for a single outcome as
 
 \begin{equation}
 \mean\left[|\prob[S']-\prob_k[S']|\right] \leq 2\frac{n!}{m^n}\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i}.
@@ -435,7 +435,7 @@ In order to generalise this to uniform loss, we append $n-\ell$ "lost" photons i
 \end{align}
 Note that in the same way that it doesn't matter which particles are traced out when initially applying the loss, it similarly doesn't matter which particles are replaced with the $\ket{0}\bra{0}$ state. 
 Uniform loss matches that of choosing which subset of photons survive according to the binomial distribution \cite{oszmaniec2018,renema2018loss}. 
-We can combine this model with the distinguishability model of Sec.\ \ref{sec:expansion}, giving
+We can combine this model with the distinguishability model of Section \ref{sec:expansion}, giving
 \begin{align}
 \rho_{n,\eta,x}&=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\left(\frac{1}{\ell!}\sum_{\substack{\sigma,\sigma'\in\symm_n\\\sigma^{-1}(j)=\sigma'^{-1}(j)\\\forall j \notin I}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\otimes(\ket{0}\bra{0})^{\otimes n-\ell}\\
 &=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\rho_{L,I}.
@@ -451,13 +451,13 @@ As in Section \ref{sec:expansion}, by truncating this to be some maximum size $k
 To understand the precision of this algorithm, we first note that if $|L|\leq k$, then we can classically simulate any number of indistinguishable photons within our desired runtime. 
 As a result, we only need to truncate when $|L|>k$, and only need to do so up to $|I|\leq k$. 
 
-As with Sec.\ \ref{sec:average-case}, we start by considering the error bound for a random interferometer. We note that in cases where at most $k$ photons survive our approximation is exact, so these outcomes do not contribute to our total variation distance. 
+As with Section \ref{sec:average-case}, we start by considering the error bound for a random interferometer. We note that in cases where at most $k$ photons survive our approximation is exact, so these outcomes do not contribute to our total variation distance. 
 For the remainder, we see that
 \begin{equation}
 \mean[\Delta P] = \sum_{\ell=k+1}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\mean[\Delta P_L],
 \end{equation}
 where $\Delta P_L$ denotes the error of our simulation with photons in input modes denoted by $L$. 
-Using our bound in Sec.\ \ref{sec:average-case} as well as the rule of conditional binomial distributions (see below), we can bound this as
+Using our bound in Section \ref{sec:average-case} as well as the rule of conditional binomial distributions (see below), we can bound this as
 \begin{equation}
 \mean[\Delta P] \leq \sum_{i=k+1}^n(\eta x)^i(1-\eta x)^{n-i}\binom{n}{i}.
 \end{equation}
@@ -465,7 +465,7 @@ Using our bound in Sec.\ \ref{sec:average-case} as well as the rule of condition
 Again, an improvement over the use of the triangle inequality can potentially lead to an improvement in this bound.
 
 
-For the worst-case error, we construct analogous states to those in Sec.\ \ref{sec:worst-case}:
+For the worst-case error, we construct analogous states to those in Section \ref{sec:worst-case}:
 \begin{equation}
 \rho_{\leq k,\eta,x} = \frac{\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^{\min(\ell,k)} x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\rho_{L,I}}{\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\binom{n}{\ell}\sum_{i=0}^{\min(\ell,k)} x^i(1-x)^{\ell-i}\binom{\ell}{i}},
 \end{equation}
@@ -480,7 +480,7 @@ As a result, the worst-case error of this simulation, using the convex propertie
 &=\sum_{i=k+1}^n(\eta x)^i(1-\eta x)^{n-i}\binom{n}{i}\label{eqn:lossy-worst},
 \end{align}
 where in the second line we have used the rule of conditional binomial distributions. 
-Using the same result as used for Eq.\ (\ref{eqn:worst-case}), we can bound the error to a value decreasing in $n$ by setting $k = n\beta$ for $\beta>\eta x$ \cite{arratia1989}. 
+Using the same result as used for Equation (\ref{eqn:worst-case}), we can bound the error to a value decreasing in $n$ by setting $k = n\beta$ for $\beta>\eta x$ \cite{arratia1989}. 
 This shows a relationship between distinguishability and loss similarly to, but not exactly the same, as the one found in \cite{renema2018loss}: the more distinguishable photons are, the more we can classically simulate photon loss, and vice versa. It is remarkable to see that these two algorithms have a different dependence on $x$ and $\eta$: while state truncation depends on $\eta x$, point truncation depends on $\eta x^2$. It is not immediately clear where this difference comes from, and we leave it as an open question.
 
 
@@ -495,9 +495,9 @@ But this comes at the cost of a potentially large, albeit polynomial, runtime of
 Truncating based on states, on the other hand, provides a significant improvement in runtime based on $k$, and is able to run in $O(2^k + \poly(k,m,n))$ time, but at the cost of $k$ increasing linearly with $n$ for constant error.
 
 We therefore consider a variety of comparisons. 
-In Sec.\ \ref{subsec:same-k}, we start by considering the highest value of $x$ and $\eta$ simulable by each approach when given the same values of $n$ and $k$ for a fixed error rate. 
-We then introduce the runtime for each algorithm in Sec.\ \ref{subsec:runtimes}, by comparing how fast they can simulate particular values of $x$ and $\eta$ for increasing $n$. 
-Finally in Sec.\ \ref{subsec:same-runtime}, we compare the highest value of $x$ and $\eta$ simulable by both algorithms for a 90-photon Boson Sampling experiment, where $k$ is varying but under the condition that the algorithms have similar run times. The motivation for this is that $90$ photons has been suggested as strict upper bound for what is achievable using classical computation~\cite{dalzell2018}.
+In Section \ref{subsec:same-k}, we start by considering the highest value of $x$ and $\eta$ simulable by each approach when given the same values of $n$ and $k$ for a fixed error rate. 
+We then introduce the runtime for each algorithm in Section \ref{subsec:runtimes}, by comparing how fast they can simulate particular values of $x$ and $\eta$ for increasing $n$. 
+Finally in Section \ref{subsec:same-runtime}, we compare the highest value of $x$ and $\eta$ simulable by both algorithms for a 90-photon Boson Sampling experiment, where $k$ is varying but under the condition that the algorithms have similar run times. The motivation for this is that $90$ photons has been suggested as strict upper bound for what is achievable using classical computation~\cite{dalzell2018}.
 
 Before we go further, we make a few observations on the calculations of error bounds and runtimes used in this section. 
 Rather than using the asymptotic error bounds for fixed point truncation, which assume $n\rightarrow\infty$, we have used bounds for finite $n$. 
@@ -536,17 +536,17 @@ This is of interest as in both approaches $k$ is considered to be a parameter de
 To do so, we consider the error bounds of classically simulating $n$-photon Boson Sampling for $n$ ranging between 2 and 100. 
 The values chosen for $k$ depend on $n$: we consider $k=n-1$ as the upper limit of what the two algorithms can achieve without simulating the full distribution, and also $k=n/2$ as a more feasible, though still exponential time, value.
 
-The result is plotted in FIG.\ \ref{fig:samek}, where in (\ref{fig:max-x-samek}) we show the highest value of $x$ simulable assuming no loss ($\eta=1$) and in (\ref{fig:max-eta-samek}) we show the highest value of $\eta$ simulable assuming the photons are fully indistinguishable ($x=1$). 
+The result is plotted in Figure \ref{fig:samek}, where in (\ref{fig:max-x-samek}) we show the highest value of $x$ simulable assuming no loss ($\eta=1$) and in (\ref{fig:max-eta-samek}) we show the highest value of $\eta$ simulable assuming the photons are fully indistinguishable ($x=1$). 
 For all cases, we are considering simulations up to 10\% error.
 
-There are a number of things we can note from FIG.\ \ref{fig:samek}. 
+There are a number of things we can note from Figure \ref{fig:samek}. 
 First is that when $k=n-1$, we can see that both algorithms tend to the same maximum values of distinguishability and loss. 
 In the case of distinguishability, we can easily see why by considering the error bounds of both algorithms. 
-One can see from Eq.\ (\ref{eqn:error-sum}) that state truncation will have a simple error bound in this case of $\epsilon \leq x^n$, meaning that for constant error the largest value of $x$ simulable is $x = \epsilon^{1/n}$. 
-For point truncation, Eqs.\ (\ref{eqn:renema-variance}) \& (\ref{eqn:var}) with $k=n-1$ show that the error is similarly bounded as $\epsilon \leq x^n/\sqrt{e}$, leading to a largest value of $x=(\epsilon\sqrt{e})^{1/n}$. 
+One can see from Equation (\ref{eqn:error-sum}) that state truncation will have a simple error bound in this case of $\epsilon \leq x^n$, meaning that for constant error the largest value of $x$ simulable is $x = \epsilon^{1/n}$. 
+For point truncation, Equations (\ref{eqn:renema-variance}) \& (\ref{eqn:var}) with $k=n-1$ show that the error is similarly bounded as $\epsilon \leq x^n/\sqrt{e}$, leading to a largest value of $x=(\epsilon\sqrt{e})^{1/n}$. 
 Thus, although the highest value of $x$ simulable via point truncation is higher than that via state truncation, the difference will decrease in the limit of large $n$. 
 Curiously we see the same effect as well in the case of loss, but now the highest value of $\eta$ simulable via state truncation is higher than that of point truncation. 
-Again, this can be shown to hold theoretically: For state truncation the error scales as $\epsilon \leq \eta^n$ according to Eq.\ (\ref{eqn:lossy-worst}), corresponding to $\eta=\epsilon^{1/n}$; whereas for point truncation we see from Eq.\ (\ref{eqn:renema-variance}) and substituting $x=\sqrt{\eta}$ that the error scales as $\epsilon \leq \eta^{n/2}/\sqrt{e}$, meaning a maximum value of $\eta$ is $\eta=(e\epsilon^2)^{1/n}$. 
+Again, this can be shown to hold theoretically: For state truncation the error scales as $\epsilon \leq \eta^n$ according to Equation (\ref{eqn:lossy-worst}), corresponding to $\eta=\epsilon^{1/n}$; whereas for point truncation we see from Equation (\ref{eqn:renema-variance}) and substituting $x=\sqrt{\eta}$ that the error scales as $\epsilon \leq \eta^{n/2}/\sqrt{e}$, meaning a maximum value of $\eta$ is $\eta=(e\epsilon^2)^{1/n}$. 
 In the limit of large $n$ these differences will also tail off.
 
 For $k=n/2$, we see that for both distinguishability and loss point truncation is more powerful than state truncation. 
@@ -569,11 +569,11 @@ We next consider the runtime required to simulate $n$-photon Boson Sampling up t
 The motivation for this comparison is that the runtime of the two algorithms at the same value of $k$ are significantly different. 
 In particular, the runtime of state truncation is only dependent on $k$ and not $n$, whereas the runtime for point truncation depends on a scaling of approximately $O(n^{2k})$.
 
-To understand how the runtimes scale, in FIG.\ \ref{fig:runtime} we plot the runtimes of classically simulating $n$-photon Boson Sampling experiments via the two approaches for fixed values of $\eta$ and $x$. 
+To understand how the runtimes scale, in Figure \ref{fig:runtime} we plot the runtimes of classically simulating $n$-photon Boson Sampling experiments via the two approaches for fixed values of $\eta$ and $x$. 
 The values of $k$ chosen for each algorithm are the smallest values for an error of at most 10\%. 
 For choosing $\eta$ and $x$, we give two example cases. 
-The first (FIG.\ \ref{fig:runtime}, red), where $\eta=0.755$ and $x=0.975$, is an example of a hypothetical best experiment we could build with current technology, with the most lossless sources (82\%) \cite{slussarenko2017}, interferometers (99\%) \cite{wang2018} and detectors (93\%) \cite{marsili2013}, and the highest level of photon indistinguishability (97.6\%) \cite{he2018}. 
-The second case (FIG.\ \ref{fig:runtime}, green), where $\eta=x=0.5$, is an example of how the two algorithms perform in what would be considered a poor experiment for both distinguishability and loss. 
+The first (Figure \ref{fig:runtime}, red), where $\eta=0.755$ and $x=0.975$, is an example of a hypothetical best experiment we could build with current technology, with the most lossless sources (82\%) \cite{slussarenko2017}, interferometers (99\%) \cite{wang2018} and detectors (93\%) \cite{marsili2013}, and the highest level of photon indistinguishability (97.6\%) \cite{he2018}. 
+The second case (Figure \ref{fig:runtime}, green), where $\eta=x=0.5$, is an example of how the two algorithms perform in what would be considered a poor experiment for both distinguishability and loss. 
 Actual Boson Sampling experiments are likely to fall between these two extremes.
 
 In both cases, state truncation appears to outperform point truncation for near-term photon experiments, with point truncation eventually being able to perform faster for larger values of $n$. 
@@ -602,16 +602,16 @@ Now we consider both truncation level and runtime, and compare the algorithms wh
 To do this, we shall consider the challenge of simulating a 90-photon Boson Sampling experiment, and the largest values of distinguishability and loss that can be simulated at level $k$ with 10\% error. 
 The motivation for this is that $90$ photons has been suggested as strict upper bound for what is achievable using classical computation~\cite{dalzell2018}. 
 
-The results are shown in FIG.\ \ref{fig:fixed-n-90}, detailing for each algorithm the highest value of $x$ simulable when $\eta=1$ (\ref{fig:max-x-fixed-n-90}) and the highest value of $\eta$ simulable when $x=1$ (\ref{fig:max-eta-fixed-n-90}). 
+The results are shown in Figure \ref{fig:fixed-n-90}, detailing for each algorithm the highest value of $x$ simulable when $\eta=1$ (\ref{fig:max-x-fixed-n-90}) and the highest value of $\eta$ simulable when $x=1$ (\ref{fig:max-eta-fixed-n-90}). 
 In both figures, the blue line indicates state truncation at level $k$, and the green line indicates point truncation at level $k$. 
 However, the runtime of state truncation at level $k$ and point truncation at level $k$ are likely to be drastically different. 
 To take runtime into consideration as well, we consider the orange line which indicates point truncation at level $k'$, where $k'$ is the smallest integer such that the approximated runtime of point truncation at level $k'$ is longer than that of state truncation at level $k$. 
 This allows us to compare the performance of the two algorithms when restricted to similar runtimes.
 
-Considering distinguishability in FIG.\ \ref{fig:max-x-fixed-n-90}, we can note that point truncation with comparable runtime performs better up to $k\leq 45$, after which the methods are roughly comparable with state truncation performing marginally better, before becoming more dominant for $k\geq 60$. 
+Considering distinguishability in Figure \ref{fig:max-x-fixed-n-90}, we can note that point truncation with comparable runtime performs better up to $k\leq 45$, after which the methods are roughly comparable with state truncation performing marginally better, before becoming more dominant for $k\geq 60$. 
 It has been suggested that boson sampling with 50 indistinguishable photons is roughly the limit of what can be classically simulated on a supercomputer \cite{neville2017, clifford2017, zhang2018}, so it appears that when considering distinguishability, the algorithms are roughly comparable in this case.
 
-When considering loss in FIG. \ref{fig:max-eta-fixed-n-90}, we see a noticeable improvement for state truncation. 
+When considering loss in Figure \ref{fig:max-eta-fixed-n-90}, we see a noticeable improvement for state truncation. 
 Now point truncation under the same runtime only performs better up to $k\leq 22$, with state truncation performing considerably better for higher values of $k$. 
 Boson Sampling with up to 30 indistinguishable photons is already known to be classically simulable on a standard laptop \cite{neville2017}, so this appears to offer a noticeable improvement even for fast classical simulations.
 
@@ -623,7 +623,7 @@ We finish by briefly considering non-uniform loss, where each photon survives a 
 This model of loss has been considered before \cite{garciapatron2017,oszmaniec2018}, but without the incorporation of distinguishability. We can do this using the same methods as other non-uniform loss results, by extracting non-uniform losses into a layer of uniform losses followed by a lossy interferometer. 
 The uniform loss layer means that each photon has probability $\eta=\tau^s$ of surviving, where $\tau$ is the loss of each optical component and $s$ is the smallest number of lossy optical components a photon interacts with. 
 If we take the total number of lossy components to be $d$, the remaining lossy circuit can be modelled as an $(m+d)$-mode interferometer, with lost photons ending up in the additional $d$ modes. 
-Thus we can achieve the same error as Eq.\ (\ref{eqn:lossy-worst}) in $O(k2^k+\poly(k,m,d))$ time. 
+Thus we can achieve the same error as Equation (\ref{eqn:lossy-worst}) in $O(k2^k+\poly(k,m,d))$ time. 
 In typical schemes for linear interferometers, $d$ is at most polynomial in $m$ \cite{reck1994,clements2016}, so the overhead from these additional modes is small. 
 We can bound the error to a decreasing value in terms of $n$ if $k>nx\tau^s$. Taking the logarithm on both sides and rearranging for $s$, we find that this holds if
 
@@ -707,7 +707,22 @@ The overall state can be expanded as
 
 It is again possible to verify that as $x\rightarrow 1$ then only the symmetric irrep contributes, and as $x \rightarrow 0$ then all irreps contribute uniformly.
 
-We now go back to the question at the start of this section, as to whether or not this could lead to another simulation. A potential method of simulation, akin to the point and state truncation methods, would be to truncate which irrep we sample from. In other words, we sample an irrep with at least $n-k$ nonzero rows for some truncation level $k$, and then perform sampling conditioned on that irrep.
+\begin{figure}
+\subfloat[\label{fig:irreps-n-2}]{\includegraphics[width=0.45\linewidth]{classical_sim/irreps_n_2}}
+\hfill
+\subfloat[\label{fig:irreps-n-3}]{\includegraphics[width=0.45\linewidth]{classical_sim/irreps_n_3}}
+\caption[Probability of different irreps when $n=2$ and $n=3$.]{\label{fig:irreps} Probability of different irreps when (\ref{fig:irreps-n-2}) $n=2$ and (\ref{fig:irreps-n-3}) $n=3$. Note that if for the $\lambda=(2,1)$ irrep in Figure \ref{fig:irreps-n-3}, we have shown the probability of sampling any of the multiplicities, when in reality this is a uniform distribution of the four multiplicities.}
+\end{figure}
+
+In Figure \ref{fig:irreps} we have plotted the probability of sampling from different irreps over $x \in [0,1]$ for (\ref{fig:irreps-n-2}) $n=2$ and (\ref{fig:irreps-n-3}) $n=3$. As already mentioned, this makes clear how at $x=0$ all terms have equal probability, and as $x\rightarrow 1$ the fully symmetric irrep begins to dominate. It is interesting to note that for $n=3$, $\lambda=(2,1)$ is the most likely irrep; this is because of the multiplicities within this irrep for both $\symm_3$ and $\unitary(3)$. By solving the cubic equation
+
+\begin{equation}
+1+3x^2+2x^3 = 4-4x^3,
+\end{equation}
+
+\noindent we find that the two overlap when $x \approx 0.657$, when both irreps have probability approximately $0.4773$ of being sampled\footnote{Note that there are other solutions to this cubic equation, but $x\approx 0.657$ is the only real-valued solution between 0 and 1 and is therefore the only solution relevant to us.}.
+
+We now go back to the question at the start of this section, as to whether or not this could lead to another simulation. A potential method of simulation, akin to the point and state truncation methods, would be to truncate which irrep we sample from. In other words, we sample an irrep with at most $n-k$ nonzero rows for some truncation level $k$, and then perform sampling conditioned on that irrep.
 
 There are a few limitations with this approach. The first is that this expansion is nontrivial, and we do not currently have a convenient general form for it, unlike with state truncation where we simply follow the binomial distribution. The second is that, even in the fully distinguishable case, the matrix permanent still plays a role in the distribution, so for any value of $x$ including $x=0$ we are going to have some error if we truncate before the symmetric irrep. And the third is that it is unclear how to classically simulate these irrep states under unitary action; it seems reasonable for them to be related to matrix immanants in some way \`{a} la Tichy and M\o lmer \cite{tichy2017}, but even if so classical algorithms for computing more general immanants are less well-known, though some do exist \cite{hartmann1985, barvinok1990, burgisser2000}. Obviously classical algorithms for the special cases of the permanent and determinant are well-known with exponential \cite{glynn2010} and polynomial \cite{fisikopoulos2016} runtimes, respectively.
 

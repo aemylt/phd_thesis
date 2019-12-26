@@ -92,7 +92,7 @@ Arguing similarly for the output $S'$, we see that the probability of the algori
 &= \frac{1}{\prod_{i=1}^m S'_i! S_i!}\left|\sum_{\tau \in \textrm{S}_n}\prod_{k=1}^n U_{s'_{k},s_{\tau(k)}}\right|^2\\
 &= \frac{|\per(U_{S',S})|^2}{\prod_{i=1}^m S'_i! S_i!}.
 \end{align}
-Thus the output probability distribution matches the one given in Eq.~(\ref{eqn:bs-distribution}).
+Thus the output probability distribution matches the one given in Equation (\ref{eqn:bs-distribution}).
 We also see that Schur-Weyl duality implies
 \begin{equation}
 U^{(n)}_{q_{(n)}, q_{(n)}'} = \frac{\per(U_{S',S})}{\sqrt{\prod_{i=1}^m S'_i! S_i!}}.
@@ -285,8 +285,8 @@ which agrees with the (classical) probability distribution for sampling with dis
 
 The preceding shows how the Schur transform gives a map between second quantised occupation states and first quantised single particle states via symmetrisation.
 The complication added by distinguishability is that each single particle becomes bipartite, with a System and Label degree of freedom.
-As shown above, distinguishability arises as correlations between the System and Label registers of the circuit in Fig.~\ref{fig:noisy-bs}.
-It turns out that independently transforming the System and Label registers back into the Schur basis can give a Schmidt decomposition for these correlated states (see Fig.~\ref{fig:noisy-bs-rep}).
+As shown above, distinguishability arises as correlations between the System and Label registers of the circuit in Figure \ref{fig:noisy-bs}.
+It turns out that independently transforming the System and Label registers back into the Schur basis can give a Schmidt decomposition for these correlated states (see Figure \ref{fig:noisy-bs-rep}).
 This can be seen as a consequence of the following duality~\cite{goodman2009, rowe2012}.
 \begin{theorem}[Unitary-unitary duality]\label{thm:unitary-unitary}
 The totally symmetric irrep of $\mr{U}(md)$ can be decomposed into irreps of $\mr{U}(m) \times \mr{U}(d)$ as
@@ -330,7 +330,7 @@ Of course, this comes at the cost of throwing away a lot of bad samples.
 
 To achieve this postselective filtering, we need to ensure that we only sample the System from the fully symmetric irrep of $\textrm{U}(m)$. 
 This is done by measuring the irrep register $|\lambda\rangle_{\textrm{Sys}}$ and waiting for the outcome $\lambda_{\textrm{Sys}}=(n)$. 
-After postselection, the amplitudes of the System $q$-register $|U\cdot q_{(n)}\rangle$ are given by Eq.~\ref{eqn:symmetric_action}, which give the same probability distribution as sampling indistinguishable bosons. 
+After postselection, the amplitudes of the System $q$-register $|U\cdot q_{(n)}\rangle$ are given by Equation\ref{eqn:symmetric_action}, which give the same probability distribution as sampling indistinguishable bosons. 
 Following the arguments above, the circuit remains efficient since the added Schur transform can be implemented efficiently. 
 
 More generally, such a postselected quantum circuit could sample from any irrep $\lambda$ of $\textrm{U}(m)$. 
@@ -347,13 +347,13 @@ Another serious practical difficulty with linear optics is the loss of photons t
 In this section, we discuss how the loss model developed by Aaronson and Brod~\cite{aaronson2015} can be simulated. 
 In their model, $n+k$ bosons are generated as occupation $S^0$, $k$ of which are lost before they reach the interferometer. 
 As we don't know which bosons were lost, Aaronson and Brod take the average over the set of all $n$-boson occupations which are consistent with $S^0$, denoted $\bar{\Lambda}_{m,S^0,n}$.
-The result can be shown by tracing out any choice of $k$ qudits in the ideal case, as shown in Fig.~\ref{fig:lost-bs}. 
+The result can be shown by tracing out any choice of $k$ qudits in the ideal case, as shown in Figure \ref{fig:lost-bs}. 
 
 \begin{figure}
 \includegraphics[width=\linewidth]{noisy_circuit/lost_circuit}
 \caption[Circuit for sampling when $k$ bosons are lost]{Circuit for sampling when $k$ bosons are lost. 
 Here, we ignore $k$ qudits of the System register, tracing them out with the Label register. 
-As with Fig.~\ref{fig:noisy-bs}, measurements are in the computational basis.}
+As with Figure \ref{fig:noisy-bs}, measurements are in the computational basis.}
 \label{fig:lost-bs}
 \end{figure}
 
