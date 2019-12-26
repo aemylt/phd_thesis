@@ -521,15 +521,15 @@ With this in mind, we plot values for distinguishability and loss separately, an
 \subsection{Comparison at same level of truncation}
 \label{subsec:same-k}
 
-\begin{figure*}
+\begin{figure}
 \subfloat[\label{fig:max-x-samek}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_x_samek}}
 \hfill
 \subfloat[\label{fig:max-eta-samek}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_eta_samek}}
-\caption[Highest value of (\ref{fig:max-x-samek}) $x$ and $\eta$ simulable via state or point truncation]{\label{fig:samek} 
+\caption[Highest value of $x$ and $\eta$ simulable via state or point truncation]{\label{fig:samek} 
 Highest value of (\ref{fig:max-x-samek}) $x$ when $\eta=1$ and (\ref{fig:max-eta-samek}) of $\eta$ when $x=1$ simulable via state (solid) or point (dashed) truncation up to 10\% error ($\epsilon=0.1$). 
 The number of photons, $n$, is varying, with $k$ chosen as either $k=n-1$ (red) or $k=n/2$ (green).
 The oscillatory behaviour is due to rounding $k=n/2$ when $n$ is odd.}
-\end{figure*}
+\end{figure}
 
 We start by comparing the performance of the two algorithms when truncated at the same level $k$. 
 This is of interest as in both approaches $k$ is considered to be a parameter defining the interference between photons. 
@@ -589,14 +589,14 @@ And in the case where $\eta=0.755, x=0.976$, both algorithms have runtimes on th
 \subsection{Comparison at same runtime}
 \label{subsec:same-runtime}
 
-\begin{figure*}
+\begin{figure}
 \subfloat[\label{fig:max-x-fixed-n-90}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_x_fixed_n_90}}
 \hfill
 \subfloat[\label{fig:max-eta-fixed-n-90}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_eta_fixed_n_90}}
 \caption[Highest value of $x$ and $\eta=1$ simulable for 90-photon boson sampling at truncation level $k$]{\label{fig:fixed-n-90} 
 Highest value of (\ref{fig:max-x-fixed-n-90}) $x$ when $\eta=1$ and (\ref{fig:max-eta-fixed-n-90}) $\eta$ when $x=1$ simulable for 90-photon boson sampling at truncation level $k$ up to 10\% error ($\epsilon=0.1$). 
 Blue line indicates highest values simulable via state truncation at level $k$, green lines indicate highest values simulable via point truncation at level $k$, orange lines indicate highest values simulable by point truncation at level $k'$ such that $k'$ is the smallest level of truncation such that the approximate runtime of point truncation at level $k'$ is longer than the runtime of state truncation at level $k$.}
-\end{figure*}
+\end{figure}
 
 Now we consider both truncation level and runtime, and compare the algorithms when restricted to comparable runtimes. 
 To do this, we shall consider the challenge of simulating a 90-photon Boson Sampling experiment, and the largest values of distinguishability and loss that can be simulated at level $k$ with 10\% error. 
@@ -636,9 +636,45 @@ It also shows how distinguishability can affect the simulability of lossy compon
 
 \section{Computing the exact trace distance}
 
+\begin{figure}
+\subfloat[\label{fig:2-photon-trace}]{\includegraphics[width=0.45\linewidth]{classical_sim/2_photon_trace-cropped}}
+\hfill
+\subfloat[\label{fig:3-photon-trace}]{\includegraphics[width=0.45\linewidth]{classical_sim/3_photon_trace-cropped}}
+
+\subfloat[\label{fig:4-photon-trace}]{\includegraphics[width=0.45\linewidth]{classical_sim/4_photon_trace-cropped}}
+\hfill
+\subfloat[\label{fig:5-photon-trace}]{\includegraphics[width=0.45\linewidth]{classical_sim/5_photon_trace-cropped}}
+
+\subfloat[\label{fig:6-photon-trace}]{\includegraphics[width=0.45\linewidth]{classical_sim/6_photon_trace-cropped}}
+\hfill
+\subfloat[\label{fig:7-photon-trace}]{\includegraphics[width=0.45\linewidth]{classical_sim/7_photon_trace-cropped}}
+\caption[Exact trace distance between $\rho_{n,x}$ and $\rho_{\leq k, x}$ over $x$ for $k< n, n=2,\dots,7$]{\label{fig:exact-trace} 
+Exact trace distance betweem $\rho_{n,x}$ and $\rho_{\leq k, x}$ over $x$ for all $k < n$ for (\ref{fig:2-photon-trace}) $n=2$, (\ref{fig:3-photon-trace}) $n=3$, (\ref{fig:4-photon-trace}) $n=4$, (\ref{fig:5-photon-trace}) $n=5$, (\ref{fig:6-photon-trace}) $n=6$ and (\ref{fig:7-photon-trace}) $n=7$.}
+\end{figure}
+
 In our analysis of the worst-case error bounds, we have simply used the property of the trace distance being convex. However, this is only an upper bound, and it could be that the actual trace distance is lower. How much can we improve this bound by more direct calculation?
 
-Sadly there is not an easy way of calculating the exact trace distance, as we have managed to do for the fixed distinguishability cases in Section \ref{ssec:fixed-dist-distance}. In lieu of this, we use analytical code to compute the trace distance for small numbers of photons. Using symbolic programming in Mathematica, we are able to compute the exact trace distance in terms of $x$ for varying $k$ and up to four photons. Furthermore, we can use analytical programming in Matlab to produce figures plotting the trace distance over $x$ for varying values of $k$ and up to eight photons.
+Sadly there is not an easy way of calculating the exact trace distance, as we have managed to do for the fixed distinguishability cases in Section \ref{ssec:fixed-dist-distance}. In lieu of this, we use analytical code to compute the trace distance for small numbers of photons. Using symbolic programming in Mathematica, we are able to compute the exact trace distance in terms of $x$ for varying $k$ and up to four photons. Furthermore, we can use analytical programming in Matlab to produce figures plotting the trace distance over $x$ for varying values of $k$ and up to seven photons.
+
+\begin{table}
+\begin{center}
+\begin{tabularx}{\textwidth}{|C|p{4cm}|p{4cm}|p{4cm}|}
+\hline  & \multicolumn{3}{|c|}{$k$} \\
+\hline $n$ & 1 & 2 & 3 \\
+\hline 2 & $x^2/2$ &  &  \\
+\hline 3 & $x^2(3+2x)/6$ & $2x^2/3$ &  \\
+\hline 4 & $x^2(30+16x-9x^2+9|2-3x^2|)/48$ & $x^2(18+4x-6x^2+3|1-3x^2|+|1-4x+3x^2|)/24$ & $x^2(3+x-x^2)/4$\\\hline
+\end{tabularx}
+\end{center}
+\caption[Exact equations for $\tdist(\rho_{n,x}, \rho{\leq k, x})$ for $k < n, n=2,\dots,4$]{Exact equations for $\tdist(\rho_{n,x}, \rho{\leq k, x})$ for $k < n$ and $n=2,3,4$.}
+\label{tab:exact-trace}
+\end{table}
+
+The formulae computed via Mathematica are given in Table \ref{tab:exact-trace}, and the results from Matlab computation are given in Figure \ref{fig:exact-trace}, with each subfigure showing the trace distance for varying $n$ and $k$. It is very challenging to discern a general pattern here, unlike the fixed distinguishability cases discuseed in Section \ref{ssec:fixed-dist-distance}; the formulae produced by Mathematica start looking complicated even for $n=4$. Larger values of $n$ were attempted in both Matlab and Mathematica, but had to be abandoned due to computation time.
+
+We can see that for high values of $x$ all of these approximations start to fail. Part of the reason for this is how few photons we have; if on average we expect $nx$ photons then for a good approximation with $k<n$ we would expect that $x<(n-1)/n$, which will be fairly low with these small values of $n$.
+
+It is interesting to note from Figure \ref{fig:exact-trace} that for some values of $x$ there are some values of $k$ where $\tdist(\rho_{n,x},\rho_{\leq k, x}) < \tdist(\rho_{n,x},\rho_{\leq k+1, x})$. This is very surprising; we would expect that the trace distance would decrease for all $x$ as $k$ increases, as this would correspond to more indistinguishable photons. We do not know why this is and leave it as an open question for future research. It is however worth emphasising in these cases that the trace distance is an upper bound, and it might be that in practice interferometers which achieve this perfect maximisation of trace distance do not exist. We again leave this as a direction for future research, but note that this is similar to the question explored by Stanisic and Turner, who looked at this in the fixed distinguishability case \cite{stanisic2018}.
 
 \section{Expanding in terms of representations}
 
