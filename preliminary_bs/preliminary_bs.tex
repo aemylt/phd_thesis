@@ -162,9 +162,9 @@ We shall now discuss some example interferometers, and their resulting effects, 
 
 \subsubsection{One-photon-two-modes: The Mach-Zehnder Interferometer}
 
-A Mach-Zender interferometer is a demonstration of how a single photon can interfere with itself \cite{zehnder1891,mach1892}. This experiment uses a single photon in one of two modes, and consists of a beam splitter across both modes, followed by a phase shifter on a single mode, and finally a second beam splitter.
+A Mach-Zehnder Interferometer (MZI) is a demonstration of how a single photon can interfere with itself \cite{zehnder1891,mach1892}. This experiment uses a single photon in one of two modes, and consists of a beam splitter across both modes, followed by a phase shifter on a single mode, and finally a second beam splitter.
 
-In second quantisation, we can describe the Mach Zehnder interferometer as follows, labelling our spatial modes 1 and 2. We start with a single photon in mode 1 $\ket{1,0} = a_1^\dagger\ket{0,0}$. After our first beam splitter we have the state $(a_1^\dagger + ia_2^\dagger)\ket{0,0}/\sqrt{2}.$
+In second quantisation, we can describe the MZI as follows, labelling our spatial modes 1 and 2. We start with a single photon in mode 1 $\ket{1,0} = a_1^\dagger\ket{0,0}$. After our first beam splitter we have the state $(a_1^\dagger + ia_2^\dagger)\ket{0,0}/\sqrt{2}.$
 
 We next apply a phase shifter to spatial mode 1, giving $(e^{i\theta}a_1^\dagger + ia_2^\dagger)\ket{0,0}/\sqrt{2}$. Finally, we apply our second beam splitter and find that
 
@@ -173,7 +173,14 @@ We next apply a phase shifter to spatial mode 1, giving $(e^{i\theta}a_1^\dagger
 &= \frac{1}{2}((e^{i\theta}-1)a_1^\dagger+i(e^{i\theta}+1)a_2^\dagger)\ket{0,0}.
 \end{align}
 
-Adjusting our phase $\theta$ determines what output we measure: For $\theta=0$, the photon will be in mode 2; for $\theta=\pi/2$, the photon will be in mode 1, and for other values of $\theta$ the photon will be measured randomly in one of the two modes.
+Adjusting our phase $\theta$ determines what output we measure: For $\theta=0$, the photon will be in mode 2; for $\theta=\pi/2$, the photon will be in mode 1, and for other values of $\theta$ the photon will be measured randomly in one of the two modes. How the probabilities change over $\theta$ is given in Figure \ref{fig:mzi-plot}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\linewidth]{preliminary_bs/mzi_plot}
+\end{center}
+\caption{\label{fig:mzi-plot}Probability of measuring $\ket{0,1}$ and $\ket{1,0}$ from a Mach-Zehnder Interferometer over $\theta$.}
+\end{figure}
 
 In first quantisation, we see the same outcome. Our input is $\ket{1}$, and  applying the first beam splitter leads to the state $(\ket{1}+i\ket{2})/\sqrt{2}$. The phase shifter on mode 1 results in the state $(e^{i\theta}\ket{1}+i\ket{2})/\sqrt{2}$, and the second beam splitter leaves us with the state
 
@@ -186,7 +193,7 @@ Again, we see that adjusting $\theta$ will determine which spatial mode we detec
 
 \subsubsection{Two-photons-two-modes: The Hong-Ou-Mandel Dip}
 
-The Hong-Ou-Mandel Dip is the earliest demonstration of multi-photon interference \cite{hong1987}. It features two spatial modes, each starting with a single photon, and consists of simply a beam splitter across both modes.
+The Hong-Ou-Mandel (HOM) Dip is the earliest demonstration of multi-photon interference \cite{hong1987}. It features two spatial modes, each starting with a single photon, and consists of simply a beam splitter across both modes.
 
 In second quantisation, we start with the Fock state $\ket{1,1} = a_1^\dagger a_2^\dagger\ket{0,0}$. Applying the beam splitter gives us
 
@@ -347,7 +354,7 @@ One of the points made when discussing Boson Sampling is that the photons need t
 
 A number of internal characteristics about the photons could make them distinguishable. The most visually intuitive one is wavelength: A red photon is definitely distinct from a green photon. But other aspects could also distinguish photons, such as their polarisation, or what time they were generated. The time generation point is particularly important following the discussion in Section \ref{ssec:bs-variants} about the challenges of single photon sources: Not only do all of these single photon sources need to emit a photon, but all of them need to emit photons at the exact same time. We can model distinguishability by introducing additional modes to describe the internal state. Throughout this thesis, we will use spatial or system modes to describe where a photon is, and internal or label modes to describe its distinguishable characteristics.
 
-Before we consider Boson Sampling under distinguishability, we will first return to the Hong-Ou-Mandel dip from Section \ref{ssec:example-interferometers} \cite{hong1987}. This time, we will consider one red photon generated in mode $1$, and one photon generated in mode 2 which is red with amplitude $v \in [0,1]$ and green with amplitude $d=\sqrt{1-v^2}$. We can represent this in the second quantisation by introducing additional indexes to our creation and annihilation operators: $a_{i,R}^\dagger$ and $a_{i,G}^\dagger$ to indicate a red or green photon in mode $i$, respectively. Our input is now
+Before we consider Boson Sampling under distinguishability, we will first return to the Hong-Ou-Mandel dip from Section \ref{ssec:example-interferometers} \cite{hong1987}. This time, we will consider one red photon generated in mode $1$, and one photon generated in mode 2 which is red with amplitude $v\in [0,1]$ and green with amplitude $d=\pm\sqrt{1-v^2}$. We can represent this in the second quantisation by introducing additional indexes to our creation and annihilation operators: $a_{i,R}^\dagger$ and $a_{i,G}^\dagger$ to indicate a red or green photon in mode $i$, respectively. Our input is now
 
 \begin{equation}
 a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0_R,0_G,0_R,0_G}.
@@ -372,7 +379,14 @@ Note that in the final line, the terms $a_{1,R}^\dagger a_{2,G}^\dagger$ and $a_
 &+\frac{1}{2}\left( d\left(i\ket{1_R,1_G,0_R,0_G} + \ket{1_R,0_G,0_R,1_G} - \ket{0_R,1_G,1_R,0_G}+i\ket{0_R,0_G,1_R,1_G} \right)\right).
 \end{align}
 
-If we only measure what spatial mode our photons is in and discard the wavelength, we will find that we are in the Fock state $\ket{2,0}$ with probability $v^2/2 + d^2/4$ and likewise for $\ket{0,2}$, but we'll also find ourselves in the state $\ket{1,1}$ with probability $d^2/2$. Noting that $d^2 = 1-v^2$, it is easy to see that adjusting $v$ determines how likely we are to see coincidences at the output: if $v=0$, corresponding to completely distinguishable photons, then we see coincidences with probability 1/2; if $v=1$, meaning that our photons are completely indistinguishable, we don't see any photons at all. This is where the ``dip'' in Hong-Ou-Mandel Dip comes from: as our photons become more indistinguishable we see a drop in coincidences. The extent to which we see a dip is known as the visibility of a Hong-Ou-Mandel dip, hence $v$, and is a standard technique when characterising linear optics experiments to determine how distinguishable pairs of photons are.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\linewidth]{preliminary_bs/hom_plot}
+\end{center}
+\caption{\label{fig:hom-plot}The probability of seeing the coincident $\ket{1,1}$ output from a Hong-Ou-Mandel experiment over $\Delta\tau$.}
+\end{figure}
+
+If we only measure what spatial mode our photons is in and discard the wavelength, we will find that we are in the Fock state $\ket{2,0}$ with probability $v^2/2 + d^2/4$ and likewise for $\ket{0,2}$, but we'll also find ourselves in the state $\ket{1,1}$ with probability $d^2/2$. Noting that $d^2 = 1-v^2$ and that $v=e^{-\delta\tau}$ for some $\delta\tau\in \mathbb{R}_{\geq 0}$, it is easy to see that adjusting $\Delta\tau$ determines how likely we are to see coincidences at the output: if $\Delta\tau=0$, meaning that our photons are completely indistinguishable, we don't see any coincidences at all; as $\Delta\tau\rightarrow\pm\infty$, corresponding to completely distinguishable photons, then we see coincidences with probability 1/2. This is where the ``dip'' in Hong-Ou-Mandel Dip comes from: as our photons become more indistinguishable we see a drop in coincidences. This is plotted visually in Figure \ref{fig:hom-plot}. The extent to which we see a dip is known as the visibility of a Hong-Ou-Mandel dip, hence $v$, and is a standard technique when characterising linear optics experiments to determine how distinguishable pairs of photons are. Physically, $\Delta\tau$ corresponds to the difference between our photons, for example if there is a difference in path length between the photon sources and the beamsplitter.
 
 In first quantisation, we can likewise realise this interference by introducing a second register noting which colour our photons are in. Our state is now
 
