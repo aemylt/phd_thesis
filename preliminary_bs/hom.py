@@ -20,4 +20,13 @@ for i in range(n):
 plt.plot(xs, ys)
 plt.xlabel(r'$\Delta\tau$ (arbitrary units)')
 plt.ylabel(r'Pr$[|1,1\rangle]$')
+plt.ylim(0,1)
 plt.savefig("hom_plot.pdf", bbox_inches="tight")
+
+plt.figure()
+plt.bar([0,1,2], [1/2, 0, 1/2])
+plt.xticks([0,1,2], [r'$|2,0\rangle$', r'$|1,1\rangle$', r'$|0,2\rangle$'])
+plt.ylim(0,1)
+plt.ylabel("Probability")
+plt.xlabel("Output state")
+plt.savefig("hom_perfect.pdf", bbox_inches="tight")
