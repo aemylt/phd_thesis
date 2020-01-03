@@ -561,7 +561,9 @@ As a result, it is unsurprising that for $k$ increasing linearly with $n$ the hi
 \label{subsec:runtimes}
 
 \begin{figure}
-\includegraphics[width=\linewidth]{classical_sim/runtime}
+\begin{center}
+\includegraphics[width=0.5\linewidth]{classical_sim/runtime}
+\end{center}
 \caption[Approximate runtime to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ via state or point truncation]{\label{fig:runtime} Approximate runtime (number of operations) to simulate $n$-photon Boson Sampling with chosen values of $\eta$ and $x$ up to 10\% error ($\epsilon=0.1$) via state (solid) or point (dashed) truncation. Note that a modern supercomputer running for an hour can perform roughly $10^{20}$ operations.}
 \end{figure}
 
@@ -762,7 +764,7 @@ We now go back to the question at the start of this section, as to whether or no
 
 There are a few limitations with this approach. The first is that this expansion is nontrivial, and we do not currently have a convenient general form for it, unlike with state truncation where we simply follow the binomial distribution. The second is that, even in the fully distinguishable case, the matrix permanent still plays a role in the distribution, so for any value of $x$ including $x=0$ we are going to have some error if we truncate before the symmetric irrep. And the third is that it is unclear how to classically simulate these irrep states under unitary action; it seems reasonable for them to be related to matrix immanants in some way \`{a} la Tichy and M\o lmer \cite{tichy2017}, but even if so classical algorithms for computing more general immanants are less well-known, though some do exist \cite{hartmann1985, barvinok1990, burgisser2000}. Obviously classical algorithms for the special cases of the permanent and determinant are well-known with exponential \cite{glynn2010} and polynomial \cite{fisikopoulos2016} runtimes, respectively.
 
-So if this decomposition does not provide us with faster classical algorithms, what might it be useful for? Well, there are some instances of $\lambda$ for which matrix imminants are known to be hard. The best-known of these is the permanent \cite{valiant1979, aaronson2011}, but other forms of immanant are also know to be $\#P$-hard \cite{hartmann1985, burgisser2000, brylinski2003, mertens2013}. If one is able to construct a form of distinguishable-photon Boson Sampling such that the probability ends up being largely concentrated in these hard instances, and show that computing the sum of these immanants is at least as hard as computing a single immanant, then this could potentially lead to new proofs of hardness for Boson Sampling under distinguishability. We leave this question as future work.
+So if this decomposition does not provide us with faster classical algorithms, what might it be useful for? Well, there are some instances of $\lambda$ for which matrix imminants are known to be hard. The best-known of these is the permanent \cite{valiant1979, aaronson2011}, but other forms of immanant are also know to be $\sharpp$-hard \cite{hartmann1985, burgisser2000, brylinski2003, mertens2013}. If one is able to construct a form of distinguishable-photon Boson Sampling such that the probability ends up being largely concentrated in these hard instances, and show that computing the sum of these immanants is at least as hard as computing a single immanant, then this could potentially lead to new proofs of hardness for Boson Sampling under distinguishability. We leave this question as future work.
 
 \section{Conclusion}
 \label{sec:conclusion}

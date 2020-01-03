@@ -7,7 +7,10 @@ The reasons above suggest that these problems might be suitable for a demonstrab
 
 The next two chapters will focus on this question. In this chapter we shall survey the world of NP-Hard problems. In particular we will look at classical and quantum algorithms for solving these problems in general. In Chapter \ref{chp:tsp}, we shall demonstrate how these quantum speedups can be applied to special instances of the Travelling Salesman Problem, an especially famous NP-Hard problem.
 
+The rest of this chapter is laid out as follows. In Section \ref{sec:p-vs-np}, we introduce P and NP, explain the significance of the P vs NP problem and the relevance of NP-Hard problems. In Section \ref{sec:classical-np}, we introduce standard classical algorithms for solving NP-Hard problems exactly in an exponential amount of time. Finally, we discuss quantum speedups or these approaches in Section \ref{sec:quantum-np}.
+
 \section{P vs NP and NP-Hardness}
+\label{sec:p-vs-np}
 
 To understand why NP-Hard problems are a good starting point in the hunt for a quantum speedup, we first need to understand why they are so important in the world of complexity theory. This is because they provide a potential solution to one of the famous problems in computer science and mathematics: The P vs NP problem.
 
@@ -39,7 +42,7 @@ Given $A \in \mathbb{Z}^{m\times n}$, $c \in \mathbb{Z}^n$ and $b \in \mathbb{Z}
 
 It is worth noting that Integer Linear Programming is considered NP-Hard but not NP-Complete, as it is phrased as an optimisation problem rather than a decision problem. The equivalent decision problem -- does there exist an $x \in \mathbb{Z}_\geq^n$ that satisfies $Ax \leq b$ -- is NP-Complete, with the version where $x\in\{0,1\}^n$ being one of Karp's 21 NP-Complete problems \cite{karp1972}.
 
-\begin{problem}[The Travelling Salesman (TSP)]
+\begin{problem}[The Travelling Salesman Problem]
 Let $G = (V,E)$ be a weighted graph with $n$ vertices. Find an minimum-weight cycle which visits every vertex exactly once.
 \end{problem}
 
@@ -48,6 +51,7 @@ A solution to the Travelling Salesman Problem is by definition a Hamiltonian cyc
 Like Integer Linear Programming, the Travelling Salesman Problem is an optimisation problem rather than a decision problem. The decision variant -- does $G$ contains a Hamiltonian cycle of length at most $\ell$ -- is also NP-Complete, and can be seen through the same reasoning as the paragraph above. It is also worth noting that if an algorithm exists for the decision version of the problem, an algorithm for the optimisation problem can also be found with polynomial overhead, by calling the algorithm with varying bounds $\ell$ chosen in a binary search fashion.
 
 \section{Classical Algorithms for NP-Hard Problems}
+\label{sec:classical-np}
 
 We shall now move on to exploring how we can classically solve these NP-Hard problems. We shall focus on exact algorithms, which are required to run in polynomial time classically. It is worth noting that there are classical algorithms for approximating many of these problems in polynomial time; Christofides' Algorithm, for example, provides a Hamiltonian cycle whose length is at most 3/2 of the length of the optimal Hamiltonian cycle in polynomial time \cite{christofides1976}. See \cite{garey1979} for a more thorough review of classical algorithms, including approximation algorithms.
 
@@ -117,6 +121,7 @@ Branch and Bound is a standard approach for Integer Linear Programming. An upper
 Both Branch and Bound \& Branch and Cut algorithms have also been developed for the Travelling Salesman Problem \cite{little1963, padberg1991}. Asymptotic analysis of these algorithms are hard to come by, but these approaches have been found to be the best performing in practice. Indeed, a Branch and Cut algorithm is responsible for some of the largest solved instances of the Travelling Salesman Problem to date, finding the optimal tour of 85,900 cities in 2005/2006 \cite{applegate2006}, and later finding the optimal tours of 49,687 UK pubs and 109,399 stars \cite{tspuk49687}.
 
 \section{Quantum Speedups}
+\label{sec:quantum-np}
 
 We shall now summarise some of the research in quantum speedups of the classical algorithms already described in this chapter. For a more broad summary of quantum algorithms, we direct the reader to \cite{montanaro2016}.
 
