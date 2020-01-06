@@ -3,7 +3,7 @@
 
 An intuitive starting point for finding a problem which quantum computers can demonstrably outperform classical machines at would be to find problems which are classically intractable. There are many problems to choose from, with perhaps the most famous being those which are described as NP-Hard. Many problems with practical applications fit into this family, and although these problems have not been formally proven to be hard for classical computers, the consequences of them being easy to solve has led to the general consensus that these problems are intractable\footnote{For some informal arguments as to why these problems \textit{should} be classically hard, see \cite{aaronson2006}}.
 
-The reasons above suggest that these problems might be suitable for a demonstrable quantum advantage. However, the downside is that these problems are generally believed to be too difficult for quantum computers to solve efficiently as well! So it seems unlikely that any exponential speedup is achievable, but what about a polynomial speedup? Although less impressive, a polynomial improvement can still be significant in practice.
+The reasons above suggest that these problems might be suitable for a demonstrable quantum advantage. However, the downside is that these problems are generally believed to be too difficult for quantum computers to solve efficiently as well! Indeed, work by Bennett et al.\ showed that, relative to an oracle chosen uniformly at random, there is no quantum algorithm that can solve arbitrary NP-Complete problems in $o(2^{n/2})$ time \cite{bennett1997}. So it seems unlikely that any exponential speedup is achievable, but what about a polynomial speedup? Although less impressive, a polynomial improvement can still be significant in practice.
 
 The next two chapters will focus on this question. In this chapter we shall survey the world of NP-Hard problems. In particular we will look at classical and quantum algorithms for solving these problems in general. In Chapter \ref{chp:tsp}, we shall demonstrate how these quantum speedups can be applied to special instances of the Travelling Salesman Problem, an especially famous NP-Hard problem.
 
@@ -42,7 +42,7 @@ Given $A \in \mathbb{Z}^{m\times n}$, $c \in \mathbb{Z}^n$ and $b \in \mathbb{Z}
 
 It is worth noting that Integer Linear Programming is considered NP-Hard but not NP-Complete, as it is phrased as an optimisation problem rather than a decision problem. The equivalent decision problem -- does there exist an $x \in \mathbb{Z}_\geq^n$ that satisfies $Ax \leq b$ -- is NP-Complete, with the version where $x\in\{0,1\}^n$ being one of Karp's 21 NP-Complete problems \cite{karp1972}.
 
-\begin{problem}[The Travelling Salesman Problem]
+\begin{problem}[The Travelling Salesman Problem (TSP)]
 Let $G = (V,E)$ be a weighted graph with $n$ vertices. Find an minimum-weight cycle which visits every vertex exactly once.
 \end{problem}
 
