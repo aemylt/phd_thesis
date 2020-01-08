@@ -26,53 +26,13 @@
                 % the degree programme
                     degree={PhD},
                 % the thesis    title (which cannot be blank)
-                     title={On the hunt for a near-term quantum speedup},
+                     title={The Quantum-Classical Race},
                 % the thesis subtitle (which can    be blank)
-                  subtitle={},
+                  subtitle={Near-term quantum and classical algorithms for combinatorially hard problems},
                 % the year of submission
                       year={\year} ]{templates/thesis}
 
 \begin{document}
-
-% =============================================================================
-
-% This macro creates the standard UoB title page by using information drawn
-% from the document class (meaning it is vital you select the correct degree 
-% title and so on).
-
-\maketitle
-
-% After the title page (which is a special case in that it is not numbered)
-% comes the front matter or preliminaries; this macro signals the start of
-% such content, meaning the pages are numbered with Roman numerals.
-
-\frontmatter
-
-% This macro creates the standard UoB declaration; on the printed hard-copy,
-% this must be physically signed by the author in the space indicated.
-
-\include{frontmatter/abstract}
-\makedecl
-
-% LaTeX automatically generates a table of contents, plus associated lists 
-% of figures, tables and algorithms.  The former is a compulsory part of the
-% thesis, but if you do not require the latter they can be suppressed
-% by simply commenting out the associated macro.
-
-\tableofcontents
-\listoffigures
-\listoftables
-\listofalgorithms
-
-% The following sections are part of the front matter, but are not generated
-% automatically by LaTeX; the use of \chapter* means they are not numbered.
-
-% -----------------------------------------------------------------------------
-
-%\include{frontmatter/summary_of_changes}
-%\include{frontmatter/supporting_technologies}
-\include{frontmatter/notation_and_acronyms}
-\include{frontmatter/acknowledgements}
 
 % =============================================================================
 
@@ -91,18 +51,6 @@
 
 % -----------------------------------------------------------------------------
 
-\part{Overview}
-\include{introduction/introduction}
-\part{An application-focused approach: quantum algorithms for the Travelling Salesman Problem}
-\label{prt:application}
-\include{preliminary_q_c/preliminary_q_c}
-\include{tsp/tsp}
-\part{An architecture-focused approach: Boson Sampling under distinguishability and loss}
-\label{prt:architecture}
-\include{preliminary_bs/preliminary_bs}
-\include{noisy_circuit/noisy_circuit}
-\include{classical_sim/classical_sim}
-\part{Conclusions and open questions}
 \include{conclusion/conclusion}
 
 % =============================================================================
