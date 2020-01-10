@@ -17,7 +17,7 @@ The theory of quantum computing has shown the potential for speedups in a large 
 
 The original proposed application of quantum computation is the simulating of physical systems. Indeed, this application was proposed as early as 1981, when Richard Feynman spoke about needing quantum mechanics to simulate nature during a keynote he gave at California Institute of Technology \cite{feynman1982}. It then took 15 more years for a general quantum algorithm to be able to simulate any quantum physical system, proven by Lloyd in 1996 \cite{lloyd1996}. In the decades since, other quantum simulation algorithms have made significant improvements \cite{berry2015, berry2015stoc, low2017}.
 
-Following Feynman's original proposal, the first exponential speedup was given by Deutsch and Jozsa in 1992 \cite{deutsch1992}, who gave a query problem which required an exponential number of classical queries but only one quantum query to solve exactly. However, this was for a contrived problem with no applications. The first quantum algorithm with applications to the real world was by Shor in 1994 \cite{shor1994}, who gave an algorithm for factoring integers and computing discrete logarithms in polynomial time. These problems are believed to be classically hard to solve, and efficient computation would lead to being able to break popular encryption schemes.
+Following Feynman's original proposal, the first exponential speedup was given by Deutsch and Jozsa in 1992 \cite{deutsch1992}, who gave a query problem which required an exponential number of classical queries but only one quantum query to solve exactly. However, this was for a contrived problem with no applications. The first quantum algorithm with applications to the real world was by Shor in 1994 \cite{shor1994}, who gave an algorithm for factoring integers and computing discrete logarithms in polynomial time. These problems are believed to be classically hard to solve, and efficient computation would lead to being able to break popular encryption schemes\cite{katz2007}.
 
 Many other applications have also appeared in the following years. In 1997, Grover \cite{grover96} showed how quantum computers can be used to find marked items quadratically faster than performing a na\"ive search. And in 2009, Harrow, Hassidim and Lloyd (HHL) provided the first quantum algorithm for solving linear systems of equations \cite{harrow2009}. This leading to many applications, from Support Vector Machines \cite{rebentrost2014} to Recommendation Systems \cite{kerenidis2017}, in the field of Quantum Machine Learning \cite{wittek2014, schuld2014, adcock2015, biamonte2017}. This has also led to the more recent direction of quantum-inspired classical machine learning, where various ideas from quantum algorithms have been applied to classical algorithms via sampling rows and columns of matrices with low rank \cite{tang2019, tang2018, gilyen2018, arrazola2019, chia2019, jethwani2019}.
 
@@ -83,6 +83,24 @@ Throughout this thesis we will make extensive use of Big-O (and related) notatio
 We shall discuss a variety of complexity classes. P, NP and NP-Hard will be explained in more detail in Section \ref{sec:p-vs-np}, but informally: P is the class of problems which a classical computer can solve in polynomial time, NP the class of problems which a classical computer can verify a solution for in polynomial time, and NP-Hard the problems which are at least as hard as any problem in NP. We shall also mention BPP, the class of problems which can be solved probabilistically on a classical computer in polynomial time with probability greater than 2/3; BQP, the class of problems which can be solved on a quantum computer with probability greater than 2/3; and $\sharpp$, the class of problems around counting the number of solutions to a problem in NP. Further details on these any many other complexity classes can be found at the Complexity Zoo \cite{complexityzoo}.
 
 We shall use $\unitary(m)$ to denote the Unitary group of degree $m$, which is the group of $m\times m$ unitary matrices, and $\symm_n$ to denote the Symmetric group of degree $n$, which is the group of permutations for $n$ objects. Irreducible representations, or irreps, of these groups over the vector space $(\mathbb{C}^m)^{\otimes n}$ are denoted $\lambda$, with $q_\lambda$ and $p_\lambda$ denoting basis states in these irreps for the Unitary and Symmetric groups, respectively.
+
+For an irreducible representation of the Symmetric group $\lambda$, let $\chi_\lambda$ be the character of $\lambda$. We define the immanant of an $n\times n$ matrix $M$ as the function
+
+\begin{equation}
+\textrm{imm}_\lambda(M) \colon= \sum_{\sigma\in\symm_n}\chi_\lambda(\sigma)\prod_{i=1}^nM_{i,\sigma(i)}.
+\end{equation}
+
+Of particular note is that when $\lambda=(n)$ we have the permanent of $M$
+
+\begin{equation}
+\textrm{per}(M) \colon= \sum_{\sigma\in\symm_n}\prod_{i=1}^nM_{i,\sigma(i)},
+\end{equation}
+
+\noindent and when $\lambda=(1^n)$ we have the determinant
+
+\begin{equation}
+\textrm{det}(M) \colon= \sum_{\sigma\in\symm_n}\textrm{sgn}(\sigma)\prod_{i=1}^nM_{i,\sigma(i)}.
+\end{equation}
 
 The trace distance between two states is $\rho$ and $\sigma$ is defined as
 

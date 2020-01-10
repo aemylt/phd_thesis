@@ -200,10 +200,10 @@ Again, we see that adjusting $\theta$ will determine which spatial mode we detec
 \subsubsection{Two-photons-two-modes: The Hong-Ou-Mandel Dip}
 
 \begin{figure}
-\subfloat[\label{fig:hom-diagram}]{\includegraphics[width=0.45\linewidth]{preliminary_bs/hom}}
-\hfill
-\subfloat[\label{fig:hom-perfect}]{\includegraphics[width=0.45\linewidth]{preliminary_bs/hom_perfect}}
-\caption[Experimental setup of the Hong-Ou-Mandel Dip and probability of different outcomes]{\label{fig:hom}The Hong-Ou-Mandel Dip, a demonstration of two-photon interference. \ref{fig:hom-diagram}: An experimental diagram, consisting of two indistinguishable photons (red circles) in two spatial modes (solid black lines) interacting with a single beam splitter (grey dashed line) before being measured by single photon detectors (white semi-circles). \ref{fig:hom-perfect}: The probability of each outcome from measurement.}
+\begin{center}
+\includegraphics[width=0.45\linewidth]{preliminary_bs/hom}
+\end{center}
+\caption[Experimental setup of the Hong-Ou-Mandel Dip]{\label{fig:hom}An experimental diagram for the Hong-Ou-Mandel Dip, consisting of two indistinguishable photons (red circles) in two spatial modes (solid black lines) interacting with a single beam splitter (grey dashed line) before being measured by single photon detectors (white semi-circles).}
 \end{figure}
 
 The Hong-Ou-Mandel (HOM) Dip is the earliest demonstration of multi-photon interference \cite{hong1987}. It features two spatial modes, each starting with a single photon, and consists of simply a beam splitter across both modes.
@@ -218,7 +218,7 @@ a_1^\dagger a_2^\dagger\ket{0,0} &\rightarrow \frac{1}{2}(a_1^\dagger+ia_2^\dagg
 &= \frac{i(\ket{2,0} + \ket{0,2})}{\sqrt{2}}.
 \end{align}
 
-After measurement, we will find that both photons are in the same spatial mode. This example has a strong connection to distinguishability, and we will return to it in Section \ref{ssec:imperfections-distinguishability}.
+After measurement, we will find that both photons will always be detected in the same (random) spatial mode. This example has a strong connection to distinguishability, and we will return to it in Section \ref{ssec:imperfections-distinguishability}.
 
 In first quantisation, we start with the state $(\ket{12} + \ket{21})/\sqrt{2}$. The beam splitter acts on each particle individually, giving
 
@@ -663,7 +663,7 @@ The dimension of irrep $(\lambda)$ can be viewed as the multiplicity of irrep $\
 
 It is common to label irreps of both of these groups by ordered partitions $\lambda = (\lambda_1,\lambda_2,\cdots,\lambda_m)$ of $n$ such that $\lambda_i \geq \lambda_{i+1}$ and $\sum_{i = 1}^m \lambda_i = n$.
 We usually suppress zeros in this notation, so for example the totally symmetric irrep $\lambda=(n, 0,\dots,0)$ is written $(n)$. 
-The number of nonzero $\lambda_i$ is called the length of the partition, $\ell(\lambda)$, and only partitions with $\ell(\lambda) \leq m$ occur, which we will assume in all of our expressions that follow.
+The number of nonzero $\lambda_i$ is called the length of the partition, $\ell(\lambda)$, and only partitions with $\ell(\lambda) \leq m$ occur, which we will assume in all of our expressions that follow. Similarly, the width of the partition is $w(\lambda) = \lambda_1$, the largest partition in $\lambda$.
 %Following the convention of~\cite{rowe2012}, we shall label irreps of S$_n$ and U$(m)$ indexed by $\lambda$ as $(\lambda)$ and $\{\lambda\}$, respectively.
 
 \subsection{The Quantum Schur Transform}
@@ -783,7 +783,17 @@ Let $\lambda$ be an irreducible representation, and $\sigma$ be a permutation. D
 \chi_\lambda(\sigma) \colon= \trace\left[\sigma\right]
 \end{equation}
 
-\noindent as the characteristic of $\sigma$ in representation $\lambda$. Note that for any $\sigma' = \tau\sigma\tau$ for some $\tau \in \symm_n$, $\chi_\lambda(\sigma) = \chi_\lambda(\sigma')$.  This means that $\sigma$ and $\sigma'$ are in the same class.
+\noindent as the characteristic of $\sigma$ in representation $\lambda$. Note that for any $\sigma' = \tau\sigma\tau^{-1}$ for some $\tau \in \symm_n$, $\chi_\lambda(\sigma) = \chi_\lambda(\sigma')$, meaning that $\sigma$ and $\sigma'$ are in the same conjugacy class:
+
+\begin{align}
+\chi_\lambda(\sigma') &= \trace\left[\sigma'\right]\\
+&= \trace\left[\tau\sigma\tau^{-1}\right]\\
+&= \trace\left[\sigma\tau^{-1}\tau\right]\\
+&= \trace\left[\sigma\right]\\
+&= \chi_\lambda(\sigma).
+\end{align}
+
+The map $\chi_\lambda$ for all classes of $\symm_n$ is defined as the character of $\lambda$. Note that computing $\chi_\lambda$ is $\sharpp$-Hard \cite{hepler1994}.
 
 We define the immanant of an $n\times n$ matrix $M$ as the polynomial
 
@@ -793,4 +803,4 @@ We define the immanant of an $n\times n$ matrix $M$ as the polynomial
 
 Note that when $\lambda=(n)$, we have $\chi_\lambda(\sigma)=1\forall\sigma\in\symm_n$, which gives the permanent. Similarly for $\lambda=(1^n)$, $\chi_\lambda(\sigma)=\textrm{sgn}(\sigma)\forall\sigma\in\symm_n$, giving the determinant.
 
-So what is known about the computational complexity of these immanants then? The best-known results are for the permanent and determinant, which are $\sharpp$-Hard and computable in polynomial time, respectively \cite{valiant1979, aaronson2011, fisikopoulos2016}. But other hardness results are also known, such as when the Young diagram is of a particular structure known as a hook form, where most of the boxes are in the top row and the remaining rows have at most one box in them \cite{hartmann1985, burgisser2000, brylinski2003, mertens2013}.
+So what is known about the computational complexity of these immanants then? The best-known results are for the permanent and determinant, which are $\sharpp$-Hard and computable in polynomial time, respectively \cite{valiant1979, aaronson2011, fisikopoulos2016}. But other hardness results are also known \cite{hartmann1985, burgisser2000, brylinski2003, mertens2013}. For example, B\"urgisser \cite{burgisser2000immanants} showed that for $w=\poly(n)$, computation of $\textrm{Imm}_\lambda$ is $\sharpp$-Hard when $\lambda=(w,1^{n-w})$, known as a hook diagram, or when $\lambda=(w^{n/w})$, known as a rectangular diagram.
