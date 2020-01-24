@@ -3,6 +3,8 @@
 
 \section{Introduction}
 
+This work was completed in collaboration with Peter S. Turner, and published as ``Quantum simulation of partially distinguishable boson sampling'', \href{https://link.aps.org/doi/10.1103/PhysRevA.97.062329}{\textit{Physical Review A} \textbf{97}, 062329 (2018)} [{\tt \href{https://arxiv.org/abs/1803.03657}{arXiv:1803.03657}}], copyright American Physics Society.
+
 In this chapter we explore the problem of sampling from a collection of $n$ partially distinguishable single bosons interacting on a $m$-mode interferometer from the opposite direction, that is, from the perspective of quantum simulation. 
 We do so by observing that ideal Boson Sampling is equivalent to sampling from the totally symmetric representation of the unitary group, and that partial distinguishability generalises this to the problem of sampling from arbitrary irreducible representations.
 We show that quantum circuits for the Schur transform~\cite{bacon2007} can therefore be used to give a polynomial time quantum algorithm for sampling from the same probability distribution as bosons emerging from a linear interferometer, regardless of distinguishability.
@@ -490,6 +492,8 @@ We have described how to use the Schur transform to perform a quantum simulation
 These results make it clear that ideal $n$ boson, $m$ mode linear interferometry is equivalent to a transversal $n$ qudit quantum circuit, with the constraint that the input must be totally symmetric -- that is, the ordering of the qudits must be erased.
 Moreover, we can introduce nonideal aspects into the quantum simulation by tracing out qudits (loss), or introducing ancillas and entanglement (distinguishability).
 A recently released paper focusing on the issue of loss in more detail makes similar connections~\cite{oszmaniec2018}.
+
+\subsection{Open questions}
 
 A broad aim of future research along this approach is to better understand how the computational complexity of sampling from photons changes as photons become more distinguishable. 
 %As stated in Section \ref{sec:nc-intro}, currently such results are only known for the perfectly distinguishable and indistinguishable cases. 
