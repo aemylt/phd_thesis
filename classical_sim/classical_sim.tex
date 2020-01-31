@@ -233,10 +233,10 @@ p_i = x^i(1-x)^{n-i}.
 %&= (x + 1 - x)^n\\
 %&= 1.
 %\end{align}
-%As the trace is the sum of diagonal elements in the density matrix, we can conclude that all elements along the diagonal of the density matrix are $1/n!$, agreeing with Eq.~(\ref{eq:}).
+%As the trace is the sum of diagonal elements in the density matrix, we can conclude that all elements along the diagonal of the density matrix are $1/n!$, agreeing with Equation (\ref{eq:}).
 %{\blue I now don't think that this really shows anything other than the fact the binomial distribution is 
 
-To see that the matrix elements of Eq.~(\ref{eq:newrho}) with $p_i$ binomially distributed equal those of Eq.~(\ref{eqn:rhoni}), consider  $\sigma,\sigma'$ which differ at points in the set $I$, where $|I|=i$; the coefficient here should be $x^i$.
+To see that the matrix elements of Equation (\ref{eq:newrho}) with $p_i$ binomially distributed equal those of Equation (\ref{eqn:rhoni}), consider  $\sigma,\sigma'$ which differ at points in the set $I$, where $|I|=i$; the coefficient here should be $x^i$.
 Contributing to this element of the density matrix will be the state $\rho_I$, as well as other states $\rho_{I'}$, where $I \subseteq I'$. 
 The number of such sets $I'$ is $\binom{n-i}{i'-i}$, as it is equivalent to choosing $i'$ from $n$ elements when $i$ elements have already been chosen. 
 The corresponding matrix element is
@@ -439,7 +439,8 @@ Note that in the same way that it doesn't matter which particles are traced out 
 Uniform loss matches that of choosing which subset of photons survive according to the binomial distribution \cite{oszmaniec2018,renema2018loss}. 
 We can combine this model with the distinguishability model of Section \ref{sec:expansion}, giving
 \begin{align}
-\rho_{n,\eta,x}&=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\left(\frac{1}{\ell!}\sum_{\substack{\sigma,\sigma'\in\symm_n\\\sigma^{-1}(j)=\sigma'^{-1}(j)\\\forall j \notin I}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\otimes(\ket{0}\bra{0})^{\otimes n-\ell}\\
+\rho_{n,\eta,x}&=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\nonumber\\
+&\times\sum_{\substack{I\subseteq L\\|I|=i}}\left(\frac{1}{\ell!}\sum_{\substack{\sigma,\sigma'\in\symm_n\\\sigma^{-1}(j)=\sigma'^{-1}(j)\\\forall j \notin I}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\otimes(\ket{0}\bra{0})^{\otimes n-\ell}\\
 &=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\rho_{L,I}.
 \end{align}
 
@@ -741,7 +742,8 @@ Finally, we note that the fully distinguishable states can be written as
 The overall state can be expanded as
 
 \begin{align}
-\rho_x &= \frac{1}{6}\left((1+3x^2+2x^3)\ket{\young(123)}\bra{\young(123)} + (1-x^3)\left(\left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\right)\nonumber\\
+\rho_x &= \frac{1}{6}\left((1+3x^2+2x^3)\ket{\young(123)}\bra{\young(123)}\right)\nonumber\\
+&+\frac{1}{6}\left((1-x^3)\left(\left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\right)\nonumber\\
 &+\frac{1}{6}\left((1-x^3)\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right|\right) + (1-3x^2+2x^3)\left|\young(1,2,3)\right\rangle\left\langle\young(1,2,3)\right|\right).
 \end{align}
 

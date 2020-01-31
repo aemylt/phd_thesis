@@ -102,7 +102,7 @@ U^{(n)}_{q_{(n)}, q_{(n)}'} = \frac{\per(U_{S',S})}{\sqrt{\prod_{i=1}^m S'_i! S_
 \end{equation}
 That is, the totally symmetric representation of the unitary group can be constructed from permanents of $U_{S',S}$ matrices~\cite{bhatia1997}.
 
-As for the complexity of this circuit, the mapping from bosons to $q_{(n)}$ states and back can be done in polynomial time and space in terms of $n$~\cite{rowe1999}, Schur-Weyl duality takes polynomial time and space in terms of $d$, $n$ \& $\log(\delta^{-1})$ and the Solovay-Kitaev theorem allows $U$ to be implemented in polynomial time and space. 
+As for the complexity of this circuit, the mapping from bosons to $q_{(n)}$ states and back can be done in polynomial time and space in terms of $n$~\cite{rowe1999}, Schur-Weyl duality takes polynomial time and space in terms of $m$, $n$ \& $\log(1/\epsilon)$ and the Solovay-Kitaev theorem allows $U$ to be implemented in polynomial time and space. 
 From this and the earlier points discussed in this section, we find that Theorem \ref{thm:bs} holds.
 \begin{theorem}
 Algorithm \ref{alg:bs} performs ideal bosonic sampling with approximation $\delta+\epsilon$ in polynomial time and space in terms of $m$, $n$, $\log(\delta^{-1})$ and $\log(\epsilon^{-1})$.
@@ -194,9 +194,9 @@ where $\mathcal{S}_{k,l} = \langle \Phi_{s_k}|\Phi_{s_l}\rangle$ is a Hermitian 
 In order to connect our model with this model of distinguishability, one simply needs to take superpositions of $mn$-mode input occupations $T$ in such a way as to realise the Label states $\Phi_i$.
 This is always possible since the space of internal states, span$\{\Phi_i\}_{i=1}^m$, can always be embedded in the Label space $(\mathbb{C}^n)^{\otimes n}$.
 For example, consider two bosons in two System modes where one boson is in System mode 1 and has internal state $|1\rangle$ (corresponding to Label mode 1), and the other boson is in System mode 2 and has internal state $|\Phi_2\rangle=\alpha|1\rangle+\beta|2\rangle$.
-This is represented as the following superposition of System-Label occupations (recall rows of $T$ correspond to the System and columns to the Label):
+This is represented as the following superposition of System-Label occupations:
 \begin{align}
-\alpha \Ket{\begin{matrix} 1&0\\1&0 \end{matrix}} + \beta \Ket{\begin{matrix} 1&0\\0&1 \end{matrix}} .
+\alpha \Ket{1_R, 0_G, 1_R, 0_G} + \beta \Ket{1_R, 0_G, 0_R, 1_G} .
 \end{align}
 Given a distinguishability matrix $\mathcal{S}_{k,l}$, in this way we can prepare a corresponding superposition of occupations $T$ at step 2 of the algorithm.
 (We can in fact consider more general partially distinguishable situations of bosons with different Label states in the same System mode.)
@@ -223,7 +223,7 @@ When we apply the action of the interferometer $U$ on the $m$-dimensional System
  &= \frac{\sum_{\sigma, \sigma' \in \textrm{S}_n} \prod_{k=1}^n \langle s'_k|U|s_{\sigma^{-1}(k)}\rangle\langle s_{\sigma'^{-1}(k)}|U^\dagger|s'_k\rangle\mathcal{S}_{\sigma'^{-1}(k),\sigma^{-1}(k)}}{n!\prod_{i=1}^m S_i!}\\
  &= \frac{\sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^*_{s'_k,s_{\tau'(k)}} \mathcal{S}_{\tau'(k),\tau(k)}}{n!\prod_{i=1}^m S_i!}.
 \end{align}
-Up to a factor, this is the desired probability distribution of Eq.(\ref{eq:TichyDist}).
+Up to a factor, this is the desired probability distribution of Equation (\ref{eq:TichyDist}).
 As discussed at the end of the last section, this factor could be handled either by applying a second Schur transform on the System and sampling the $q$-register, or by classical post processing.
 
 Counting resources goes much the same as it did in the ideal case, though now we have $mn$-dimensional qudits that are made up of pairs of $m$- and $n$-dimensional qudits.
@@ -242,7 +242,7 @@ For completely indistinguishable bosons, the Label for each is the same (call it
 \begin{equation}
 \frac{1}{\sqrt{n!\prod_{i=1}^m S_{i}!}}\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle|1\rangle^{\otimes n},
 \end{equation}
-It is clear that the Label register is separable from the System register, and tracing out the Label yields the same situation as the ideal case in Eq.(\ref{eq:IdealState}), as it should.
+It is clear that the Label register is separable from the System register, and tracing out the Label yields the same situation as the ideal case in Equation (\ref{eq:IdealState}), as it should.
 
 In the completely distinguishable case, each boson has a different unique Label, correlated to a unique System mode (note $m\geq n$ in this case).
 This implies that the occupation $T$ has a single 1 in each of $n$ rows and columns, and zeros elsewhere.
@@ -302,10 +302,10 @@ The question is then which linear combinations of tensor products of such states
 \begin{align}\label{eq:symSL}
 \ket{\lambda, q_\lambda, {q'}_\lambda}_\mr{SysLab} &=  \sum_{p_\lambda} \ket{\lambda, q_\lambda, p_\lambda}_\mr{Sys} \ket{\lambda, {q'}_\lambda, p_\lambda}_\mr{Lab} .
 \end{align}
-Thus a basis for the totally symmetric irrep of the System-Label Hilbert space consists of states of this form, leading to the decomposition in Eq.(\ref{eq:uudecomp}) and to a Schmidt decomposition of totally symmetric (second quantised) System-Label states.
+Thus a basis for the totally symmetric irrep of the System-Label Hilbert space consists of states of this form, leading to the decomposition in Equation (\ref{eq:uudecomp}) and to a Schmidt decomposition of totally symmetric (second quantised) System-Label states.
 
 Because the Schur transformations on each register are local to the System and Label, entanglement across this bipartition is unchanged.
-For example, the completely distinguishable state that from Eq.(\ref{eq:ComDis}) is seen to have Schmidt rank $n!$ in the computational basis, and therefore must be of the form
+For example, the completely distinguishable state that from Equation (\ref{eq:ComDis}) is seen to have Schmidt rank $n!$ in the computational basis, and therefore must be of the form
 \begin{equation}
 \frac{1}{\sqrt{n!}} \sum_{\lambda \vdash n} \sum_{q_\lambda^\mr{coin}} \sum_{p_\lambda} |\lambda,q_\lambda,p_\lambda\rangle_{\textrm{Sys}}|\lambda,q_\lambda,p_\lambda\rangle_{\textrm{Lab}},
 \label{distinguishable-irreps}
@@ -332,7 +332,7 @@ Of course, this comes at the cost of throwing away a lot of bad samples.
 
 To achieve this postselective filtering, we need to ensure that we only sample the System from the fully symmetric irrep of $\textrm{U}(m)$. 
 This is done by measuring the irrep register $|\lambda\rangle_{\textrm{Sys}}$ and waiting for the outcome $\lambda_{\textrm{Sys}}=(n)$. 
-After postselection, the amplitudes of the System $q$-register $|U\cdot q_{(n)}\rangle$ are given by Equation\ref{eqn:symmetric_action}, which give the same probability distribution as sampling indistinguishable bosons. 
+After postselection, the amplitudes of the System $q$-register $|U\cdot q_{(n)}\rangle$ are given by Equation \ref{eqn:symmetric_action}, which give the same probability distribution as sampling indistinguishable bosons. 
 Following the arguments above, the circuit remains efficient since the added Schur transform can be implemented efficiently. 
 
 More generally, such a postselected quantum circuit could sample from any irrep $\lambda$ of $\textrm{U}(m)$. 
@@ -379,19 +379,19 @@ Choosing the last $k$ qudits, the reduced density matrix for the remaining $n$ p
 \begin{align}
 \rho_n
  &= \frac{1}{(n+k)!\prod_{i=1}^m S^0_i!}\sum_{\sigma,\sigma'\in\textrm{S}_{n+k}}\bigotimes_{l=1}^n|s^0_{\sigma^{-1}(l)}\rangle\langle s^0_{\sigma'^{-1}(l)}|\bigotimes_{l=n+1}^{n+k}\langle s^0_{\sigma'^{-1}(l)}|s^0_{\sigma^{-1}(l)}\rangle\label{eqn:losstrace}\\
- &=\frac{1}{(n+k)!\prod_{i=1}^m S^0_i!}\sum_{\substack{S \subseteq \{s^0_1,\dots,s^0_{n+k}\}\\\bar{S}=\{s^0_1,\dots,s^0_{n+k}\}\setminus{S}\\|S|=n}}\sum_{\sigma \in \textrm{S}_{n}}\sigma|s\rangle\sum_{\sigma' \in \textrm{S}_{n}}\langle s|\sigma'^\dagger\sum_{\tau,\tau'\in\textrm{S}_k}\langle \bar{s}|\tau'^\dagger\tau|\bar{s}\rangle\label{eqn:firstloss}\\
- &=\frac{1}{(n+k)!\prod_{i=1}^m S^0_i!}\sum_{\substack{S \in \Lambda_{m,S^0,n}\\\bar{S}=\{s^0_1,\dots,s^0_{n+k}\}\setminus{S}}}\prod_{i=1}^m\left(\frac{S^0_i!}{S_i!(S_i^0-S_i)!}\right)^2\sum_{\sigma \in \textrm{S}_{n}}\sigma|s\rangle\sum_{\sigma' \in \textrm{S}_{n}}\langle s|\sigma'^\dagger\sum_{\tau,\tau'\in\textrm{S}_k}\langle \bar{s}|\tau'^\dagger\tau|\bar{s}\rangle\label{eqn:secondloss}\\
- &=\frac{k!}{(n+k)!}\sum_{S \in \Lambda_{m,S^0,n}}\frac{\prod_{i=1}^m S^0_i!}{(\prod_{j=1}^m S_j!)^2\prod_{i=1}^m (S^0_i-S_i)!}\sum_{\sigma \in \textrm{S}_{n}}\sigma|s\rangle\sum_{\sigma' \in \textrm{S}_{n}}\langle s|\sigma'^\dagger\label{eqn:thirdloss}\\
- &=\frac{1}{\binom{n+k}{n}}\sum_{S \in \Lambda_{m,S^0,n}}\frac{\prod_{i=1}^m \binom{S_i^0}{S_i}}{n!\prod_{j=1}^m S_j!}\sum_{\sigma \in \textrm{S}_{n}}\sigma|s\rangle\sum_{\sigma' \in \textrm{S}_{n}}\langle s|\sigma'^\dagger , \label{eq:lastloss}
+ &=\frac{1}{(n+k)!\prod_{i=1}^m S^0_i!}\sum_{\substack{S \subseteq \{s^0_1,\dots,s^0_{n+k}\}\\\bar{S}=\{s^0_1,\dots,s^0_{n+k}\}\setminus{S}\\|S|=n}}\sum_{\sigma, \sigma' \in \textrm{S}_{n}}\sigma|s\rangle\langle s|\sigma'^\dagger\sum_{\tau,\tau'\in\textrm{S}_k}\langle \bar{s}|\tau'^\dagger\tau|\bar{s}\rangle\label{eqn:firstloss}\\
+ &=\frac{1}{(n+k)!\prod_{i=1}^m S^0_i!}\sum_{\substack{S \in \Lambda_{m,S^0,n}\\\bar{S}=\{s^0_1,\dots,s^0_{n+k}\}\setminus{S}}}\prod_{i=1}^m\left(\frac{S^0_i!}{S_i!(S_i^0-S_i)!}\right)^2\sum_{\sigma, \sigma' \in \textrm{S}_{n}}\sigma|s\rangle\langle s|\sigma'^\dagger\sum_{\tau,\tau'\in\textrm{S}_k}\langle \bar{s}|\tau'^\dagger\tau|\bar{s}\rangle\label{eqn:secondloss}\\
+ &=\frac{k!}{(n+k)!}\sum_{S \in \Lambda_{m,S^0,n}}\frac{\prod_{i=1}^m S^0_i!}{(\prod_{j=1}^m S_j!)^2\prod_{i=1}^m (S^0_i-S_i)!}\sum_{\sigma, \sigma' \in \textrm{S}_{n}}\sigma|s\rangle\langle s|\sigma'^\dagger\label{eqn:thirdloss}\\
+ &=\frac{1}{\binom{n+k}{n}}\sum_{S \in \Lambda_{m,S^0,n}}\frac{\prod_{i=1}^m \binom{S_i^0}{S_i}}{n!\prod_{j=1}^m S_j!}\sum_{\sigma, \sigma' \in \textrm{S}_{n}}\sigma|s\rangle\langle s|\sigma'^\dagger , \label{eq:lastloss}
 \end{align}
 where now $|s\rangle$ (resp.\ $|\bar{s}\rangle$) is any state consistent with the occupation $S$ (resp.\ $\bar{S}$). 
-In this calculation we first break the qudits into multisets of $S$ and $\bar{S}$ with respective sizes $n$ and $k$, and permute each multiset individually, which is done in Eq.(\ref{eqn:firstloss}). 
+In this calculation we first break the qudits into multisets of $S$ and $\bar{S}$ with respective sizes $n$ and $k$, and permute each multiset individually, which is done in Equation (\ref{eqn:firstloss}). 
 Note that $S \subseteq \{s^0_{1},\dots,s^0_{n+k}\}$ such that $|S|=n$ implies that $S\in\Lambda_{m,S^0,n}$ defined above, so we can sum over $\Lambda_{m,S^0,n}$. 
 However, doing so will ignore duplicates of $S$ we had when considering multisets included in $\{s^0_1,\dots,s^0_{n+k}\}$, which need to be acconted for. 
 The total number of duplicate terms is the number of permutations $\sigma,\sigma'\in\textrm{S}_{n+k}$ for which $|s^0\rangle$ is invariant, of which there are $(\prod_{i=1}^m S^0_i!)^2$. 
 The permutations $\sigma,\sigma'\in\textrm{S}_n$ and $\tau,\tau'\in\textrm{S}_k$ mean that $(\prod_{i=1}^mS_i!(S_i^0-S_i)!)^2$ duplicates are already accounted for. 
-Putting these two points together, we get the factor seen in Eq.(\ref{eqn:secondloss}). 
-Finally in Eq.(\ref{eqn:thirdloss}), we take the inner product, noting that $\sum_{\tau,\tau'\in\textrm{S}_k}\langle \bar{s}|\tau'^\dagger\tau|\bar{s}\rangle = k!\prod_{i=1}^m(S_i^0-S_i)!$.
+Putting these two points together, we get the factor seen in Equation (\ref{eqn:secondloss}). 
+Finally in Equation (\ref{eqn:thirdloss}), we take the inner product, noting that $\sum_{\tau,\tau'\in\textrm{S}_k}\langle \bar{s}|\tau'^\dagger\tau|\bar{s}\rangle = k!\prod_{i=1}^m(S_i^0-S_i)!$.
 
 Applying the unitary transformation $U$ and measuring in the computational basis, we find that the calculation of the probability of measuring a state $|s'\rangle \in (\mathbb{C}^m)^{\otimes n}$ goes through much as in the previous sections.
 Applying the same methods as before, we have
@@ -410,7 +410,7 @@ To find the probability of sampling occupation $S'$, we add together the probabi
 This gives us the desired probability distribution.
 \end{proof}
 
-Combining loss with distinguishability can be simulated by splitting the remaining $n$ qudits in the state given by Eq.(\ref{eq:lastloss}) into System and Label registers, and tracing out the Label.
+Combining loss with distinguishability can be simulated by splitting the remaining $n$ qudits in the state given by Equation (\ref{eq:lastloss}) into System and Label registers, and tracing out the Label.
 This would result in similar averages over the lossless cases described in the sections above.
 
 
@@ -421,7 +421,7 @@ This would result in similar averages over the lossless cases described in the s
 Our model of distinguishability as correlations with the Label register gives an explicit decoherence model for the computation on the System register.
 A natural question is to ask at what point this decoherence renders the quantum computation classically simulateable.
 There is a large amount of literature surrounding classical simulation of mixed state quantum computing~\cite{fujii2014, morimae2014classical, morimae2014hardness}, and the role of entanglement~\cite{harrow2003, virmani2005, buhrman2006, vidal2003, animesh2007}. 
-We've already seen that when the input is completely distinguishable, the output distribution is given by the permanents of positive matrices, Eq.(\ref{eq:DistPer}), which can be approximated in polynomial time~\cite{anari2017}. 
+We've already seen that when the input is completely distinguishable, the output distribution is given by the permanents of positive matrices, Equation (\ref{eq:DistPer}), which can be approximated in polynomial time~\cite{anari2017}. 
 This efficient permanent approximation method can be used with Clifford and Clifford's algorithm~\cite{clifford2017} to produce a polynomial runtime for approximate sampling. 
 Another method for efficiently simulating fully distinguishable photons is to simulate each photon going through the interferometer individually~\cite{aaronson2014,neville2017}. 
 %\FIXME{I think~\cite{anari2017} this is the citation you are referring to but I don't know for sure. Also I would be wary of this argument; while the permanents might be easy to compute, there are at least like $\binom{m}{n}$ possible outcomes of just anti-bunched photons, which would make computing the entire probability distribution and then sampling still computationally hard.~\cite{aaronson2014} or~\cite{neville2017} provide a more concrete argument for why sampling from distinguishable photons is classically easy, by demonstrating that we can simply sample from each photon in turn. Alternatively, you might be able to give an argument combining the permanent of positive matrix approximation algorithm with Clifford and Clifford, to demonstrate an easy to simulate algorithm?}
@@ -440,7 +440,7 @@ Equation~(\ref{eq:ComDis}) tells us that the completely indistinguishable state 
 It is therefore tempting to conclude that there is a measurable set of states near the completely distinguishable state that are separable.
 However, the completely distinguishable state only has support on the coincident subspace, which is not a tensor product, and so these results cannot be applied directly.
 
-We can in fact show that for any $\epsilon>0$ the reduced System state of Eq.(\ref{eq:Werner}) is entangled, in that it fails the partial transpose criterion~\cite{chen2002}.
+We can in fact show that for any $\epsilon>0$ the reduced System state of Equation (\ref{eq:Werner}) is entangled, in that it fails the partial transpose criterion~\cite{chen2002}.
 This is similar to results that show a mixture of the totally antisymmetric state and the projector on the symmetric subspace are entangled for two qudits~\cite{breuer2006}.
 Rewrite $\rho_\epsilon$ in the form
 \begin{align}
@@ -476,7 +476,7 @@ From this we can work out the trace norm as
  &= 1+\epsilon(n-1).
 \end{align}
 Here, the $(1-\epsilon)n!$ and $\epsilon n!$ terms come from the trace of the first two terms. 
-The third term comes from Eq.(\ref{eqn:mismatched-perms}), the trace of which one can think of as the number of ways we can pick permutations $\sigma,\tau\in\textrm{S}_n$ such that $\sigma^{-1}(1)\neq\tau^{-1}(1)$. 
+The third term comes from Equation (\ref{eqn:mismatched-perms}), the trace of which one can think of as the number of ways we can pick permutations $\sigma,\tau\in\textrm{S}_n$ such that $\sigma^{-1}(1)\neq\tau^{-1}(1)$. 
 This can be worked out by choosing any permutation $\sigma \in \textrm{S}_n$, and constructing $\tau$ by first choosing $\tau^{-1}(1)\neq\sigma^{-1}(1)$ and choosing $\tau^{-1}(i)$ for $i>1$ to be a permutation in $\textrm{S}_{n-1}$. 
 Thus the overall number is $(n-1)n!(n-1)!$.
 
