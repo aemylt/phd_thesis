@@ -31,7 +31,41 @@ This is a concept that has gone through a few different names, most notably ``qu
 
 For simplicity, we shall not detail the formal proofs of different quantum advantage problems, and instead note a general structure of the proofs of hardness. These problems are typically described as sampling problems, where the aim is to produce an output from (approximately) the same probability distribution as the quantum computer. For these proofs to work, we require that approximating one of these probabilities is $\sharpp$-Hard. If this is true, then a result of Stockmeyer \cite{stockmeyer1983} shows that classically being able to sample from this exact distribution leads to a algorithm that can approximate these probabilities up to a multiplicative error. This would imply a model of computer which can approximately solve $\sharpp$-Hard problems, which in turn would lead to the collapse of the Polynomial Hierarchy to the third level by Toda's Theorem \cite{toda1991}. This consequence is similar to, though not as strong as, $\p=\np$, and is considered equally unlikely.
 
-This proves that if sampling from the exact distribution can be done classically, then the Polynomial Hierarchy collapses to the third level. However, we often want to go further than this claim, and show that to even sample from a distribution which is approximately equal to the target distribution is hard\footnote{By ``approximately equal'' we mean that the total variation distance between the two distributions can be bounded by some value $\epsilon$.}. To do this, we require two further assumptions, in order to reduce sampling from the target distribution to sampling from the approximate distribution. The first is the distribution must anticoncentrate; this means that the distribution is largely spread out rather than having peaks\footnote{Note however that the distribution cannot be too far spread out, otherwise it becomes close to the uniform distribution which can be sampled classically. Some problems, including Boson Sampling, have been proven to be far from uniform, by the construction of an algorithm for distinguishing the two distributions \cite{aaronson2014}.}. The second is that approximating the probability of a random outcome up to multiplicative error\footnote{Here and throughout, ``multiplicative error'' means that given two values $p, p' \in [0,1]$, $|p'-p|\leq p\epsilon$ for some $\epsilon > 0$. This is different from ``additive error'', where $|p'-p|\leq \epsilon$. Note that multiplicative error immediately implies additive error.} must be hard, not just the worst-case outcome. Using these two assumptions, we can reduce from an exact sampling problem to an approximate one, and then use the argument above to show that even approximately sampling must be hard for the Polynomial Hierarchy to not collapse. Intuitively, these assumptions ensure that a polynomial-time classical simulator cannot simply sample from the peaks of the distribution (by anticoncentration), nor can it just sample from the outcomes whose probabilities are easy to approximate (average-case hardness).
+This proves that if sampling from the exact distribution can be done classically, then the Polynomial Hierarchy collapses to the third level. However, we often want to go further than this claim, and show that to even sample from a distribution which is approximately equal to the target distribution is hard.
+
+Before explaining how to prove the hardness of approximate sampling, it is worth discussing what it means to sample from an approximate distribution in the first place. For this, we use the total variation distance, which is defined between two probability distributions $P$ and $Q$ over a finite set of outcomes $\Omega$ as half the $L_1$ distance:
+
+\begin{equation}
+\Delta(P, Q) \colon= \frac{1}{2}\sum_{\omega \in \Omega}|P(\omega) - Q(\omega)|.
+\end{equation}
+
+Another distance which is also used particularly for quantum states is the trace distance, which is defined between two states $\rho$ and $\sigma$ as
+
+\begin{equation}
+\delta_{\trace}(\rho, \sigma) \colon= \frac{1}{2}\trace\left[\sqrt{(\rho-\sigma)^\dagger(\rho-\sigma)}\right].
+\end{equation}
+
+The trace distance can also be defined as the maximum total variation distance between any two states when a measurement is applied is applied:
+
+\begin{equation}
+\delta_{\trace}(\rho, \sigma) \colon= \max_E\Delta(E(\rho), E(\sigma)),
+\end{equation}
+
+\noindent where $E$ is taken over all positive operator valued measures. As a result, it is often beneficial to use the trace distance as an upper bound for the total variation distance. We can also note that this distance is convex:
+
+\begin{equation}
+\delta_{\trace}(\rho, \sigma + \tau) \leq \delta_{\trace}(\rho, \sigma) + \delta_{\trace}(\rho, \tau).
+\end{equation}
+
+As well as understanding how we measure the distance between two distributions, it is worth discussing the size of the error. Let $p \in [0,1]$ be our target probability for some outcome, and $\tilde{p} \in [0,1]$ be its approximation. For some $\epsilon > 0$, we say that $p$ and $\tilde{p}$ are approximately equal up to additive error $\epsilon$ if $|p-\tilde{p}|\leq \epsilon$, and approximately equal up to multiplicative error $\epsilon$ if $|p-\tilde{p}|\leq p\epsilon$. It is easy to see that multiplicative error immediately implies additive error as well, but additive error does not necessarily imply multiplicative error.
+
+We are now ready to define approximate sampling. We say that a target distribution $P$ can be approximately sampled from efficiently if there is a probability distribution $\tilde{P}$ which can be sampled from in polynomial time and is approximately equal to $P$ in total variation distance up to additive error $\epsilon$ for some $\epsilon > 0$:
+
+\begin{equation}
+\Delta(P, \tilde{P}) \leq \epsilon.
+\end{equation}
+
+To prove that even approximately sampling is hard, we require two further assumptions, in order to reduce sampling from the target distribution to sampling from the approximate distribution. The first is the distribution must anticoncentrate; this means that the distribution is largely spread out rather than having peaks\footnote{Note however that the distribution cannot be too far spread out, otherwise it becomes close to the uniform distribution which can be sampled classically.}. The second is that approximating the probability of a random outcome up to multiplicative error must be hard, not just the worst-case outcome. Using these two assumptions, we can reduce from an exact sampling problem to an approximate one, and then use the argument above to show that even approximately sampling must be hard for the Polynomial Hierarchy to not collapse. Intuitively, these assumptions ensure that a polynomial-time classical simulator cannot simply sample from the peaks of the distribution (by anticoncentration), nor can it just sample from the outcomes whose probabilities are easy to approximate (average-case hardness).
 
 As we shall see in Sections \ref{ssec:qa-examples} and \ref{ssec:cc-bs}, each of the problems have more or less the same argument as that stated above, though what is proven and what remains conjecture tends to vary. It has been proven for some sampling problems that their distributions do anticoncentrate, and it has been proven for some problems that exactly computing the probability of a random outcome is $\sharpp$-hard. What has not currently been proven for any quantum advantage problem is that it is $\sharpp$-hard to approximate the probability of a random outcome, though we have some idea of what techniques will not lead to a successful proof. Aaronson and Chen \cite{aaronson2016chen} proved two details, regarding the use of oracles\footnote{An oracle in complexity theory is a process that an algorithm can query. The overall runtime is the overhead of the algorithm, plus the number of oracle queries multiplied by the oracle's runtime for each query.} in such a proof. The first is that a proof cannot be relative to arbitrary oracles, as there exists an oracle relative to which the complexity classes of classical probabilistic sampling and quantum sampling are equivalent, yet the Polynomial Hierarchy does not collapse. The second is that if the proof is restricted to using an oracle in $P$ with a polynomial advice string that only depends on the size of the input, then in order for the Polynomial Hierarchy to collapse we need to assume that either classical and quantum sampling complexity are not equivalent, in which case an oracle is not necessary, or $\np \nsubseteq \bpp$, where $\bpp$ is the class of what can be solved in polynomial time probabilistically with bounded error. This second assumption is a closely related to a standard assumption in cryptography: That there are functions which are easy to compute but hard to invert, also known as one-way functions.
 
@@ -253,6 +287,7 @@ where $\per$ is the matrix permanent, defined as
 
 \begin{equation}
 \per(M) = \sum_{\sigma\in\symm_n}\prod_{i=0}^nM_{i,\sigma(i)}.
+\label{eqn:permanent}
 \end{equation}
 
 This relationship between linear optics and matrix permanents was originally found by Scheel and Buhmann \cite{scheel2008}, and later proven by Aaronson and Arkhipov using a different approach \cite{aaronson2010report, aaronson2011}.
@@ -819,6 +854,10 @@ We define the immanant of an $n\times n$ matrix $M$ as the polynomial
 \textrm{imm}_\lambda(M) \colon= \sum_{\sigma\in\symm_n}\chi_\lambda(\sigma)\prod_{i=1}^nM_{i,\sigma(i)}.
 \end{equation}
 
-Note that when $\lambda=(n)$, we have $\chi_\lambda(\sigma)=1\forall\sigma\in\symm_n$, which gives the permanent. Similarly for $\lambda=(1^n)$, $\chi_\lambda(\sigma)=\textrm{sgn}(\sigma)\forall\sigma\in\symm_n$, giving the determinant.
+Note that when $\lambda=(n)$, we have $\chi_\lambda(\sigma)=1\forall\sigma\in\symm_n$, which gives the permanent as defined in Equation (\ref{eqn:permanent}). Similarly for $\lambda=(1^n)$, $\chi_\lambda(\sigma)=\textrm{sgn}(\sigma)\forall\sigma\in\symm_n$, giving the determinant:
+
+\begin{equation}
+\textrm{det}(M) \colon= \sum_{\sigma\in\symm_n}\textrm{sgn}(\sigma)\prod_{i=1}^nM_{i,\sigma(i)}.
+\end{equation}
 
 So what is known about the computational complexity of these immanants then? The best-known results are for the permanent and determinant, which are $\sharpp$-Hard and computable in polynomial time, respectively \cite{valiant1979, aaronson2011, fisikopoulos2016}. But other hardness results are also known \cite{hartmann1985, burgisser2000, brylinski2003, mertens2013}. For example, B\"urgisser \cite{burgisser2000immanants} showed that for $w=\poly(n)$, computation of $\textrm{imm}_\lambda$ is $\sharpp$-Hard when $\lambda=(w,1^{n-w})$, known as a hook diagram, or when $\lambda=(w^{n/w})$ if $w|n$, known as a rectangular diagram with $n/w$ rows.

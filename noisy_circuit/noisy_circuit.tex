@@ -442,6 +442,9 @@ However, the completely distinguishable state only has support on the coincident
 
 We can in fact show that for any $\epsilon>0$ the reduced System state of Equation (\ref{eq:Werner}) is entangled, in that it fails the partial transpose criterion~\cite{chen2002}.
 This is similar to results that show a mixture of the totally antisymmetric state and the projector on the symmetric subspace are entangled for two qudits~\cite{breuer2006}.
+
+To demonstrate entanglement, we shall use the generalised partial transpose criterion \cite{chen2002}, which is a method for testing if a mixed state $\rho = \sum_{i,j}\rho_{i,j}\ket{i}\otimes\bra{j}$ is entangled. Define the trace norm of $\rho$ as $\|\rho\| \colon= \trace\sqrt{\rho^\dagger\rho}$. We denote a row transposition as $\rho^{T_{r}} = \sum_{i,j}\rho_{i,j}\bra{i}\otimes\bra{j}$, and a column transposition as $\rho^{T_{c}} = \sum_{i,j}\rho_{i,j}\ket{i}\otimes\ket{j}$. The generalised partial transpose criterion states that $\rho$ is separable if for any transposition $y \subset \{r_A,c_A,\dots,r_Z,c_Z\}$ of rows or columns corresponding to subsystems of $\rho$, $\|\rho^{T_y}\| \leq 1$. In our case, it is sufficient to only transpose the rows and columns corresponding to the first particle.
+
 Rewrite $\rho_\epsilon$ in the form
 \begin{align}
 \rho_\epsilon

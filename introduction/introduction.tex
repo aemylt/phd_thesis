@@ -75,53 +75,11 @@ Some of the contents of this thesis has been published previously, or completed 
 \item Parts of Chapter \ref{chp:preliminary_bs} and the main results of Chapter \ref{chp:classical_sim} is joint work with Ra\'{u}l Garc\'{i}a-Patr\'{o}n, Jelmer J. Renema and Peter S. Turner, and has been published as as ``Classically simulating near-term partially-distinguishable and lossy boson sampling'', \href{https://iopscience.iop.org/article/10.1088/2058-9565/ab5555}{\textit{Quantum Science and Technology} \textbf{5}, 015001 (2020)} [{\tt \href{https://arxiv.org/abs/1907.00022}{arXiv:1907.00022}}], copyright Institute of Physics.
 \end{itemize}
 
-\section{A brief note on notation}
+\section{A brief note on complexity theory}
 \label{sec:notation}
 
-There are various pieces of notation which either fall outside the range of subjects covered in the preliminary material (Chapters \ref{chp:prelim-q-c} and \ref{chp:preliminary_bs}), are used in both Parts \ref{prt:application} and \ref{prt:architecture} of this thesis, or are simply convenient to specify at the start of this thesis along with the List of Abbreviations and Acronyms. We provide such notation and terms here.
+Both Parts \ref{prt:application} and \ref{prt:architecture} make extensive use of concepts from complexity theory. We summarise these concepts below for the benefit of the reader.
 
 Throughout this thesis we will make extensive use of Big-O (and related) notation to simplify the expression of runtimes and only focus on the most significant factors. We will not summarise this notation in detail, and instead point the reader to \cite{clrs} for further information, but we will note here a few variants also used. We shall use $O^*$ to suppress factors which are polynomial in $n$, the input size, as well as $\poly(n)$ to denote terms which are polynomial in $n$ and $\polylog(n)$ for terms which are polynomial in $\log n$.
 
-A variety of complexity classes are discussed in the following chapters. P, NP and NP-Hard will be explained in more detail in Section \ref{sec:p-vs-np}, but informally: P is the class of problems which a classical computer can solve in polynomial time, NP the class of problems which a classical computer can verify a solution for in polynomial time, and NP-Hard the problems which are at least as hard as any problem in NP. We shall also mention BPP, the class of problems which can be solved probabilistically on a classical computer in polynomial time with probability greater than 2/3; BQP, the class of problems which can be solved on a quantum computer with probability greater than 2/3; and $\sharpp$, the class of problems around counting the number of solutions to a problem in NP. Further details on these any many other complexity classes can be found at the Complexity Zoo \cite{complexityzoo}.
-
-We shall use $\unitary(m)$ to denote the Unitary group of degree $m$, which is the group of $m\times m$ unitary matrices, and $\symm_n$ to denote the Symmetric group of degree $n$, which is the group of permutations for $n$ objects. Irreducible representations, or irreps, of these groups over the vector space $(\mathbb{C}^m)^{\otimes n}$ are denoted $\lambda$, with $q_\lambda$ and $p_\lambda$ denoting basis states in these irreps for the Unitary and Symmetric groups, respectively.
-
-For an irreducible representation of the Symmetric group $\lambda$, let $\chi_\lambda$ be the character of $\lambda$. We define the immanant of an $n\times n$ matrix $M$ as the function
-
-\begin{equation}
-\textrm{imm}_\lambda(M) \colon= \sum_{\sigma\in\symm_n}\chi_\lambda(\sigma)\prod_{i=1}^nM_{i,\sigma(i)}.
-\end{equation}
-
-Of particular note is that when $\lambda=(n)$ we have the permanent of $M$
-
-\begin{equation}
-\textrm{per}(M) \colon= \sum_{\sigma\in\symm_n}\prod_{i=1}^nM_{i,\sigma(i)},
-\end{equation}
-
-\noindent and when $\lambda=(1^n)$ we have the determinant
-
-\begin{equation}
-\textrm{det}(M) \colon= \sum_{\sigma\in\symm_n}\textrm{sgn}(\sigma)\prod_{i=1}^nM_{i,\sigma(i)}.
-\end{equation}
-
-The trace distance between two states $\rho$ and $\sigma$ is defined as
-
-\begin{equation}
-\delta_{\trace}(\rho, \sigma) \colon= \frac{1}{2}\trace\left[\sqrt{(\rho-\sigma)^\dagger(\rho-\sigma)}\right].
-\end{equation}
-
-\noindent Note that this is convex:
-
-\begin{equation}
-\delta_{\trace}(\rho, \sigma + \tau) \leq \delta_{\trace}(\rho, \sigma) + \delta_{\trace}(\rho, \tau).
-\end{equation}
-
-\noindent Similarly, the trace norm of a density matrix $\rho$ is defined as $\|\rho\| \colon= \trace\sqrt{\rho^\dagger\rho}$.
-
-The generalised partial transposition criterion from \cite{chen2002} is a method for testing if a mixed state $\rho = \sum_{i,j}\rho_{i,j}\ket{i}\otimes\bra{j}$ is entangled. Denote a row transposition as $\rho^{T_{r}} = \sum_{i,j}\rho_{i,j}\bra{i}\otimes\bra{j}$ and column transposition as $\rho^{T_{c}} = \sum_{i,j}\rho_{i,j}\ket{i}\otimes\ket{j}$. The criterion states that $\rho$ is separable if for any transposition $y \subset \{r_A,c_A,\dots,r_Z,c_Z\}$ of rows or columns corresponding to subsystems of $\rho$, $\|\rho^{T_y}\| \leq 1$. For simplicity, where we use the generalised partial transposition criterion we shall only transpose the rows and columns corresponding to the first particle.
-
-The total variation distances between two probability distributions $P$ and $Q$ can be defined for a finite set of outcomes $\Omega$ as half the $L_1$ distance:
-
-\begin{equation}
-\Delta(P, Q) \colon= \frac{1}{2}\sum_{\omega \in \Omega}|P(\omega) - Q(\omega)|.
-\end{equation}
+We shall also discuss a variety of complexity classes in this thesis. P, NP and NP-Hard will be explained in more detail in Section \ref{sec:p-vs-np}, but informally: P is the class of problems which a classical computer can solve in polynomial time, NP the class of problems which a classical computer can verify a solution for in polynomial time, and NP-Hard the problems which are at least as hard as any problem in NP. We shall also mention BPP, the class of problems which can be solved probabilistically on a classical computer in polynomial time with probability greater than 2/3; BQP, the class of problems which can be solved on a quantum computer with probability greater than 2/3; and $\sharpp$, the class of problems around counting the number of solutions to a problem in NP. Further details on these and many other complexity classes can be found at the Complexity Zoo \cite{complexityzoo}.
