@@ -10,8 +10,6 @@ Renema et al.~\cite{renema2018} demonstrated that Boson Sampling with partially-
 However, the runtime might still not be efficient in practice, as the polynomial can be large. There is also a further disadvantage in that the error bounds are the average case for a random linear optical interferometer, meaning that there could be interferometers for which the algorithm performs significantly worse.
 A significant improvement could be achieved through adapting the method of Clifford \& Clifford to this algorithm, but there are challenges with this approach.
 
-Another motivation for adapting Clifford \& Clifford to photonic imperfection is the task of classically simulating other photonic regimes, such as Gaussian Boson Sampling \cite{hamilton2017}. The probability distribution of Gaussian Boson Sampling is that of $n$ indistinguishable squeezed states at the output of an $m$-mode linear optical interferometer, and depends on the Hafnian of a matrix. Unlike Boson Sampling, there is no known polynomial time classical algorithm for computing the probability of a single outcome from $n$ fully distinguishable squeezed states. On the other hand, it is classically efficient to sample $n$ fully distinguishable squeezed states, via a similar approach to that used for classically sampling distinguishable single photons \cite{aaronson2014}: For each squeezed state, one first samples the number of photons in that squeezed state via the inverse binomial distribution \cite{wu2019}, then each of those photons is sampled through the interferometer individually, as photons that start in the same spatial mode do not interfere with one another and their outcomes can therefore be sampled individually. As a result, adapting the Clifford \& Clifford algorithm to non-ideal Boson Sampling models provides a first step towards being able to classically simulate imperfections in Gaussian Boson Sampling.
-
 Here we consider the cost of classically simulating Boson Sampling when the photons are partially distinguishable or lossy.
 We look at the same model of distinguishability as considered in \cite{renema2018,renema2018loss}, and use techniques for modelling photon distinguishability in first quantization as described in Chapter \ref{chp:noisy_circuit} to show that this is akin to choosing the indistinguishable photons of a Boson Sampling experiment via the binomial distribution. 
 We combine this with the well-studied model of uniform loss, where each photon independently survives with probability $\eta$. Under this model, the probability of how many photons survive overall also follows a binomial distribution. 
@@ -19,23 +17,25 @@ This gives rise to a method which is able to naturally apply the Clifford \& Cli
 Although this approach only offers a polynomial improvement compared to the runtime for ideal Boson Sampling (unlike the exponential improvement shown in \cite{renema2018,renema2018loss}) we use analytical bounds to show that for photon numbers of experimental interest our algorithm can make a significant improvement over alternative approaches.
 
 This chapter is laid out as follows.
-In Section \ref{sec:expansion}, we show what the Renema et al.~\cite{renema2018, renema2018loss} model of distinguishability looks like in first quantization, and provide an alternative classical simulation. 
+We start in Section \ref{sec:what-didnt-work} by discussing some ideas which were previously considered by us but had limitations with their feasibility.
+Our main results start in Section \ref{sec:expansion}, we show what the Renema et al.~\cite{renema2018, renema2018loss} model of distinguishability looks like in first quantization, and provide an alternative classical simulation. 
 In Section \ref{sec:average-case}, we consider average error bounds for a Haar-random unitary interferometer, via the methods explained in Section \ref{sec:renema-review}. 
 In Section \ref{sec:worst-case}, we improve this bound to a worst-case error bound, by computing an upper bound for the trace distance between our approximation and the model. 
 In Section \ref{sec:loss}, we expand these results to consider uniform loss, and show how distinguishability and loss relate to each other. 
 In Section \ref{sec:empirical-errors}, we explore these error bounds for experimentally interesting numbers of photons, and show that there are some cases where our algorithm offers an improvement. 
 Finally, we briefly consider \emph{non}-uniform loss, where loss is a function of the number of optical components, and use the methods of \cite{garciapatron2017, oszmaniec2018} to show that classical simulations with non-uniform loss also become easier when distinguishability is introduced.
-We conclude with some open research questions in Section \ref{sec:conclusion}.
+We conclude with some discussion and analysis of small numbers of photons in Section \ref{sec:small-photon-no}, and some open research questions in Section \ref{sec:conclusion}.
 
 \section{Limitations of other classical simulation algorithms}
+\label{sec:what-didnt-work}
 
-Before disucssing our classical algorithm, we shall look at other classical potential classical simulation algorithms and explain some of their limitations when applied to Boson Sampling under distinguishability. In particular, we shall discuss adapting the methods of \cite{havlicek2018, havlicek2019} and \cite{oszmaniec2018} to Boson Sampling under distinguishability and loss.
+Before disucssing our classical algorithm, we shall look at other classical potential classical simulation algorithms and explain some of their limitations when applied to Boson Sampling under distinguishability. In particular, we shall discuss adapting the methods of \cite{havlicek2018, havlicek2019} and \cite{oszmaniec2018} to Boson Sampling under distinguishability and loss. It is worth noting that these ideas do not contribute to our main results, which begin in Section \ref{sec:expansion}.
 
 \subsection{Classical Tractability}
 
 We shall start by discussing the issue with employing the Classical Tractability method of Van den Nest \cite{vandennest2011}, similarly to the technique used by Havl\'{i}\v{c}ek and Strelchuk \cite{havlicek2018}. There are some promising initial results for using this technique to approximate the transition amplitudes of imperfect Boson Sampling, but it very quickly becomes clear that this is not efficiently possible in general.
 
-Recall from Section \ref{ssec:schur-simulation} that a state is Classically Tractable if we can efficiently approximate its amplitudes and sample from measuring the state in the computational basis up to polynomial multiplicative error \cite{vandennest2011}. It is easy to see in this case that the input state to Boson Sampling in the first quantisation is a CT state, as the only basis states with non-zero amplitude are those which are permutations of $[n]$, and those states have uniform amplitudes. More formally, the amplitude of a state $\ket{a}\in(\mathbb{C}^m)^{\otimes n}$ is
+Recall from Section \ref{ssec:schur-simulation} that a state is Classically Tractable (CT) if we can efficiently approximate its amplitudes and measure the state in the computational basis up to polynomial multiplicative error \cite{vandennest2011}. It is easy to see in this case that the input state to Boson Sampling in first quantisation is a CT state, as the only basis states with non-zero amplitude are those which are permutations of $[n]$, and those states have uniform amplitudes. More formally, the amplitude of a state $\ket{a}\in(\mathbb{C}^m)^{\otimes n}$ is
 
 \begin{equation}
 \psi_a = \begin{cases}1/\sqrt{n!} & \quad \textrm{if } \exists \sigma\in\symm_n \textrm{ s.t. } \sigma(a_i) = i \forall i\in[n]\\0 & \quad{otherwise}\end{cases}.
@@ -49,7 +49,7 @@ In order to approximate the probability of an outcome, the operation we apply to
 
 Each element of this operator can be efficiently approximated as a product of different elements of $U$. However, the matrix is very large, with $m^n$ elements in each row and column. This is especially poor in the case where $m = O(n^2)$, believed to be the regime required for Boson Sampling to provide a quantum advantage.
 
-There are some potentially positive directions in this area. If there are a small number of non-zero elements in each row and column of $U$, then many of the elements in $U^{\otimes n}$ would also be zero, and then the matrix could be interpreted as ECS. This could be true if, for example, the photonic circuit is low depth. Another potential direction is to use this method to simulate Boson Sampling under photon loss, which would reduce the exponent. However, it is unclear how either of these methods would lead to a faster simulation than ones that are already known.
+There are some potentially positive directions here. If there are a small number of non-zero elements in each row and column of $U$, then many of the elements in $U^{\otimes n}$ would also be zero, and then the matrix could be interpreted as ECS. This could be true if, for example, the photonic circuit is low depth. Another potential direction is to use this method to simulate Boson Sampling under photon loss, which would reduce the exponent. However, it is unclear how either of these methods would lead to a faster simulation than ones that are already known.
 
 \subsection{Distance from the fully distinguishable state}
 \label{ssec:fixed-dist-distance}
@@ -95,7 +95,7 @@ As the above matrix is positive semidefinite, we can find its square root as
 \sqrt{(\rho_I - \rho_D)(\rho_I - \rho_D)^\dagger} &= \frac{1}{n!}\left(\left(\frac{n!-2}{n!}\right)\sum_{\sigma,\tau\in\textrm{S}_n}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
 \end{align}
 
-From this we can work out the trace difference between the two states to be
+From this we can work out the trace distance between the two states to be
 
 \begin{align}
 \delta_{\mathrm{tr}}(\rho_I, \rho_D) &= \frac{1}{2\times n!}\left(\left(\frac{n!-2}{n!}\right)n! + n!\right)\\
@@ -118,14 +118,14 @@ Following the same structure as with fully indistinguishable photons, we find th
 Multiplying the matrix by its adjoint gives the positive semidefinite matrix
 
 \begin{align}
-(\rho_{SD} - \rho_D)(\rho_{OBE} - \rho_D)^\dagger &= \frac{1}{(n!)^2}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\left(\sum_{\substack{\tau,\tau'\in\textrm{S}_n\\\tau^{-1}(i)=\tau'^{-1}(i)\\\tau\neq\tau'}}\tau'\ket{s}\bra{s}\tau^\dagger\right)\\
+(\rho_{SD} - \rho_D)(\rho_{SD} - \rho_D)^\dagger &= \frac{1}{(n!)^2}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\left(\sum_{\substack{\tau,\tau'\in\textrm{S}_n\\\tau^{-1}(i)=\tau'^{-1}(i)\\\tau\neq\tau'}}\tau'\ket{s}\bra{s}\tau^\dagger\right)\\
 &= \frac{1}{(n!)^2}\left(((n-1)! - 2)\sum_{\substack{\sigma,\tau\in\textrm{S}_n\\\sigma^{-1}(i)=\tau^{-1}(i)}}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
 \end{align}
 
 We can then work out the square root of this positive semidefinite matrix as the positive matrix
 
 \begin{align}
-\sqrt{(\rho_{OBE} - \rho_D)(\rho_{OBE} - \rho_D)^\dagger} &= \frac{1}{n!}\left(\left(\frac{(n-1)!-2}{(n-1)!}\right)\sum_{\substack{\sigma,\tau\in\textrm{S}_n\\\sigma^{-1}(i)=\tau^{-1}(i)}}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
+\sqrt{(\rho_{SD} - \rho_D)(\rho_{SD} - \rho_D)^\dagger} &= \frac{1}{n!}\left(\left(\frac{(n-1)!-2}{(n-1)!}\right)\sum_{\substack{\sigma,\tau\in\textrm{S}_n\\\sigma^{-1}(i)=\tau^{-1}(i)}}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
 \end{align}
 
 Finally, we work out the trace of this matrix, and find the trace distance to be
@@ -156,7 +156,7 @@ Depending on choice of Schur basis, we can describe the Singly Distinguishable s
 The terms in the singly distinguishable case have amplitudes of $(1/n!)$ in the fully distinguishable case, so these terms will be $1-n - 1/n! = ((n-1)!-1)/n!$ in the difference matrix, with other diagonal terms having $0$ apart from $n!-n$ which appear in $\rho_D$ but not in $\rho_{SD}$, which have value $1/n!$. The trace distance thus ends up being
 
 \begin{align}
-\delta_{\mathrm{tr}}(\rho_{OBE},\rho_{D}) &= \frac{1}{2}\left(\frac{(n-1)!-1}{n!}\times n + \frac{n!-n}{n!}\right)\\
+\delta_{\mathrm{tr}}(\rho_{SD},\rho_{D}) &= \frac{1}{2}\left(\frac{(n-1)!-1}{n!}\times n + \frac{n!-n}{n!}\right)\\
 &= \frac{1}{2}\left(2\times\frac{n!-n}{n!}\right)\\
 &= \frac{n!-n}{n!}\\
 &= 1 - \frac{1}{(n-1)!}.
@@ -166,11 +166,11 @@ Therefore either technique produces the same trace distance.
 
 We can easily generalise the two results above to a case where $k$ photons are fully indistinguishable, and the remaining $n-k$ are fully distinguishable. Now we specify that $\sigma^{-1}(i)=\sigma'^{-1}(i)\forall i \in \bar{K}$, where $\bar{K}$ is the set of $n-k$ distinguishable photons. The only other change is that the $(n-1)!$ terms become $k!$. The final trace distance will be $1-1/k!$. Even more generally, it seems likely that if we have two states with indistinguishable photons defined by set $K$ and $K'$, then the trace distance would equal $|K\cap K'|!/|K\cap K'|!$, though this has not been formally proven.
 
-As can be seen from the above, for $k$ indistinguishable photons and $n-k$ photons which are fully distinguishable from every other photon, we have the trace distance $\delta_{\mathrm{tr}}$ reducing as $1 - 1/k!$.
+As can be seen from the above, for $k$ indistinguishable photons and $n-k$ photons which are fully distinguishable from every other photon, we have the trace distance $\delta_{\mathrm{tr}}$ decreasing as $1 - 1/k!$.
 
 The property which the trace distance is useful for is that it is an upper bound of the total variation distance. According to Oszmaniec and Brod, this is helpful for loss as the trace distance tends to $0$ as more photons are lost. But even when only two photons are indistinguishable, we still have a trace distance of $1/2$, and this error only increases with the number of indistinguishable photons.
 
-We shall conclude this section by considering a somewhat more positing case: the state $\rho_\epsilon$, as described in Equation \ref{eq:Werner} from Section \ref{sec:mixture}:
+We conclude this section by considering a somewhat more positive case: the state $\rho_\epsilon$, as described in Equation \ref{eq:Werner} from Section \ref{sec:mixture}:
 
 \begin{equation}
 \rho_\epsilon = (1-\epsilon)\rho_D + \epsilon\rho_I.
@@ -187,6 +187,14 @@ The trace distance between this state and the fully distinguishable state is
 
 \section{Expanding in terms of states}
 \label{sec:expansion}
+
+We now begin explaining the main results of this chapter, by considering the results of Renema et al.~\cite{renema2018, renema2018loss} in first quantisation. First, recall from Section \ref{sec:renema-review} that the case considered by Renema et al.\ is one where pairs of photons overlap with probability $x$, leading to a distribution where the probability of outcome photon occupation $S'$ is
+
+\begin{equation}
+\prob[S'] = \sum_{j=0}^n\sum_{\sigma^j}x^j\per(M*M^*_{1,\sigma}) , \label{eqn:renema-eqn}
+\end{equation}
+
+\noindent where the sum over $\sigma^j$ means the sum of all permutations with $j$ fixed points, $M$ is a matrix constructed from rows and colums of our interferometer $U\in \unitary(m)$, and $M^*_{1,\sigma}$ is $M$ with columns permuted by $\sigma$. Renema et al.\ approximate this probability as a sum of simpler matrix permanents which can be approximated in polynomial time.
 
 We will now introduce a new expression for partially distinguishable particles. We start by writing the input state of $n$ photons, with pairwise distinguishability parameter $x$ as in the previous section, in first quantization
 \begin{equation}
@@ -546,10 +554,18 @@ There are a number of things we can note from Figure \ref{fig:samek}.
 First is that when $k=n-1$, we can see that both algorithms tend to the same maximum values of distinguishability and loss. 
 In the case of distinguishability, we can easily see why by considering the error bounds of both algorithms. 
 One can see from Equation (\ref{eqn:error-sum}) that state truncation will have a simple error bound in this case of $\epsilon \leq x^n$, meaning that for constant error the largest value of $x$ simulable is $x = \epsilon^{1/n}$. 
-For point truncation, Equations (\ref{eqn:renema-variance}) \& (\ref{eqn:var}) with $k=n-1$ show that the error is similarly bounded as $\epsilon \leq x^n/\sqrt{e}$, leading to a largest value of $x=(\epsilon\sqrt{e})^{1/n}$. 
+For point truncation, recall from Section \ref{sec:renema-review} that the error is bounded as
+
+\begin{align}
+\mean[\Delta P] &\leq \frac{m^n}{n!}\sqrt{\var[\Delta P]}\\
+&\leq \frac{m^n}{n!}\sqrt{\sum_{j=k+1}^nx^{2j}\var[c_j]}\\
+&\leq \frac{1}{\sqrt{e}}\sqrt{\sum_{j=k+1}^nx^{2j}\sum_{l=0}^{n-j}\frac{1}{l!}}\label{eqn:renema-error-exact}.
+\end{align}
+
+Setting $k=n-1$ shows that the error is similarly bounded as $\epsilon \leq x^n/\sqrt{e}$, leading to a largest value of $x=(\epsilon\sqrt{e})^{1/n}$. 
 Thus, although the highest value of $x$ simulable via point truncation is higher than that via state truncation, the difference will decrease in the limit of large $n$. 
 Curiously we see the same effect as well in the case of loss, but now the highest value of $\eta$ simulable via state truncation is higher than that of point truncation. 
-Again, this can be shown to hold theoretically: For state truncation the error scales as $\epsilon \leq \eta^n$ according to Equation (\ref{eqn:lossy-worst}), corresponding to $\eta=\epsilon^{1/n}$; whereas for point truncation we see from Equation (\ref{eqn:renema-variance}) and substituting $x=\sqrt{\eta}$ that the error scales as $\epsilon \leq \eta^{n/2}/\sqrt{e}$, meaning a maximum value of $\eta$ is $\eta=(e\epsilon^2)^{1/n}$. 
+Again, this can be shown to hold theoretically: For state truncation the error scales as $\epsilon \leq \eta^n$ according to Equation (\ref{eqn:lossy-worst}), corresponding to $\eta=\epsilon^{1/n}$; whereas for point truncation we see from Equation (\ref{eqn:renema-error-exact}) and substituting $x=\sqrt{\eta}$ that the error scales as $\epsilon \leq \eta^{n/2}/\sqrt{e}$, meaning a maximum value of $\eta$ is $\eta=(e\epsilon^2)^{1/n}$. 
 In the limit of large $n$ these differences will also tail off.
 
 For $k=n/2$, we see that for both distinguishability and loss point truncation is more powerful than state truncation. 
@@ -639,7 +655,13 @@ s>\frac{\log n-\log 1/x-\log k}{\log1/\tau}.
 This matches results in \cite{garciapatron2017,oszmaniec2018}, showing that boson sampling can be classically simulated if each photon encounters at least a logarithmic number of lossy components. 
 It also shows how distinguishability can affect the simulability of lossy components in Boson Sampling: if our photons are more distinguishable, corresponding to a smaller value of $x$, then we can simulate shallower (i.e.\ less total loss) optical circuits.
 
-\section{Computing the exact trace distance}
+\section{Discussion of cases with a small number of photons}
+\label{sec:small-photon-no}
+
+As part of the above work, we analysed some cases with a small number of photons to see if any interesting properties can be spotted in these simpler cases. We provide details about these cases in this section. First, in Section \ref{ssec:exact-trace-distance}, we use a combination of Mathematica and Matlab to compute the exact values of the trace distance for varying levels of truncation. And second, in Section \ref{ssec:irrep-expansion}, we discuss an alternative expansion, expanding in terms of irreducible representations (irreps) rather than in terms of states. We emphasise to the reader that while these points could make for interesting discussion, the results are less significant than those discussed in earlier sections.
+
+\subsection{Computing the exact trace distance}
+\label{ssec:exact-trace-distance}
 
 \begin{figure}
 \subfloat[\label{fig:2-photon-trace}]{\includegraphics[width=0.45\linewidth]{classical_sim/2_photon_trace}}
@@ -681,7 +703,8 @@ We can see that for high values of $x$ all of these approximations start to fail
 
 It is interesting to note from Figure \ref{fig:exact-trace} that for some values of $x$ there are some values of $k$ where $\tdist(\rho_{n,x},\rho_{\leq k, x}) < \tdist(\rho_{n,x},\rho_{\leq k+1, x})$. This is very surprising; we would expect that the trace distance would decrease for all $x$ as $k$ increases, as this would correspond to more indistinguishable photons. We do not know why this is and leave it as an open question for future research. It is however worth emphasising in these cases that the trace distance is an upper bound, and it might be that in practice interferometers which achieve this perfect maximisation of trace distance do not exist. We again leave this as a direction for future research, but note that this is similar to the question explored by Stanisic and Turner, who looked at this in the fixed distinguishability case \cite{stanisic2018}.
 
-\section{Expanding in terms of representations}
+\subsection{Expanding in terms of representations}
+\label{ssec:irrep-expansion}
 
 Another natural question is if we can instead expand in terms of representations rather than in terms of state. This would provide us with an alternative decomposition where rather than needing to sample which photons are indistinguishable, we would instead be sampling an immanant to compute. It is hard to analytically work out how the different immanants contribute for general $n$, but in this section we will use results noted by Stanisic and Turner \cite{stanisic2018} to show the decompositions for two and three particles, as well as offer some general comments on why this technique might not necessarily provide a better classical simulation but could still be of theoretical interest.
 
@@ -766,7 +789,7 @@ In Figure \ref{fig:irreps} we have plotted the probability of sampling from diff
 
 We now go back to the question at the start of this section, as to whether or not this could lead to another simulation. A potential method of simulation, akin to the point and state truncation methods, would be to truncate which irrep we sample from. In other words, we sample an irrep with at most $n-k$ nonzero rows for some truncation level $k$, and then perform sampling conditioned on that irrep.
 
-There are a few limitations with this approach. The first is that this expansion is nontrivial, and we do not currently have a convenient general form for it, unlike with state truncation where we simply follow the binomial distribution. The second is that, even in the fully distinguishable case, the matrix permanent still plays a role in the distribution, so for any value of $x$ including $x=0$ we are going to have some error if we truncate before the symmetric irrep. And the third is that it is unclear how to classically simulate these irrep states under unitary action; it seems reasonable for them to be related to matrix immanants in some way \`{a} la Tichy and M\o lmer \cite{tichy2017}, but even if so classical algorithms for computing more general immanants are less well-known, though some do exist \cite{hartmann1985, barvinok1990, burgisser2000, mertens2013}. Obviously classical algorithms for the special cases of the permanent and determinant are well-known with exponential \cite{glynn2010} and polynomial \cite{fisikopoulos2016} runtimes, respectively.
+There are a few limitations with this approach. The first is that this expansion is nontrivial, and we do not currently have a convenient general form for it, unlike with state truncation where we simply follow the binomial distribution. The second is that, even in the fully distinguishable case, the matrix permanent still plays a role in the distribution, so for any value of $x$ including $x=0$ we are going to have some error if we truncate before the symmetric irrep. And the third is that it is unclear how to classically simulate these irrep states under unitary action; it seems reasonable for them to be related to matrix immanants in a way similar to Tichy and M\o lmer \cite{tichy2017}, but even if so classical algorithms for computing more general immanants are less well-known, though some do exist \cite{hartmann1985, barvinok1990, burgisser2000, mertens2013}. Obviously classical algorithms for the special cases of the permanent and determinant are well-known with exponential \cite{glynn2010} and polynomial \cite{fisikopoulos2016} runtimes, respectively.
 
 So if this decomposition does not provide us with faster classical algorithms, what might it be useful for? Well, there are some instances of $\lambda$ for which matrix imminants are known to be hard. The best-known of these is the permanent \cite{valiant1979, aaronson2011}, but other forms of immanant such as for hook or rectangular diagrams are also know to be $\sharpp$-hard \cite{burgisser2000immanants}. If one is able to construct a form of distinguishable-photon Boson Sampling such that the probability ends up being largely concentrated in these hard instances, and show that computing the sum of these immanants is at least as hard as computing a single immanant, then this could potentially lead to new proofs of hardness for Boson Sampling under distinguishability. We leave this question as future work.
 
@@ -787,10 +810,10 @@ However, such an adaptation is non-trivial, due to the fact that the term in the
 
 There are other open questions we would like to consider as well. The first would be to reduce the average-case error bounds to be less than our worst-case error bounds. This would most likely involve an alternative to using the triangle inequality. The second would be to find a way of explaining the difference in dependence on $\eta$ and $x$ between point and state truncation, and ideally improving either algorithm in the process.
 
+Finally it would be interesting to extend these results to other photonics-based quantum advantage schemes, such as Gaussian Boson Sampling \cite{hamilton2017}. The probability distribution of Gaussian Boson Sampling is that of $n$ indistinguishable squeezed states at the output of an $m$-mode linear optical interferometer, and depends on the Hafnian of a matrix. Unlike Boson Sampling, there is no known polynomial time classical algorithm for computing the probability of a single outcome from $n$ fully distinguishable squeezed states. On the other hand, it is classically efficient to sample $n$ fully distinguishable squeezed states, via a similar approach to that used for classically sampling distinguishable single photons \cite{aaronson2014}: For each squeezed state, one first samples the number of photons in that squeezed state via the inverse binomial distribution \cite{wu2019}, then each of those photons is sampled through the interferometer individually, as photons that start in the same spatial mode do not interfere with one another and their outcomes can therefore be sampled individually. As a result, adapting the Clifford \& Clifford algorithm to non-ideal Boson Sampling models provides an important step towards being able to classically simulate imperfections in Gaussian Boson Sampling. This, combined with recent classical simulation algorithms for ideal Gaussian Boson Sampling \cite{quesada2019, wu2019}, show strong potential for these results to extent to Gaussian Boson Sampling.
+
 
 \subsection{Note Added}
 
 During this work we were made aware of independent work by V. Shchesnovich, which also shows that the model of distinguishability considered by Renema et al.\ corresponds to that of selecting indistinguishable photons via the binomial distribution \cite{shchesnovich2019}. 
 This is derived using significantly different methods from those used in this manuscript, and does not consider classical simulation of distinguishability via the above method (though this has been anticipated~\cite{shchesnovich2019clifford}).
-
-No underlying data was produced during this study.
