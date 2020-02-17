@@ -142,21 +142,29 @@ An intuitive question to ask at this point is to make sure this distance still a
 The fully distinguishable state in this picture is
 
 \begin{equation}
-\rho_D = \frac{1}{n!} \sum_{\lambda \vdash n} \sum_{q_\lambda^\mathrm{coin}} \sum_{p_\lambda} |\lambda,p_\lambda,q_\lambda\rangle\langle \lambda,p_\lambda,q_\lambda|.
+\rho_D = \frac{1}{n!} \sum_{\lambda \vdash n} \sum_{r_\lambda} \sum_{p_\lambda} |\lambda,p_\lambda,\underline{1}, r_\lambda\rangle\langle \lambda,p_\lambda,\underline{1}, r_\lambda|,
 \end{equation}
 
-Depending on choice of Schur basis, we can describe the Singly Distinguishable state as
+\noindent where we have written our unitary irrep basis state as a coincident occupation number $\underline{1}=(1^n)$ and multiplicity $r_\lambda$. Depending on choice of Schur basis, we can describe the Singly Distinguishable state as
 
 \begin{equation}
-\rho_{SD} = \frac{1}{n}\left(\ket{(n),1,\underline{1},1}\bra{(n),1,\underline{1},1} + \sum_{p}\ket{(n-1,1),p,\underline{1},1}\bra{(n-1,1),p,\underline{1},1}\right),
+\rho_{SD} = \frac{1}{n}\left(\ket{(n),1,\underline{1},1}\bra{(n),1,\underline{1},1} + \sum_{p}\ket{(n-1,1),p,\underline{1},1}\bra{(n-1,1),p,\underline{1},1}\right).
 \end{equation}
 
-\noindent where we have written $q_\lambda$ as an occupation number and multiplicity.
-
-The terms in the singly distinguishable case have amplitudes of $(1/n!)$ in the fully distinguishable case, so these terms will be $1-n - 1/n! = ((n-1)!-1)/n!$ in the difference matrix, with other diagonal terms having $0$ apart from $n!-n$ which appear in $\rho_D$ but not in $\rho_{SD}$, which have value $1/n!$. The trace distance thus ends up being
+The difference between these two states is
 
 \begin{align}
-\delta_{\mathrm{tr}}(\rho_{SD},\rho_{D}) &= \frac{1}{2}\left(\frac{(n-1)!-1}{n!}\times n + \frac{n!-n}{n!}\right)\\
+\rho_{SD}-\rho_D &= \left(\frac{1}{n}-\frac{1}{n!}\right)\left(\ket{(n),1,\underline{1},1}\bra{(n),1,\underline{1},1} + \sum_{p}\ket{(n-1,1),p,\underline{1},1}\bra{(n-1,1),p,\underline{1},1}\right)\nonumber\\
+&+ \frac{1}{n!}\sum_{\substack{\lambda \vdash n\\\ell(\lambda) > 1}} \sum_{r_\lambda>1} \sum_{p_\lambda} |\lambda,p_\lambda,\underline{1},r_\lambda\rangle\langle \lambda,p_\lambda,\underline{1},r_\lambda|\\
+&= \frac{(n-1)!-1}{n!}\left(\ket{(n),1,\underline{1},1}\bra{(n),1,\underline{1},1} + \sum_{p}\ket{(n-1,1),p,\underline{1},1}\bra{(n-1,1),p,\underline{1},1}\right)\nonumber\\
+&+ \frac{1}{n!}\sum_{\substack{\lambda \vdash n\\\ell(\lambda) > 1}} \sum_{r_\lambda>1} \sum_{p_\lambda} |\lambda,p_\lambda,\underline{1},r_\lambda\rangle\langle \lambda,p_\lambda,\underline{1},r_\lambda|.
+\end{align}
+
+This matrix is diagonal and all non-zero elements are positive, meaning that $\sqrt{(\rho_{SD}-\rho_D)^2}=\rho_{SD}-\rho_D$. The trace distance thus ends up being
+
+\begin{align}
+\delta_{\mathrm{tr}}(\rho_{SD},\rho_{D}) &= \frac{1}{2}\trace[\rho_{SD},\rho_{D}]\\
+&= \frac{1}{2}\left(\frac{(n-1)!-1}{n!}\times n + \frac{n!-n}{n!}\right)\\
 &= \frac{1}{2}\left(2\times\frac{n!-n}{n!}\right)\\
 &= \frac{n!-n}{n!}\\
 &= 1 - \frac{1}{(n-1)!}.
