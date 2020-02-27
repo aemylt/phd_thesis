@@ -248,12 +248,12 @@ To solve the TSP, we need to find the shortest Hamiltonian cycle. This can be do
 \sum_{e_{i,j}\in F}c_{ij} \geq \lceil(\ell + u)/2\rceil.
 \end{equation}
 %
-If no cycle is found after running the algorithm again, we set $\ell \leftarrow \lceil(\ell + u)/2\rceil$ and repeat. Otherwise, upon receiving Hamiltonian cycle $\Gamma'$ with total cost $L_{\Gamma'}$, we set $u \leftarrow L_{\Gamma'}$ and repeat. We continue repeating until $\ell$ and $u$ converge, at which point we return the Hamiltonian cycle found by the algorithm. The scenario that will give the longest runtime is when the shortest cycle is found during the first run of the backtracking algorithm: the backtracking algorithm will fail to find a Hamiltonian cycle shorter than $\lceil(\ell + u)/2\rceil$, update $\ell$ and repeat until $\ell$ and $u$ converge. In this case, this algorithm matches a binary search. So the number of repetitions of the backtracking algorithm required to return the shortest Hamiltonian cycle is at most $O(\log L')$, where
+If no cycle is found after running the algorithm again, we set $\ell \leftarrow \lceil(\ell + u)/2\rceil$ and repeat. Otherwise, upon receiving Hamiltonian cycle $\Gamma'$ with total cost $L_{\Gamma'}$, we set $u \leftarrow L_{\Gamma'}$ and repeat. We continue repeating until $\ell$ and $u$ converge, at which point we return the Hamiltonian cycle found by the algorithm. The scenario that will give the longest runtime is when the shortest cycle is found during the first run of the backtracking algorithm: The backtracking algorithm will fail to find a Hamiltonian cycle shorter than $\lceil(\ell + u)/2\rceil$, update $\ell$ and repeat until $\ell$ and $u$ converge. In this case, this algorithm matches a binary search. So the number of repetitions of the backtracking algorithm required to return the shortest Hamiltonian cycle is at most $O(\log L')$, where
 %
 %We can find the shortest Hamiltonian cycle by repeating the algorithm at most $O(\log L')$ times, where
 %
 \begin{align}
-L' = \sum_{i = 1}^{n}\max \{c_{ij} : j \in \{1,\dots,n\} \}
+L' = \sum_{i = 1}^{n}\max \{c_{ij} \colon j \in \{1,\dots,n\} \}
 \label{eqn:l}
 \end{align}
 %

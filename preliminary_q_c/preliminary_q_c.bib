@@ -4,13 +4,14 @@
       month = "September",
       year = "2006",
       url = "https://www.scottaaronson.com/blog/?p=122",
-      note = "\url{https://www.scottaaronson.com/blog/?p=122}, Retrieved 16 September 2019"
+      note = "Retrieved 16 September 2019"
 }
 
 @misc{cmipvsnp,
       author = "Clay Mathematics Institute",
       title = "{P} vs {N}{P} Problem",
-      note = "\url{https://www.claymath.org/millennium-problems/p-vs-np-problem}, Retrieved 17 September 2019"
+      url = "https://www.claymath.org/millennium-problems/p-vs-np-problem",
+      note = "Retrieved 17 September 2019"
 }
 
 @book{garey1979,
@@ -28,7 +29,7 @@
  booktitle = {Proceedings of the Third Annual ACM Symposium on Theory of Computing (STOC 1971)},
  year = {1971},
  location = {Shaker Heights, Ohio, USA},
- pages = {151--158},
+ pages = {151-158},
  numpages = {8},
  url = {http://doi.acm.org/10.1145/800157.805047},
  doi = {10.1145/800157.805047},
@@ -47,31 +48,32 @@ bookTitle="Complexity of Computer Computations: Proceedings of a symposium on th
 year="1972",
 publisher="Springer US",
 address="Boston, MA",
-pages="85--103",
+pages="85-103",
 abstract="A large class of computational problems involve the determination of properties of graphs, digraphs, integers, arrays of integers, finite families of finite sets, boolean formulas and elements of other countable domains. Through simple encodings from such domains into the set of words over a finite alphabet these problems can be converted into language recognition problems, and we can inquire into their computational complexity. It is reasonable to consider such a problem satisfactorily solved when an algorithm for its solution is found which terminates within a number of steps bounded by a polynomial in the length of the input. We show that a large number of classic unsolved problems of covering, matching, packing, routing, assignment and sequencing are equivalent, in the sense that either each of them possesses a polynomial-bounded algorithm or none of them does.",
 isbn="978-1-4684-2001-2",
 doi="10.1007/978-1-4684-2001-2_9",
 url="https://doi.org/10.1007/978-1-4684-2001-2_9"
 }
 
-@INPROCEEDINGS{impagliazzo1999,
-author={R. {Impagliazzo} and R. {Paturi}},
-booktitle={Proceedings of the Fourteenth Annual IEEE Conference on Computational Complexity (Formerly: Structure in Complexity Theory Conference) (Cat.No.99CB36317) (CCC 1999)},
-title={Complexity of k-{SAT}},
-year={1999},
-volume={},
-number={},
-pages={237-240},
-keywords={computational complexity;k-SAT complexity;exponential time;subexponential-time algorithm;NP-complete problem;Polynomials;Educational programs;Algorithm design and analysis;Upper bound},
-doi={10.1109/CCC.1999.766282},
-ISSN={},
-month={May},}
+@article{impagliazzo1999,
+title = "On the Complexity of k-SAT",
+journal = "Journal of Computer and System Sciences",
+volume = "62",
+number = "2",
+pages = "367-375",
+year = "2001",
+issn = "0022-0000",
+doi = "https://doi.org/10.1006/jcss.2000.1727",
+url = "http://www.sciencedirect.com/science/article/pii/S0022000000917276",
+author = "Russell Impagliazzo and Ramamohan Paturi",
+abstract = "The k-SAT problem is to determine if a given k-CNF has a satisfying assignment. It is a celebrated open question as to whether it requires exponential time to solve k-SAT for k⩾3. Here exponential time means 2δn for some δ>0. In this paper, assuming that, for k⩾3, k-SAT requires exponential time complexity, we show that the complexity of k-SAT increases as k increases. More precisely, for k⩾3, define sk=inf{δ:there exists 2δn algorithm for solving k-SAT}. Define ETH (Exponential-Time Hypothesis) for k-SAT as follows: for k⩾3, sk>0. In this paper, we show that sk is increasing infinitely often assuming ETH for k-SAT. Let s∞ be the limit of sk. We will in fact show that sk⩽(1−d/k)s∞ for some constant d>0. We prove this result by bringing together the ideas of critical clauses and the Sparsification Lemma to reduce the satisfiability of a k-CNF to the satisfiability of a disjunction of 2εnk′-CNFs in fewer variables for some k′⩾k and arbitrarily small ε>0. We also show that such a disjunction can be computed in time 2εn for arbitrarily small ε>0."
+}
 
 @article{sohanghpurwala2017,
 title = "Hardware accelerated {SAT} solvers—{A} survey",
 journal = "Journal of Parallel and Distributed Computing",
 volume = "106",
-pages = "170 - 184",
+pages = "170-184",
 year = "2017",
 issn = "0743-7315",
 doi = "https://doi.org/10.1016/j.jpdc.2016.12.014",
@@ -81,14 +83,16 @@ keywords = "SAT, FPGA, Satisfiability, Boolean, Logic, NP complete",
 abstract = "Boolean Satisfiability (SAT) is a problem that holds great importance both theoretically and in practical applications. Although the general SAT problem is NP-complete, advancements in solver algorithms and heuristics have meant that many industrial problems can be quickly and efficiently solved. Much of this progress has been made in the field of sequential SAT solvers; however, there have been significant recent contributions to the field of hardware SAT accelerators. This paper offers a short overview of the current state of SAT solvers in general and surveys recent contributions to hardware accelerated SAT solvers. This paper also aims to analyze the trends, challenges, and open questions facing reconfigurable SAT solvers in an extremely competitive application area."
 }
 
-@proceedings{sat18,
-	title		= "Proceedings of {SAT} {C}ompetition 2018; {S}olver and {B}enchmark {D}escriptions",
-	editor		= "Heule, Marijn J. H. and Järvisalo, Matti Juhani and Suda, Martin",
-	series		= "Department of Computer Science Series of Publications B",
-	organization	= "University of Helsinki, Helsinki Institute for Information Technology",
-	publisher	= "Department of Computer Science, University of Helsinki",
-	year		= "2018",
-	url = "	http://hdl.handle.net/10138/237063"
+@article{sat18,
+title = "{SAT} {C}ompetition 2018",
+journal = "Journal on Satisfiability, Boolean Modeling and Computation",
+volume = "11",
+number="1",
+pages = "133-154",
+year = "2019",
+doi = "10.3233/SAT190120",
+url = "https://content.iospress.com/articles/journal-on-satisfiability-boolean-modeling-and-computation/sat190120",
+author = {Heule, Marijn J. H. and J\"{a}rvisalo, Matti Juhani and Suda, Martin},
 }
 
 @inproceedings{cohen2019,
@@ -98,14 +102,15 @@ abstract = "Boolean Satisfiability (SAT) is a problem that holds great importanc
  year = {2019},
  isbn = {978-1-4503-6705-9},
  location = {Phoenix, AZ, USA},
- pages = {938--942},
+ pages = {938-942},
  numpages = {5},
  url = {http://doi.acm.org/10.1145/3313276.3316303},
  doi = {10.1145/3313276.3316303},
  acmid = {3316303},
  publisher = {ACM},
  address = {New York, NY, USA},
- keywords = {interior point method, linear program, matrix multiplication}
+ keywords = {interior point method, linear program, matrix multiplication},
+ eprint={1810.07896}
 } 
 
 @book{applegate2006,
@@ -120,7 +125,8 @@ abstract = "Boolean Satisfiability (SAT) is a problem that holds great importanc
 @misc{tspuk49687,
       author = "University of Waterloo",
       title = "{UK}49687: {S}hortest possible tour to nearly every pub in the {U}nited {K}ingdom.",
-      note = "\url{http://www.math.uwaterloo.ca/tsp/uk/index.html}, Retrieved 20 September 2019"
+      url = "http://www.math.uwaterloo.ca/tsp/uk/index.html",
+      note = "Retrieved 20 September 2019"
 }
 
 @article{montanaro2016,
@@ -131,7 +137,8 @@ volume = "2",
 issue = "1",
 year = "2016",
 doi = "10.1038/npjqi.2015.23",
-url = "https://doi.org/10.1038/npjqi.2015.23"
+url = "https://doi.org/10.1038/npjqi.2015.23",
+eprint = "1511.04206"
 }
 
 @incollection{brassard2002,
@@ -144,6 +151,7 @@ url = "https://doi.org/10.1038/npjqi.2015.23"
 	volume	= "305",
 	series	= "AMS Contemporary Mathematics",
 	pages	= "53-74",
+	eprint = "quant-ph/0005055"
 }
 
 @misc{ambainis2018,
@@ -174,7 +182,8 @@ url = "https://doi.org/10.1038/npjqi.2015.23"
   month = {Feb},
   publisher = {American Physical Society},
   doi = {10.1103/PhysRevA.61.032303},
-  url = {https://link.aps.org/doi/10.1103/PhysRevA.61.032303}
+  url = {https://link.aps.org/doi/10.1103/PhysRevA.61.032303},
+  eprint = {quant-ph/9806078}
 }
 
 @misc{montanaro2019,
@@ -191,13 +200,14 @@ url = "https://doi.org/10.1038/npjqi.2015.23"
   journal = {Physical Review A},
   volume = {58},
   issue = {2},
-  pages = {915--928},
+  pages = {915-928},
   numpages = {0},
   year = {1998},
   month = {Aug},
   publisher = {American Physical Society},
   doi = {10.1103/PhysRevA.58.915},
-  url = {https://link.aps.org/doi/10.1103/PhysRevA.58.915}
+  url = {https://link.aps.org/doi/10.1103/PhysRevA.58.915},
+  eprint = {quant-ph/9706062}
 }
 
 @inproceedings{childs2003,
@@ -207,7 +217,7 @@ url = "https://doi.org/10.1038/npjqi.2015.23"
  year = {2003},
  isbn = {1-58113-674-9},
  location = {San Diego, CA, USA},
- pages = {59--68},
+ pages = {59-68},
  numpages = {10},
  url = {http://doi.acm.org/10.1145/780542.780552},
  doi = {10.1145/780542.780552},
@@ -215,6 +225,7 @@ url = "https://doi.org/10.1038/npjqi.2015.23"
  publisher = {ACM},
  address = {New York, NY, USA},
  keywords = {quantum algorithms, quantum walks},
+ eprint = {quant-ph/0209131}
 }
 
 @InProceedings{angelsmark2002,
@@ -228,7 +239,7 @@ booktitle="Mathematical Foundations of Computer Science 2002",
 year="2002",
 publisher="Springer Berlin Heidelberg",
 address="Berlin, Heidelberg",
-pages="93--103",
+pages="93-103",
 abstract="We present a quantum algorithm for finite domain constraint solving, where the constraints have arity 2. It is complete and runs in {\%} MathType!MTEF!2!1!+-{\%} feaafiart1ev1aaatCvAUfeBSjuyZL2yd9gzLbvyNv2CaerbuLwBLn{\%} hiov2DGi1BTfMBaeXatLxBI9gBaerbd9wDYLwzYbItLDharqqtubsr{\%} 4rNCHbGeaGqiVu0Je9sqqrpepC0xbbL8F4rqqrFfpeea0xe9Lq-Jc9{\%} vqaqpepm0xbba9pwe9Q8fs0-yqaqpepae9pg0FirpepeKkFr0xfr-x{\%} fr-xb9adbaqaaeGaciGaaiaabeqaamaabaabaaGcbaWexLMBb50ujb{\%} qeguuDJXwAKbacfiGae83ta80aaeWaaeaadaqadaqaamaadmaabaGa{\%} e8hzaqMaai4laGqbaiab+jdaYaGaay5waiaaw2faaaGaayjkaiaawM{\%} caamaaCaaaleqabaGae8NBa4Maai4laiab+jdaYaaaaOGaayjkaiaa{\%} wMcaaaaa!4724!{\$}{\$}O{\backslash}left( {\{}{\backslash}left( {\{}{\backslash}left[ {\{}d/2{\}} {\backslash}right]{\}} {\backslash}right)^{\{}n/2{\}} {\}} {\backslash}right){\$}{\$}time, where d is size of the domain of the variables and n the number of variables. For the case of d = 3 we provide a method to obtain an upper time bound of O(8n/8) ≈ O(1.2968n). Also for d = 5 the upper bound has been improved. Using this method in a slightly different way we can decide 3-colourability in O(1.2185n) time.",
 isbn="978-3-540-45687-2"
 }
@@ -244,7 +255,7 @@ booktitle="LATIN 2008: Theoretical Informatics",
 year="2008",
 publisher="Springer Berlin Heidelberg",
 address="Berlin, Heidelberg",
-pages="784--792",
+pages="784-792",
 abstract="In his seminal paper, Grover points out the prospect of faster solutions for an NP-complete problem like SAT. If there are n variables, then an obvious classical deterministic algorithm checks out all 2ntruth assignments in about 2nsteps, while his quantum search algorithm can find a satisfying truth assignment in about 2n/2 steps.",
 isbn="978-3-540-78773-0"
 }
@@ -261,7 +272,8 @@ isbn="978-3-540-78773-0"
   month = {Feb},
   publisher = {American Physical Society},
   doi = {10.1103/PhysRevA.97.022337},
-  url = {https://link.aps.org/doi/10.1103/PhysRevA.97.022337}
+  url = {https://link.aps.org/doi/10.1103/PhysRevA.97.022337},
+  eprint = {1711.05295}
 }
 
 @article{campbell2019,
@@ -274,7 +286,8 @@ isbn="978-3-540-78773-0"
   month = {Jul},
   publisher = {Quantum},
   doi = {10.22331/q-2019-07-18-167},
-  url = {https://doi.org/10.22331/q-2019-07-18-167}
+  url = {https://doi.org/10.22331/q-2019-07-18-167},
+  eprint = {1810.05582}
 }
 
 @article {farhi2001,
@@ -282,14 +295,14 @@ isbn="978-3-540-78773-0"
 	title = {A {Q}uantum {A}diabatic {E}volution {A}lgorithm {A}pplied to {R}andom {I}nstances of an {NP}-{C}omplete {P}roblem},
 	volume = {292},
 	number = {5516},
-	pages = {472--475},
+	pages = {472-475},
 	year = {2001},
 	doi = {10.1126/science.1057726},
 	publisher = {American Association for the Advancement of Science},
 	abstract = {A quantum system will stay near its instantaneous ground state if the Hamiltonian that governs its evolution varies slowly enough. This quantum adiabatic behavior is the basis of a new class of algorithms for quantum computing. We tested one such algorithm by applying it to randomly generated hard instances of an NP-complete problem. For the small examples that we could simulate, the quantum adiabatic algorithm worked well, providing evidence that quantum computers (if large ones can be built) may be able to outperform ordinary computers on hard sets of instances of NP-complete problems.},
 	issn = {0036-8075},
 	URL = {https://science.sciencemag.org/content/292/5516/472},
-	eprint = {https://science.sciencemag.org/content/292/5516/472.full.pdf},
+	eprint = {quant-ph/0104129},
 	journal = {Science}
 }
 
@@ -299,40 +312,49 @@ isbn="978-3-540-78773-0"
     institution = "Massachusetts Institute of Technology",
     number   = "MIT-CTP-2936",
     year      = "2000",
+    eprint = "quant-ph/0001106"
 }
 
-@techreport{das2008,
+@article{das2008,
   title = {Colloquium: Quantum annealing and analog quantum computation},
   author = {Das, Arnab and Chakrabarti, Bikas K.},
   journal = {Rev. Mod. Phys.},
   volume = {80},
   issue = {3},
-  pages = {1061--1081},
+  pages = {1061-1081},
   numpages = {0},
   year = {2008},
   month = {Sep},
   publisher = {American Physical Society},
   doi = {10.1103/RevModPhys.80.1061},
-  url = {https://link.aps.org/doi/10.1103/RevModPhys.80.1061}
+  url = {https://link.aps.org/doi/10.1103/RevModPhys.80.1061},
+  eprint = {0801.2193}
 }
 
-@techreport{mcgeoch2019,
-    author    = "McGeoch, Catherine C. and Harris, Richard and Reinhardt, Steven P. and Bunyk, Paul",
-    title     = "Practical {A}nnealing-{B}ased {Q}uantum {C}omputing",
-    institution = "D-Wave Systems",
-    year      = "2019",
-}
+@ARTICLE{mcgeoch2019,
+author={C. C. {McGeoch} and R. {Harris} and S. P. {Reinhardt} and P. I. {Bunyk}},
+journal={Computer},
+title={Practical {A}nnealing-{B}ased {Q}uantum {C}omputing},
+year={2019},
+volume={52},
+number={6},
+pages={38-46},
+keywords={quantum computing;simulated annealing;introductory survey;evidence-based predictions;practical annealing-based quantum computing;quantum computers;annealing paradigm;QC space;Qubit;Annealing;Computers;NP-hard problem;Quantum mechanics},
+doi={10.1109/MC.2019.2908836},
+ISSN={1558-0814},
+month={June},}
 
 @techreport{desimone2018,
     author    = "Desimone, Roberto and Warburton, Paul and Fang, Yan-Long and Montanaro, Ashley and Piddock, Stephen and Yarkoni, Sheir and Mason, Andy and White, Cathy and Popa, Tudor",
     title     = "Quantum computing algorithms for optimised planning and scheduling applications ({QCAPS})",
     institution = "Plantagenet Systems, University College London, University of Bristol, D-Wave Systems and BT Research",
     year      = "2018",
-    number = "QCAPS/133087/Final Report/D008/v1.0"
+    number = "QCAPS/133087/Final Report/D008/v1.0",
+    url = "https://everythingquantum.files.wordpress.com/2018/11/d008-final-report-qcaps-project-v1-0.pdf"
 }
 
 @misc{apers2019,
-  author = {Simon Apers and András Gilyén and Stacey Jeffery},
+  author = {Simon Apers and Andr\'{a}s Gily\'{e}n and Stacey Jeffery},
   title = {{A} {U}nified {F}ramework of {Q}uantum {W}alk {S}earch},
   year = {2019},
   eprint = {1912.04233},
@@ -362,7 +384,7 @@ URL = {
     
 },
 eprint = { 
-        https://doi.org/10.1137/S0097539796300933
+        quant-ph/9701001
     
 }
 
@@ -374,12 +396,12 @@ and Impagliazzo, Russell
 and Paturi, Ramamohan",
 editor="Chen, Jianer
 and Fomin, Fedor V.",
-title="The Complexity of Satisfiability of Small Depth Circuits",
+title="The {C}omplexity of {S}atisfiability of {S}mall {D}epth {C}ircuits",
 booktitle="Parameterized and Exact Computation",
 year="2009",
 publisher="Springer Berlin Heidelberg",
 address="Berlin, Heidelberg",
-pages="75--85",
+pages="75-85",
 abstract="Say that an algorithm solving a Boolean satisfiability problem x on n variables is improved if it takes time poly(|x|)2cnfor some constant c{\thinspace}<{\thinspace}1, i.e., if it is exponentially better than a brute force search. We show an improved randomized algorithm for the satisfiability problem for circuits of constant depth d and a linear number of gates cn: for each d and c, the running time is 2(1{\thinspace}−{\thinspace}$\delta$)nwhere the improvement {\$}{\backslash}delta{\backslash}geq 1/O(c^{\{}2^{\{}d-2{\}}-1{\}}{\backslash}lg^{\{}3{\backslash}cdot 2^{\{}d-2{\}}-2{\}}c){\$}, and the constant in the big-Oh depends only on d. The algorithm can be adjusted for use with Grover's algorithm to achieve a run time of {\$}2^{\{}{\backslash}frac{\{}1-{\backslash}delta{\}}{\{}2{\}}n{\}}{\$}on a quantum computer.",
 isbn="978-3-642-11269-0"
 }

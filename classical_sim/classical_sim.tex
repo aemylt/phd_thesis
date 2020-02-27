@@ -24,7 +24,7 @@ In Section \ref{sec:worst-case}, we improve this bound to a worst-case error bou
 In Section \ref{sec:loss}, we expand these results to consider uniform loss, and show how distinguishability and loss relate to each other. 
 In Section \ref{sec:empirical-errors}, we explore these error bounds for experimentally interesting numbers of photons, and show that there are some cases where our algorithm offers an improvement. 
 Finally, we briefly consider \emph{non}-uniform loss, where loss is a function of the number of optical components, and use the methods of \cite{garciapatron2017, oszmaniec2018} to show that classical simulations with non-uniform loss also become easier when distinguishability is introduced.
-We conclude with some discussion and analysis of small numbers of photons in Section \ref{sec:small-photon-no}, and some open research questions in Section \ref{sec:conclusion}.
+We conclude with some possible improvements to the work in Section \ref{sec:small-photon-no}, and some open research questions in Section \ref{sec:conclusion}.
 
 \section{Limitations of other classical simulation algorithms}
 \label{sec:what-didnt-work}
@@ -663,10 +663,10 @@ s>\frac{\log n-\log 1/x-\log k}{\log1/\tau}.
 This matches results in \cite{garciapatron2017,oszmaniec2018}, showing that boson sampling can be classically simulated if each photon encounters at least a logarithmic number of lossy components. 
 It also shows how distinguishability can affect the simulability of lossy components in Boson Sampling: if our photons are more distinguishable, corresponding to a smaller value of $x$, then we can simulate shallower (i.e.\ less total loss) optical circuits.
 
-\section{Discussion of cases with a small number of photons}
+\section{Discussion of possible improvements}
 \label{sec:small-photon-no}
 
-As part of the above work, we analysed some cases with a small number of photons to see if any interesting properties can be spotted in these simpler cases. We provide details about these cases in this section. First, in Section \ref{ssec:exact-trace-distance}, we use a combination of Mathematica and Matlab to compute the exact values of the trace distance for varying levels of truncation. And second, in Section \ref{ssec:irrep-expansion}, we discuss an alternative expansion, expanding in terms of irreducible representations (irreps) rather than in terms of states. We emphasise to the reader that while these points could make for interesting discussion, the results are less significant than those discussed in earlier sections.
+There are several possible ways one might seek to improve this research. In this section we shall give two potential improvements, and discuss their potential. Although we cannot provide full analysis for general $n$, we can look at cases where there are a small number of photons and use this as a springboard for discussing how these improvements might work for general $n$.
 
 \subsection{Computing the exact trace distance}
 \label{ssec:exact-trace-distance}
@@ -701,7 +701,7 @@ Sadly there is not an easy way of calculating the exact trace distance, as we ha
 \hline 4 & $x^2(30+16x-9x^2+9|2-3x^2|)/48$ & $x^2(18+4x-6x^2+3|1-3x^2|+|1-4x+3x^2|)/24$ & $x^2(3+x-x^2)/4$\\\hline
 \end{tabularx}
 \end{center}
-\caption[Exact equations for $\tdist(\rho_{n,x}, \rho{\leq k, x})$ for $k < n, n=2,\dots,4$]{Exact equations for $\tdist(\rho_{n,x}, \rho{\leq k, x})$ for $k < n$ and $n=2,3,4$.}
+\caption[Exact equations for $\tdist(\rho_{n,x}, \rho{\leq k, x})$ for $k < n, n=2,\dots,4$]{Exact equations for $\tdist(\rho_{n,x}, \rho_{\leq k, x})$ for $k < n$ and $n=2,3,4$.}
 \label{tab:exact-trace}
 \end{table}
 
