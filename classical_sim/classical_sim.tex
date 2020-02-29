@@ -229,7 +229,7 @@ where $\rho_I$ is the state where photons in modes $j \in I$ are fully indisting
 Note that unlike Equation (\ref{eqn:rhoni}), where permutations must differ in exactly $i$ points, in Equation (\ref{eqn:state-expansion}) we allow permutations to differ in \emph{at most} $i$ points. 
 This means that elements closer to and along the diagonal of the density matrix are also part of this summation, and this means that each $\sigma,\sigma' \in \symm_n$ term forms a valid density matrix.
 
-Already we can see how a classical simulation might work -- if we are able to sample $p_i$ efficiently, then we can choose $\rho_I$ by selecting $i$ photons uniformly at random to be indistinguishable. 
+Already we can see how a classical simulation might work --- if we are able to sample $p_i$ efficiently, then we can choose $\rho_I$ by selecting $i$ photons uniformly at random to be indistinguishable. 
 These $i$ photons can be classically simulated using Clifford \& Clifford \cite{clifford2017}, while the remaining $n-i$ photons are treated as fully distinguishable photons, each of which can be simulated individually in polynomial time \cite{aaronson2014,neville2017}.
 
 
@@ -807,7 +807,7 @@ So if this decomposition does not provide us with faster classical algorithms, w
 In recent years significant improvements have been made in the ability of classical computers to simulate Boson Sampling under various imperfections. 
 However, while it is of theoretical interest to demonstrate asymptotic improvements in classical simulation, the whole reason for proposals such as Boson Sampling is to offer speedups for near-term devices. 
 Although our algorithm will not scale polynomially as the number of photons increases, we find that a substantial improvement over current classical algorithms can be achieved for the numbers of photons that experimentalists are currently aiming for. 
-In doing so, we have effectively set a benchmark for what is required of a 50-90 photon Boson Sampling device.
+In doing so, we have effectively set a benchmark for what is required of a 50--90 photon Boson Sampling device.
 
 \subsection{Open questions}
 

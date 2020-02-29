@@ -169,7 +169,7 @@ If every $U$-component in a graph $G$ is trivial or a component of a 4-cycle, th
 
 We will not define the subroutines here in any detail; for our purposes, it is sufficient to assume that they all run in polynomial time and space. The circuit procedure for a circuit $\mathcal{C}$ begins by either adding an edge $e \in \mathcal{C}$ to $F$ or deleting it from the graph, then performing some other operations. ``Branching on a circuit $\mathcal{C}$ at edge $e \in \mathcal{C}$'' means generating two new instances from the current instance by applying each of these two variants of the circuit procedure starting with $e$.
 
-The Xiao-Nagamochi algorithm is described in Algorithm \ref{alg:tsp3}, reproduced from~\cite{xiao2016degree3}. Lines 2 and 3 check that the existence of a Hamiltonian cycle is not ruled out, by ensuring that that there are at least two disjoint paths between any pair of vertices and that the graph satisfies the parity condition. Lines 4 and 5 reduce any reducible circuit by initially forcing one edge and then alternately removing and forcing edges. Lines 6 \& 7 remove any parallel edges from the graph, and lines 8 \& 9 remove any circuits of three edges as well as setting up circuits of four edges so that all edges incident to them are forced. Lines 10-12 are the recursive step, branching on a good circuit by either forcing or removing an edge in the circuit and then applying the circuit procedure. The algorithm continues these recursive calls until it either finds a Hamiltonian cycle or $G \setminus F$ is a collection of single vertices and cycles of length $4$, all of which are disjoint from one another, at which point the problem can be solved in polynomial time via lines 14 and 15.
+The Xiao-Nagamochi algorithm is described in Algorithm \ref{alg:tsp3}, reproduced from~\cite{xiao2016degree3}. Lines 2 and 3 check that the existence of a Hamiltonian cycle is not ruled out, by ensuring that that there are at least two disjoint paths between any pair of vertices and that the graph satisfies the parity condition. Lines 4 and 5 reduce any reducible circuit by initially forcing one edge and then alternately removing and forcing edges. Lines 6 \& 7 remove any parallel edges from the graph, and lines 8 \& 9 remove any circuits of three edges as well as setting up circuits of four edges so that all edges incident to them are forced. Lines 10--12 are the recursive step, branching on a good circuit by either forcing or removing an edge in the circuit and then applying the circuit procedure. The algorithm continues these recursive calls until it either finds a Hamiltonian cycle or $G \setminus F$ is a collection of single vertices and cycles of length $4$, all of which are disjoint from one another, at which point the problem can be solved in polynomial time via lines 14 and 15.
 
 \begin{algorithm}
 \Fn{\FnTSPthree{$G$, $F$}}{
@@ -296,7 +296,7 @@ $G' \leftarrow G' - \{e_i\}$\;
 }
 Apply the circuit procedure to the rest of the circuit containing edge $e_i$\;
 }
-Repeat lines 4-12 until no further reductions can be applied\;
+Repeat lines 4--12 until no further reductions can be applied\;
 Return $(G', F')$\;
 }
 \caption{\label{alg:reduction} The reduction function for degree-3 graphs.}
@@ -545,6 +545,8 @@ Runtimes for small instances of $k$ are given in Table \ref{tab:degree-k}, with 
 \end{table}
 
 We will discuss the algorithm of Ge and Dunjko more in Section \ref{sec:error-correction}, but for the meantime note that it has a runtime of at best $O^*(2^{n/4})$, which matches the runtime of D\"{o}rn \cite{dorn2007} given in Section \ref{sec:backtrack-tsp} but is slower than our result.
+
+Another relevant result that came out subsequent to the work published in this chapter is a quantum speedup for branch-and-bound algorithms by Montanaro \cite{montanaro2019}. This algorithm works by applying the quantum backtracking algorithm with a predicate that rejects branches whose cost bound exceeds a cut-off $c$, and then updating $c$ via binary search. As a result, this algorithm can be seen as a generalisation of our algorithms for degree-3 and degree-4 graphs. Montanaro showed that this algorithm runs in $\tilde{O}(\sqrt{T}n^{3/2}\log c)$ time, where $T$ is the size of the tree visited in order to find a minimal solution, $n$ is the number of variables and $c$ is maximal cost of a solution. In particular, Montanaro gave an example problem of searching for the ground state in most instances of the Sherrington-Kirkpatrick spin glass in $O(2^{0.226n})$ time, which is considerably faster than any speedup from Grover search.
 
 \subsection{Open questions}
 
