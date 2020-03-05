@@ -601,18 +601,18 @@ In particular, the runtime of state truncation is only dependent on $k$ and not 
 To understand how the runtimes scale, in Figure \ref{fig:runtime} we plot the runtimes of classically simulating $n$-photon Boson Sampling experiments via the two approaches for fixed values of $\eta$ and $x$. 
 The values of $k$ chosen for each algorithm are the smallest values for an error of at most 10\%. 
 For choosing $\eta$ and $x$, we give two example cases. 
-The first (Figure \ref{fig:runtime}, red), where $\eta=0.755$ and $x=0.975$, is an example of a hypothetical best experiment we could build with current technology, with the most lossless sources (82\%) \cite{slussarenko2017}, interferometers (99\%) \cite{wang2018} and detectors (93\%) \cite{marsili2013}, and the highest level of photon indistinguishability (97.6\%) \cite{he2018}. 
+The first (Figure \ref{fig:runtime}, red), where $\eta=0.755$ and $x=0.982$, is an example of a hypothetical best experiment we could build with current technology, with the most lossless sources (82\%) \cite{slussarenko2017}, interferometers (99\%) \cite{wang2018} and detectors (93\%) \cite{marsili2013}, and the highest level of photon indistinguishability (98\%) \cite{ornelashuerta2020}. 
 The second case (Figure \ref{fig:runtime}, green), where $\eta=x=0.5$, is an example of how the two algorithms perform in what would be considered a poor experiment for both distinguishability and loss. 
 Actual Boson Sampling experiments are likely to fall between these two extremes.
 
 In both cases, state truncation appears to outperform point truncation for near-term photon experiments, with point truncation eventually being able to perform faster for larger values of $n$. 
 When $\eta=x=0.5$, point truncation performs better when $n$ is approximately larger than 230. 
-In the case of $\eta=0.755, x=0.976$, point truncation only performs better when $n$ is approximately larger than $390$ photons. 
+In the case of $\eta=0.755, x=0.982$, point truncation doesn't perform better for any $n < 400$ photons. 
 This gives an idea of the regions in which the polynomial runtime of point truncation can be better or worse than the exponential runtime of state truncation.
 
 It is also worth noting that just because point truncation is faster than state truncation for large enough $n$ does not necessarily mean that either algorithm is efficient in these cases. 
 When $\eta=x=0.5$, point truncation only becomes more efficient at instances where both algorithms already require the order of $10^{22}$ operations. 
-And in the case where $\eta=0.755, x=0.976$, both algorithms have runtimes on the order of $10^{92}$ operations before point truncation outperforms state truncation.
+And in the case where $\eta=0.755, x=0.982$, both algorithms have runtimes of approximately $10^{96}$ operations while still not reaching a sufficiently large $n$ for point truncation to outperform state truncation.
 
 
 \subsection{Comparison at same runtime}
