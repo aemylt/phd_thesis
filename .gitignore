@@ -7,6 +7,7 @@ preliminary_q_c.pdf
 preliminary_bs.pdf
 conclusion.pdf
 introduction.pdf
+__pycache__/
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
