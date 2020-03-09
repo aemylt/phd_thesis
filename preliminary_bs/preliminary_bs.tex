@@ -424,7 +424,7 @@ We shall now discuss two imperfections that are particularly common in Boson Sam
 
 One of the points made when discussing Boson Sampling is that the photons need to be indistinguishable. This means that if we permuted the photons in some way, it would be impossible for someone else to identify which permutation was applied.
 
-A number of internal characteristics about the photons could make them distinguishable. The most visually intuitive one is wavelength: A red photon is definitely distinct from a green photon. But other aspects could also distinguish photons, such as their polarisation, or what time they were generated. The time generation point is particularly important following the discussion in Section \ref{ssec:bs-variants} about the challenges of single photon sources: Not only do all of these single photon sources need to emit a photon, but all of them need to emit photons at the exact same time. We can model distinguishability by introducing additional modes to describe the internal state. Throughout this thesis, we will use spatial or ``system'' modes to describe where a photon is, and internal or ``label'' modes to describe its distinguishable characteristics.
+A number of internal characteristics about the photons could make them distinguishable. The most visually intuitive one is wavelength: A red photon is definitely distinct from a green photon. But other aspects can also distinguish photons, such as their polarisation, or what time they were generated. The time generation point is particularly important following the discussion in Section \ref{ssec:bs-variants} about the challenges of single photon sources: Not only do all of these single photon sources need to emit a photon, but all of them need to emit photons at the exact same time. We can model distinguishability by introducing additional modes to describe the internal state. Throughout this thesis, we will use spatial or ``System'' modes to describe where a photon is, and internal or ``Label'' modes to describe its distinguishable characteristics.
 
 Before we consider Boson Sampling with distinguishability, we will first return to the Hong-Ou-Mandel dip from Section \ref{ssec:example-interferometers} \cite{hong1987}. This time, we will consider one red photon generated in mode $1$, and one photon generated in mode 2 which is red with amplitude $v\in [0,1]$ and green with amplitude $d=\pm\sqrt{1-v^2}$. We can represent this in second quantisation by introducing additional indices to our creation and annihilation operators: $a_{i,R}^\dagger$ and $a_{i,G}^\dagger$ to indicate a red or green photon in mode $i$, respectively. Our input is now
 
@@ -432,7 +432,7 @@ Before we consider Boson Sampling with distinguishability, we will first return 
 a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0_R,0_G,0_R,0_G}.
 \end{equation}
 
-A beam splitter only affects system modes, and is invariant over label modes. After applying the beam splitter our photons are in the state
+A beam splitter only affects System modes, and is invariant over Label modes. After applying the beam splitter our photons are in the state
 
 \begin{align}
 a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0_R,0_G,0_R,0_G} &\rightarrow \frac{1}{2}\left(a_{1,R}^\dagger + ia_{2,R}^\dagger\right)\nonumber\\
@@ -465,13 +465,13 @@ Note that in the final line, the terms $a_{1,R}^\dagger a_{2,G}^\dagger$ and $a_
 
 If we only measure what spatial mode our photons are in and discard the wavelength, we will find that we are in the Fock state $\ket{2,0}$ with probability $v^2/2 + d^2/4$ and likewise for $\ket{0,2}$, but we'll also find ourselves in the state $\ket{1,1}$ with probability $d^2/2$. Noting that $d^2 = 1-v^2$ and that $v=e^{-\Delta\tau}$ for some $\Delta\tau\in \mathbb{R}$ such that $\Delta\tau \geq 0$, it is easy to see that adjusting $\Delta\tau$ determines how likely we are to see coincidences at the output: if $\Delta\tau=0$, meaning that our photons are completely indistinguishable, we don't see any coincidences at all; as $\Delta\tau\rightarrow\pm\infty$, corresponding to completely distinguishable photons, then we see coincidences with probability 1/2. This is where the ``dip'' in Hong-Ou-Mandel Dip comes from: as our photons become more indistinguishable we see a drop in coincidences. This is plotted visually in Figure \ref{fig:hom-plot}. The extent to which we see a dip is known as the visibility of a Hong-Ou-Mandel dip, hence $v$, and is a standard technique when characterising linear optics experiments to determine how distinguishable pairs of photons are. Physically, $\Delta\tau$ corresponds to the difference between our photons, for example if there is a difference in path length between the photon sources and the beamsplitter.
 
-In first quantisation, we can likewise realise this interference by introducing a second register noting what label mode our photons are in. Our state is now
+In first quantisation, we can likewise realise this interference by introducing a second register noting what Label mode our photons are in. Our state is now
 
 \begin{equation}
 \ket{\psi} = \frac{1}{\sqrt{2}}\left(v(\ket{12}+\ket{21})\ket{RR}+d(\ket{12}\ket{RG} + \ket{21}\ket{GR})\right).
 \end{equation}
 
-Our unitary $U$ will act as $U\otimes U$ on the spatial modes and $I\otimes I$ on the label modes. Thus, our state evolves to
+Our unitary $U$ will act as $U\otimes U$ on the spatial modes and $I\otimes I$ on the Label modes. Thus, our state evolves to
 
 \begin{align}
 U^{\otimes 2}\otimes I^{\otimes 2}\ket{\psi} &= \frac{v}{2\sqrt{2}}\left((2i\ket{11}+(1+i^2)\ket{12}+(i^2+1)\ket{21}+2i\ket{22})\ket{RR}\right)\nonumber\\
@@ -509,7 +509,7 @@ Finally, we note there are a number of results that link distinguishability in l
 \subsection{Loss}
 \label{ssec:imperfections-loss}
 
-Now we turn to photon loss, where we know that some photons were generated at the input but not detected at the output. There are a wide variety of reasons for why this might occur, including coupling between optical components, two-photon absorption, Rayleigh scattering and detector inefficiencies. Note that unlike distinguishability, here we will discuss two different ways of modelling photon loss, based on first and second quantisation, respectively.
+Now we turn to photon loss, where we know that some photons were generated at the input but not detected at the output. There are a wide variety of reasons for why loss might occur, including but not limited to coupling between optical components, two-photon absorption, Rayleigh scattering and detector inefficiencies \cite{silverstone2016, rosenfeld2019}. Note that unlike distinguishability, here we will discuss two different ways of modelling photon loss, based on first and second quantisation, respectively.
 
 First, we shall look at the model of photon loss in second quantisation, otherwise known as the ``beam splitter'' model \cite{oszmaniec2018, garciapatron2017, brod2019}. In this model, loss is induced by adding ``lost'' modes $a_{\textrm{L},i}^\dagger$ to our experiment. These additional modes are coupled to spatial modes in our experiment by a single beam splitter with transmission $\sqrt{\eta}$ for some $\eta \in [0,1]$
 
