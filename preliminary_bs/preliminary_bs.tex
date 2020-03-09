@@ -5,7 +5,7 @@ Parts of this chapter are joint work with Peter S. Turner, and published as ``Qu
 
 In the previous part of this thesis we have considered how quantum computers can offer speedups for computationally hard problems, with a particular focus on the NP-Hard Travelling Salesman Problem. But these speedups have focused on asymptotic runtimes, rather than considering how much of a speedup can be achieved in real life. This is particularly crucial when considering the issue of quantum error correction, which is a necessity for these algorithms to work in the real world.
 
-In this part, we shift gears to focusing on an architecture-driven approach. We will focus in particular on Boson Sampling, an example of a near-term quantum architecture which is of interest due to its classical hardness rather than due to any practical applications. In Chapter \ref{chp:noisy_circuit}, we formalise a link between Boson Sampling and the representation theory of the Symmetric and Unitary groups. In doing so, we show that Boson Sampling can be modelled in the first quantisation, or particle-based picture, as sampling from a particular structure of quantum circuit, and how practical issues can be modelled as decoherence in these circuits. Then in Chapter \ref{chp:classical_sim}, we model particular kinds of imperfections in first quantisation, and show how this can lead to simpler classical simulation algorithms which we estimate will perform faster when simulating near-term devices.
+In this part, we shift gears to focus on an architecture-driven approach. We will focus in particular on Boson Sampling, an example of a near-term quantum architecture which is of interest due to its classical hardness rather than due to any practical applications. In Chapter \ref{chp:noisy_circuit}, we formalise a link between Boson Sampling and the representation theory of the Symmetric and Unitary groups. In doing so, we show that Boson Sampling can be modelled in first quantisation, or particle-based picture, as sampling from a particular structure of quantum circuit, and how practical issues can be modelled as decoherence in these circuits. Then in Chapter \ref{chp:classical_sim}, we model particular kinds of imperfections in first quantisation, and show how this can lead to simpler classical simulation algorithms which we estimate will perform faster when simulating near-term devices.
 
 The rest of this chapter is laid out as follows. We start by explaining in Section \ref{sec:error-correction} why this change in directions is necessary, by discussing practical limitations with universal quantum computation, particularly error correction. Next we introduce the topic of Quantum Advantage in Section \ref{sec:quantum-advantage}, where the focus is on non-universal models of quantum computation which seem classically hard to simulate. In Section \ref{sec:lo-bs}, we discuss linear optics and introduce the problem of Boson Sampling, an example of a Quantum Advantage proposal with strong connections to representation theory. This architecture will be the focus of this part. Experimental achievements are given in Section \ref{sec:experimental-achievements}, as well as limitations with larger experiments and how these lead to classical simulations in Sections \ref{sec:lo-imperfections} and \ref{sec:classical-simulations}. We will conclude this chapter summarising some ideas in representation theory, in particular the Quantum Schur Transform, in Section \ref{sec:sw-duality}. Although the switch to representation theory at the end of this chapter might seem at odds with the rest of this chapter, we will show in Chapters \ref{chp:noisy_circuit} and \ref{chp:classical_sim} how these two subjects relate to one another.
 
@@ -18,7 +18,7 @@ The question of whether or not NP-Hard problems can fit this scenario was consid
 
 However, there is also a cost that comes with running these algorithms for the largest problem sizes: how much error correction is required to reliably solve the problem. This was estimated using a gate decomposition of Clifford gates as well as either the single qubit $T$ gate or the three-qubit Toffoli gate as non-Clifford operations which can provide universal quantum computation. The idea is that one can use the surface code to implement any Clifford gates in a fault-tolerant fashion, and then the non-Clifford gates can be implemented by preparing a particular quantum state, called a magic state, and then using that state in the rest of the Clifford operations. This means that the only significant overhead is in the preparation of these magic states, which is done via a purification technique where less ideal magic states are used to construct more ideal states. The qubits required to produce these states are known as the factory qubits.
 
-Unfortunately the result of Campbell, Khurana and Montanaro shows that the number of magic states required in these instances is significant \cite{campbell2019}. For the $10^5$ speedup mentioned earlier, a total of $10^{19}$ Toffoli gates is required, corresponding to $10^{12}$ factory qubits. Similarly for graph colouring, the $10^4$ speedup requires on the order of $10^{20}$ $T$ or Toffoli gates, and $10^{12}$ factory qubits. What is even more concerning is that implementing so many Toffoli or $T$ gates also requires a significant amount of classical processing: Campbell, Khurana and Montanaro showed that the classical processing required to implement $10^{20}$ Toffoli gates was on the order of $10^8$ processor days even for specialised electronics such as application-specific integrated circuits. For a standard CPU, this overhead could be as large as $10^{16}$ processor days. Such a large overhead means that any quantum advantage from these techniques would immediately be lost.
+Unfortunately the result of Campbell, Khurana and Montanaro shows that the number of magic states required in these instances is significant \cite{campbell2019}. For the $10^5$ speedup mentioned earlier, a total of $10^{19}$ Toffoli gates are required, corresponding to $10^{12}$ factory qubits. Similarly for graph colouring, the $10^4$ speedup requires on the order of $10^{20}$ $T$ or Toffoli gates, and $10^{12}$ factory qubits. What is even more concerning is that implementing so many Toffoli or $T$ gates also requires a significant amount of classical processing: Campbell, Khurana and Montanaro showed that the classical processing required to implement $10^{20}$ Toffoli gates was on the order of $10^8$ processor days even for specialised electronics such as application-specific integrated circuits. For a standard CPU, this overhead could be as large as $10^{16}$ processor days. Such a large overhead means that any quantum advantage from these techniques would immediately be lost.
 
 A potential workaround for this is adapting quantum algorithms to near-term architectures. There are a small number of results in this area, particularly when the number of logical qubits required is small. Dunjko, Ge and Cirac \cite{dunjko2018} showed that a polynomial (at most quadratic) speedup for Satisfiability can be shown for a quantum computer of arbitrary size. This was achieved by first using classical backtracking to reduce the Boolean formula to problem instances small enough that they can be run on the quantum computer, and then applying Grover search to obtain a quadratic speedup for these smaller instances. Ge and Dunjko \cite{ge2019} later developed a general framework based on this idea, and showed how it can be applied to find Hamiltonian cycles in bounded-degree graphs, achieving a polynomial speedup over Eppstein's algorithm \cite{eppstein2007}\footnote{It is worth noting that this speedup is not at most a quadratic one over Eppstein's algorithm. This is because the approach of Ge and Dunjko uses Grover search instead of the quantum backtracking algorithms.}. However these algorithms still require logical qubits, and therefore might use a large number of physical qubits to operate in practice.
 
@@ -45,7 +45,7 @@ Another distance which is also used particularly for quantum states is the trace
 \delta_{\trace}(\rho, \sigma) \colon= \frac{1}{2}\trace\left[\sqrt{(\rho-\sigma)^\dagger(\rho-\sigma)}\right].
 \end{equation}
 
-The trace distance can also be defined as the maximum total variation distance between any two states when a measurement is applied is applied:
+The trace distance can also be defined as the maximum total variation distance between any two states when a measurement is applied:
 
 \begin{equation}
 \delta_{\trace}(\rho, \sigma) \colon= \max_E\Delta(E(\rho), E(\sigma)),
@@ -102,17 +102,17 @@ So far in this chapter we have motivated the need for pratical sampling experime
 
 \subsection{Single photons and linear optical components}
 
-Boson Sampling experiments can be developed from the use of single photons, simple linear optical components and single photon detectors. We shall now summarise how such photons and components can be described in both second and first quantisation. For a more thorough understanding of these concepts we direct the interested reader to \cite{fox2006, gerry2012}.
+Boson Sampling experiments can be developed from the use of single photons, simple linear optical components and single photon detectors. We shall now summarise how such experiments can be described in both second and first quantisation. For a more thorough understanding of these concepts we direct the interested reader to \cite{fox2006, gerry2012}.
 
 \subsubsection{Second quantisation}
 
-We shall start with second quantisation, as the more common and natural way of describing bosonic systems. The bosonic Fock space follows a direct sum of symmetric tensors:
+We shall start with second quantisation, as the more common and natural way of describing bosonic systems. The bosonic Fock space is a direct sum of symmetric tensors:
 
 \begin{equation}
 F(H) = \oplus_{n=0}^\infty\textrm{Sym}(H^{\otimes n}),
 \end{equation}
 
-\noindent where $H$ is a Hilbert space, and $\textrm{Sym}$ denotes the symmetric subspace.
+\noindent where $H$ is a Hilbert space, and $\textrm{Sym}$ denotes the symmetric subspace. Note that $H^{\otimes 0}$ is the Hilbert space spanned by the vacuum state $\ket{0}$.
 
 An $m$-mode bosonic Fock state is written as an $m$-dimensional complex vector $\ket{S_1,S_2,\dots,S_m}$, where $S_i$ is the number of photons occupying mode $i$. The number of photons in mode $i$ can be decremented or incremented by annihilation and creation operations $a_i$ and $a_i^\dagger$, respectively:
 
@@ -124,7 +124,7 @@ a_i\ket{S_1,\dots,S_i,\dots,S_m} = \sqrt{S_i}\ket{S_1,\dots,S_i-1,\dots,S_m},
 a_i\ket{S_1,\dots,S_i,\dots,S_m} = \sqrt{S_i+1}\ket{S_1,\dots,S_i+1,\dots,S_m}.
 \end{equation}
 
-We also have the commutation relations $[a_i^\dagger, a_j^\dagger] = [a_i,a_j] = 0$ and $[a_i^\dagger, a_j] = \delta_{ij}$.
+\noindent We also have the commutation relations $[a_i^\dagger, a_j^\dagger] = [a_i,a_j] = 0$ and $[a_i^\dagger, a_j] = \delta_{ij}$.
 
 A particular Fock occupation can therefore be described by creation operators acting on the vacuum state:
 
@@ -138,7 +138,7 @@ A particular Fock occupation can therefore be described by creation operators ac
 \ket{i^j} = \ket{\overbrace{i,i,i,\dots,i}^{j \textrm{ copies}}}.
 \end{equation}
 
-We shall use these creation and annihilation operators to describe how we apply optical components to act on the initial state.
+\noindent We shall use these creation and annihilation operators to describe how we apply optical components to act on the initial state.
 
 There are two basic linear optical components we require to implement Boson Sampling. The first is a phase shifter, which induces a phase on a spatial mode. A phase shifter on mode $j$ induces:
 
@@ -148,7 +148,7 @@ a_j^\dagger \rightarrow e^{i\theta}a_j^\dagger.
 
 Physically, a phase shifter can be implemented as a change of refractive index, which can speed up or slow down the transmission of light.
 
-The second component is a beam splitter. This component acts as a partial mirror between two spatial modes, transmitting some light and reflecting other light. A beam splitter on spatial modes $j$ and $k$ with reflectivity $r, r'$ and transmittance $t, t'$ acts as the following:
+The second component is a beam splitter. This component acts as a partial mirror between two spatial modes, transmitting some light and reflecting the remainder. A beam splitter on spatial modes $j$ and $k$ with reflectivity $r, r'$ and transmittance $t, t'$ acts as the following:
 
 \begin{equation}
 a_j^\dagger \rightarrow ta_j^\dagger + r'a_k^\dagger,
@@ -179,7 +179,7 @@ Equivalently, we can describe these effects in the first quantisation, or partic
 \frac{1}{\sqrt{n!\prod_{i=1}^mS_i!}}\left(\sum_{\sigma\in\symm_n}\sigma\bigotimes_{j=1}^m\ket{j}^{\otimes S_j}\right),
 \end{equation}
 
-\noindent where $\symm_n$ means the Symmetric group, or number of ways of permuting $n$ objects. Linear optical components can now be applied to each particle individually as an $m \times m$ unitary matrix. For example, the action of a $\theta$-phase shifter applied to one mode in a two-mode interferometer can be written as
+\noindent where $\symm_n$ is the Symmetric group, or the group of permutations of $n$ objects. Linear optical components can now be applied to each particle individually as an $m \times m$ unitary matrix. For example, the action of a $\theta$-phase shifter applied to one mode in a two-mode interferometer can be written as
 
 \begin{equation}
 \begin{pmatrix}
@@ -188,7 +188,7 @@ e^{i\theta} & 0\\
 \end{pmatrix}.
 \end{equation}
 
-The action of a beam splitter with reflectivity $r, r'$ and transmittance $t, t'$ can be written as
+\noindent The action of a beam splitter with reflectivity $r, r'$ and transmittance $t, t'$ can be written as
 
 \begin{equation}
 \begin{pmatrix}
@@ -224,7 +224,7 @@ We shall now discuss some example interferometers, and their resulting effects, 
 
 A Mach-Zehnder Interferometer (MZI) is a demonstration of how a single photon can interfere with itself \cite{zehnder1891,mach1892}. This experiment uses a single photon in one of two modes, and consists of a 50-50 beam splitter across both modes, followed by a phase shifter on a single mode, and finally a second 50-50 beam splitter. A diagram of this experiment can be seen in Figure \ref{fig:mzi-plot}.
 
-In second quantisation, we can describe the MZI as follows, labelling our spatial modes 1 and 2. We start with a single photon in mode 1 $\ket{1,0} = a_1^\dagger\ket{0,0}$. After our first beam splitter we have the state $(a_1^\dagger + ia_2^\dagger)\ket{0,0}/\sqrt{2}.$
+In second quantisation, we can describe the MZI as follows, labelling our spatial modes 1 and 2. We start with a single photon in mode 1 $\ket{1,0} = a_1^\dagger\ket{0,0}$. After our first beam splitter we have the state $(a_1^\dagger + ia_2^\dagger)\ket{0,0}/\sqrt{2} = (\ket{1,0}+i\ket{0,1})/\sqrt{2}.$
 
 We next apply a phase shifter to spatial mode 1, giving $(e^{i\theta}a_1^\dagger + ia_2^\dagger)\ket{0,0}/\sqrt{2}$. Finally, we apply our second beam splitter and find that
 
@@ -306,7 +306,7 @@ The evolution of the photonic state induced by a linear optical interferometer i
 Thus single boson states evolve under linear interferometry just as an $m$ dimensional qudit does under a unitary gate $U$ (sometimes called unary encoding).
 This suggests how quantum circuits simulating photonics might be constructed, as we'll see.
 
-The problem known as Boson Sampling is that of sampling from this probability distribution in the case where the input occupation is specified as $|1^n 0^{m - n}\rangle = \prod_{i = 1}^n a_{i}^\dagger|0\rangle$, and $U$ is drawn Haar randomly from U$(m)$ with $m=O(n^2)$\cite{aaronson2010report, aaronson2011}.
+The problem known as Boson Sampling is that of sampling from this probability distribution under certain conditions \cite{aaronson2010report, aaronson2011}. First, the input occupation is specified as $|1^n 0^{m - n}\rangle = \prod_{i = 1}^n a_{i}^\dagger|0\rangle$. Second, the interferometer $U$ is sampled Haar randomly from U$(m)$ with $m=O(n^2)$. And finally, the sampled output is anti-bunched, meaning that there is at most one photon in each spatial mode. Such a photon occupation is also referred to as coincident. Although it looks like this last condition relies on postselection and could therefore be costly in practice, it can be satisfied with high probability if $m=O(n^2)$, due to the Bosonic Birthday Paradox \cite{arkhipov2011}.
 
 It is easy to see that both of the two examples discussed in Section \ref{ssec:example-interferometers} can be described in this picture as well. For the Mach-Zehnder Interferometer, we find that the unitary matrix describing our interferometer is
 
@@ -432,21 +432,21 @@ Before we consider Boson Sampling with distinguishability, we will first return 
 a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0_R,0_G,0_R,0_G}.
 \end{equation}
 
-After applying the beam splitter our photons are in the state
+A beam splitter only affects system modes, and is invariant over label modes. After applying the beam splitter our photons are in the state
 
 \begin{align}
 a_{1,R}^\dagger\left(v a_{2,R}^\dagger + da_{2,G}^\dagger\right)\ket{0_R,0_G,0_R,0_G} &\rightarrow \frac{1}{2}\left(a_{1,R}^\dagger + ia_{2,R}^\dagger\right)\nonumber\\
-&\times\left(v\left(ia_{1,R}^\dagger + a_{2,R}^\dagger\right) + d\left(ia_{1,G}^\dagger + a_{2,G}^\dagger\right)\right)\ket{0_R,0_G,0_R,0_G}\\
+&\quad\times\left(v\left(ia_{1,R}^\dagger + a_{2,R}^\dagger\right) + d\left(ia_{1,G}^\dagger + a_{2,G}^\dagger\right)\right)\ket{0_R,0_G,0_R,0_G}\\
 &= \frac{v}{2}\left(i(a_{1,R}^\dagger)^2 + a_{1,R}^\dagger a_{2,R}^\dagger - a_{2,R}^\dagger a_{1,R}^\dagger+i(a_{2,R}^\dagger)^2\right)\nonumber\\
-&\times\ket{0_R,0_G,0_R,0_G}\nonumber\\
-&+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\nonumber\\
-&\times\ket{0_R,0_G,0_R,0_G}\nonumber\\
+&\quad\times\ket{0_R,0_G,0_R,0_G}\nonumber\\
+&\quad+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\nonumber\\
+&\quad\times\ket{0_R,0_G,0_R,0_G}\nonumber\\
 &= \frac{v}{2}\left(i(a_{1,R}^\dagger)^2 +i(a_{2,R}^\dagger)^2\right)\ket{0_R,0_G,0_R,0_G}\nonumber\\
-&+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\nonumber\\
-&\times\ket{0_R,0_G,0_R,0_G}\nonumber\\
+&\quad+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\nonumber\\
+&\quad\times\ket{0_R,0_G,0_R,0_G}\nonumber\\
 &= \frac{v}{2}\left(i(a_{1,R}^\dagger)^2 +i(a_{2,R}^\dagger)^2\right)\ket{0_R,0_G,0_R,0_G}\nonumber\\
-&+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\nonumber\\
-&\times\ket{0_R,0_G,0_R,0_G}\\.
+&\quad+\frac{d}{2}\left(ia_{1,R}^\dagger a_{1,G}^\dagger + a_{1,R}^\dagger a_{2,G}^\dagger - a_{2,R}^\dagger a_{1,G}^\dagger+ia_{2,R}^\dagger a_{2,G}^\dagger \right)\nonumber\\
+&\quad\times\ket{0_R,0_G,0_R,0_G}\\.
 \end{align}
 
 Note that in the final line, the terms $a_{1,R}^\dagger a_{2,G}^\dagger$ and $a_{2,R}^\dagger a_{1,G}^\dagger$ do not cancel out, due to the different creation operators from the fact that the photons are different colours. We apply our creation operators to reach the final state
@@ -475,10 +475,10 @@ Our unitary $U$ will act as $U\otimes U$ on the spatial modes and $I\otimes I$ o
 
 \begin{align}
 U^{\otimes 2}\otimes I^{\otimes 2}\ket{\psi} &= \frac{v}{2\sqrt{2}}\left((2i\ket{11}+(1+i^2)\ket{12}+(i^2+1)\ket{21}+2i\ket{22})\ket{RR}\right)\nonumber\\
-&+\frac{d}{2\sqrt{2}}\left(i\ket{11}(\ket{RG}+\ket{GR})+i\ket{22}(\ket{RG}+\ket{GR})\right)\nonumber\\
-&+\frac{d}{2\sqrt{2}}\left(\ket{12}(\ket{RG}-\ket{GR})+\ket{21}(\ket{GR}-\ket{RG})\right)\\
+&\quad+\frac{d}{2\sqrt{2}}\left(i\ket{11}(\ket{RG}+\ket{GR})+i\ket{22}(\ket{RG}+\ket{GR})\right)\nonumber\\
+&\quad+\frac{d}{2\sqrt{2}}\left(\ket{12}(\ket{RG}-\ket{GR})+\ket{21}(\ket{GR}-\ket{RG})\right)\\
 &= \frac{iv}{\sqrt{2}}\left((\ket{11}+\ket{22})\ket{RR}\right)\nonumber\\
-&+\frac{d}{2\sqrt{2}}\left(i(\ket{11}+\ket{22})(\ket{RG}+\ket{GR})+(\ket{12}-\ket{21})(\ket{RG}-\ket{GR})\right).
+&\quad+\frac{d}{2\sqrt{2}}\left(i(\ket{11}+\ket{22})(\ket{RG}+\ket{GR})+(\ket{12}-\ket{21})(\ket{RG}-\ket{GR})\right).
 \end{align}
 
 Again, we see that coincidences occur with probability $d^2/2$, matching the first quantisation result.
@@ -509,9 +509,34 @@ Finally, we note there are a number of results that link distinguishability in l
 \subsection{Loss}
 \label{ssec:imperfections-loss}
 
-We now turn to photon loss, where we know that some photons were generated at the input but not detected at the output. There are a wide variety of reasons for why this might occur, including coupling between optical components, two-photon absorption, Rayleigh scattering and detector inefficiencies.
+Now we turn to photon loss, where we know that some photons were generated at the input but not detected at the output. There are a wide variety of reasons for why this might occur, including coupling between optical components, two-photon absorption, Rayleigh scattering and detector inefficiencies. Note that unlike distinguishability, here we will discuss two different ways of modelling photon loss, based on first and second quantisation, respectively.
 
-Consider a Boson Sampling experiment which starts with $n$ photons, of which only $k$ are detected. Crucially, not only does loss reduce the number of photons, but also we do not know which of the photons have been lost. This leads to the probability distribution forming a convex sum over different subsets of input photons
+First, we shall look at the model of photon loss in second quantisation, otherwise known as the ``beam splitter'' model \cite{oszmaniec2018, garciapatron2017, brod2019}. In this model, loss is induced by adding ``lost'' modes $a_{\textrm{L},i}^\dagger$ to our experiment. These additional modes are coupled to spatial modes in our experiment by a single beam splitter with transmission $\sqrt{\eta}$ for some $\eta \in [0,1]$
+
+\begin{equation}
+a_1^\dagger \rightarrow \sqrt{\eta} a_1^\dagger + \sqrt{1-\eta}a_{\textrm{L}, i}^\dagger
+\end{equation}
+
+\noindent such that a photon which starts in this spatial mode ends up in our lost mode with probability $1 - \eta$. The fact that only a single beam splitter couples this additional mode to a spatial mode in our experiment is required to ensure that any photons which are lost do not reappear later in the experiment. Finally, these additional spatial modes are traced out to induce the photon loss
+
+\begin{align}
+\trace_{\textrm{L}}[a_1^\dagger\ket{0,0_{\textrm{L}}}] &\rightarrow \trace_{\textrm{L}}[(\sqrt{\eta}a_1^\dagger + \sqrt{1-\eta}a_{\textrm{L}}^\dagger)\ket{0,0_{\textrm{L}}}]\\
+&= \trace_{\textrm{L}}[\sqrt{\eta}a_1^\dagger\ket{0,0_{\textrm{L}}} + \sqrt{1-\eta}a_{\textrm{L}}^\dagger\ket{0,0_{\textrm{L}}}]\\
+&= \trace_{\textrm{L}}[\sqrt{\eta}\ket{1,0_{\textrm{L}}} + \sqrt{1-\eta}\ket{0,1_{\textrm{L}}}]\\
+&= \eta\ket{1}\bra{1} + (1-\eta)\ket{0}\bra{0}.
+\end{align}
+
+At first glance, it might seem like this model of loss might require an arbitrarily large number of additional spatial modes, due to the requirement that each loss-inducing beam splitter couples to an additional spatial mode. However, note that if we have two loss-inducing beam splitters in sequence with survival probabilities $\eta_1$ and $\eta_2$, respectively, then this is equivalent to a singe loss-inducing beam splitter with overall survival probability $\eta_1\eta_2$. This reduces the number of additional modes required to a number polynomial in terms of how many optical components are in our experiment. As shown in Section \ref{ssec:universal-lo}, this number is polynomial in $m$ and $n$. It is in fact possible to reduce this number of additional modes even further, in cases where the loss-inducing components can commute with the optical components in an experiment. As we will see in Section \ref{ssec:simulating-lossy-bs}, this is often used to approximate a lossy linear optical interferometer as a single layer of loss followed by a less lossy interferometer.
+
+We now move to the model of photon loss in first quantisation. Note that the beam splitter model considered above is inconvenient in first quantisation due to the fact that it is tracing out spatial modes, which is not easily done in first quantisation. Likewise, this next model, which can be seen as tracing out particles, is inconvenient in second quantisation.
+
+Consider a Boson Sampling experiment which starts with $n$ photons, of which only $k$ are detected. Crucially, not only does loss reduce the number of photons, but also we do not know which of the photons have been lost. In first quantisation, this is equivalent to performing Boson Sampling with input given by the mixed state
+
+\begin{equation}
+\rho = \sum_{\substack{K \subseteq S\\|K| = k}}p_{K}\rho_K,
+\end{equation}
+
+\noindent where $\rho_K$ describes a photonic input state with $k$ photons whose spatial modes are specified by $K$. When this loss is uniform, meaning that $p_K=1/\binom{n}{k}\forall K$, this is equivalent to tracing out $n-k$ particles \cite{oszmaniec2018}. This leads to the probability distribution forming a convex sum over different subsets of input photons
 
 \begin{equation}
 \prob[K'] = \sum_{\substack{K \subseteq S\\|K| = k}}p_{K}|\per(U_{K',K})|^2,
@@ -519,7 +544,7 @@ Consider a Boson Sampling experiment which starts with $n$ photons, of which onl
 
 \noindent where $p_K$ is the probability of the photons which started in input modes $K$ surviving, with $\sum_Kp_K = 1$.
 
-One known complexity result is by Aaronson and Brod \cite{aaronson2016}, who considered Boson Sampling with uniform loss, meaning that $p_K=1/\binom{n}{k}\forall K$. Aaronson and Brod showed that in this model, Boson Sampling remains classically hard if $k=n-\ell$ for some constant $\ell$. This was proven by showing that if someone could estimate a convex sum of squared permanents of submatrices of an $(n)\times(n)$ matrix, then one can estimate the squared permanent of an $(n-\ell)\times(n-\ell)$ matrix with bounded probability. However, this only works if a constant number of photons are lost, regardless of how large $n$ is. No hardness proofs exist even for the case of a constant fraction of photons being lost.
+One known complexity result is by Aaronson and Brod \cite{aaronson2016}, who considered Boson Sampling with uniform loss. Aaronson and Brod showed that in this model, Boson Sampling remains classically hard if $k=n-\ell$ for some constant $\ell$. This was proven by showing that if someone could estimate a convex sum of squared permanents of submatrices of an $(n)\times(n)$ matrix, then one can estimate the squared permanent of an $(n-\ell)\times(n-\ell)$ matrix with bounded probability. However, this only works if a constant number of photons are lost, regardless of how large $n$ is. No hardness proofs exist even for the case of a constant fraction of photons being lost.
 
 Another workaround for loss was suggested by Latmiral, Spagnolo and Sciarrino \cite{latmiral2016}. This proposal considers Scattershot Boson Sampling under photon loss. This is a sensible proposal, as the point of Scattershot Boson Sampling is to use a large number of photon sources to produce a small number of photons at the output. However, one weakness is that there is now a chance of a photon not being heralded, as the photon measured to detect its presence might be lost. Latmiral, Spagnolo and Sciarrino propose working around this by placing a shutter on each input mode, such that only heralded photons can enter the interferometer. From analysis of the distribution under this new architecture, Latmiral, Spagnolo and Sciarrino gave bounds for how long it would take to simulate lossy Scattershot Boson Sampling, tough it is important to note that the classical algorithm used was to compute the probability of every single outcome and then sample over the full probability distribution. For this na\"ive sampling strategy, Latmiral, Spagnolo and Sciarrino showed that as few as 7 photons across 50 modes would be sufficient for a quantum advantage, but there are far more efficient classical algorithms as we will see in Section \ref{sec:classical-simulations}.
 
@@ -549,7 +574,7 @@ Dark counts themselves are not much of a challenge in Boson Sampling experiments
 
 \subsubsection{Gaussian noise}
 
-The Gaussian noise model was proposed as a way of considering errors in Boson Sampling by Kalai and Kindler \cite{kalai2014}. Under Kalai and Kindler, Boson Sampling experiences a model of noise where the probability is still related to the permanent of a matrix, but now  the matrix in question is $\sqrt{1-\epsilon}U_{S',S}+\sqrt{\epsilon}X$ for some Gaussian matrix $X$ that acts as our noise. Kalai and Kindler suggest that for $\epsilon=\omega(1/n)$, vanilla Boson Sampling and Boson Sampling under Gaussian noise are already uncorrelated, and furthermore for $\epsilon = \Omega(1)$, that the probability of an outcome of Boson Sampling under Gaussian noise can be approximated by up to constant error.
+A Gaussian noise model was proposed as a way of considering errors in Boson Sampling by Kalai and Kindler \cite{kalai2014}. In this model, the probability of an outcome $S'$ is still related to the permanent of a matrix, but now  the matrix in question is $\sqrt{1-\epsilon}U_{S',S}+\sqrt{\epsilon}X$ for some Gaussian matrix $X$ that acts as our noise. Kalai and Kindler suggest that for $\epsilon=\omega(1/n)$, vanilla Boson Sampling and Boson Sampling under Gaussian noise are already uncorrelated, and furthermore for $\epsilon = \Omega(1)$, that the probability of an outcome of Boson Sampling under Gaussian noise can be approximated by up to constant error.
 
 \section{Classical Simulation Algorithms}
 \label{sec:classical-simulations}
@@ -574,6 +599,7 @@ This is through a combination of optimizations, particularly computing marginal 
 In the case where the $n$ input photons are fully distinguishable, a simple polynomial time algorithm exists \cite{aaronson2014}. In this case, there is no photon interference, so photons can be sampled individually. This is done by taking a photon which starts in mode $i$, and sampling output mode $j$ with probability $|U_{j,i}|^2$. Repeating for all photons gives us the complete sample in $O(mn)$ time.
 
 \subsection{Simulation algorithms for Boson Sampling with loss}
+\label{ssec:simulating-lossy-bs}
 
 Another common source of imperfections in linear optics is that of photon loss, which arises through a number of different means. 
 Indeed, any large-scale demonstration of Boson Sampling is bound to face photon loss, and therefore needs to take such issues into account. 
@@ -584,7 +610,7 @@ Neville et al.\ compared the classical simulation of their approach to a Boson S
 There has also been some consideration of how classical simulations can be generalised to non-uniform loss. 
 This usually means photon loss that is dependent on the number of optical components, with each component having transmission probability $\tau$. 
 Classical simulation methods can be generalised to this model by identifying a layer of uniform losses from the circuit, followed a non-uniform lossy circuit which can be simulated classically through the use of additional modes for lost photons \cite{garciapatron2017,oszmaniec2018}. 
-These results showed that Boson Sampling under non-uniform loss can be classically simulated as long as the smallest number of components a photon encounters is logarithmic in $n$. More recently, methods were also developed to give a polynomial-time algorithm in the case where some photons experience little or no loss, by extracting losses into a layer of non-uniform loss and simulating via a generalisation of the Clifford \& Clifford algorithm \cite{brod2019}.
+These results showed that Boson Sampling under non-uniform loss can be classically simulated as long as every photon encounters at least $O(\log n)$ components. More recently, Brod and Oszmaniec developed on these methods to give a polynomial-time algorithm in the case where some photons experience little or no loss while others experience significant amounts of loss, by extracting losses into a layer of non-uniform loss and simulating via a generalisation of the Clifford \& Clifford algorithm \cite{brod2019}.
 
 \subsection{Simulation under multiple imperfections}
 \label{sec:renema-review}
@@ -670,9 +696,9 @@ This in turn leads to negative probabilities, which are not clear how to correct
 \section{The Schur-Weyl Duality}
 \label{sec:sw-duality}
 
-We'll now turn to Schur-Weyl duality, a theorem related to the irreducible representations of the symmetric and unitary groups. Although this seems like a sudden jump in subject, we emphasise to the reader that the connection between linear optics and Boson Sampling as described earlier in this chapter and Schur-Weyl duality will be explained in Chapters \ref{chp:noisy_circuit} and \ref{chp:classical_sim}.
+We'll now turn to the Schur-Weyl Duality, a theorem related to the irreducible representations of the symmetric and unitary groups. Although this seems like a sudden jump in subject, we emphasise to the reader that the connection between linear optics and Boson Sampling as described earlier in this chapter and the Schur-Weyl Duality will be explained in Chapters \ref{chp:noisy_circuit} and \ref{chp:classical_sim}.
 
-We will start by introducing representation theory, before explaining the Schur-Weyl duality in detail. At the end of this section we shall consider its connection to quantum information, and in Chapter \ref{chp:noisy_circuit} how it is linked to Boson Sampling specifically. For further reading we direct the reader to \cite{fulton2004, harrow2005}.
+We will start by introducing representation theory, before explaining the Schur-Weyl Duality in detail. At the end of this section we shall consider its connection to quantum information, and in Chapter \ref{chp:noisy_circuit} how it is linked to Boson Sampling specifically. For further reading we direct the reader to \cite{fulton2004, harrow2005}.
 
 \subsection{Representation theory}
 
@@ -682,7 +708,7 @@ Let $G$ be a group and $X$ a set. We define an action of $G$ on $X$ as a map $\P
 \Phi_{g_1}(\Phi_{g_2}(x)) = \Phi_{g_1g_2}(x).
 \end{equation}
 
-One trivial example is the action of the permutation group $S_n$ on the set of numbers from 1 to $n$, defined as $\Phi_\sigma(i) = \sigma(i)$. Note that $\Phi$ need not be injective with respect to $G$, so another trivial example is the identity action, which is $\Phi_g(x) = x \forall g \in G$.
+One example is the action of the permutation group $S_n$ on the set of numbers from 1 to $n$, defined as $\Phi_\sigma(i) = \sigma^{-1}(i)$. Note that $\Phi$ need not be injective with respect to $G$, so another trivial example is the identity action, which is $\Phi_g(x) = x \forall g \in G$.
 
 A representation is defined as a vector space $V$ combined with an action $\Phi: G \times V \rightarrow V$ with the additional constraint that $\Phi$ is a linear map over $V$:
 
@@ -702,8 +728,8 @@ This finally brings us to the topic of irreducible representations. A representa
 
 \subsection{Symmetric and Unitary Groups}
 
-The main interest of this thesis is the representation theory of the unitary group U$(m)$, and their action on the space of $(\mathbb{C}^{m})^{\otimes n}$. The intuition for linking this to Boson Sampling is that each vector in $\mathbb{C}^m$ is referring to a photon which could be in one of $m$ modes, and the action of $U \in \unitary(m)$ will be our interferometer.
-As we shall see, the irreducible representations for $\unitary(m)$ are intimately related to those of the symmetric group $\textrm{S}_n$.
+The main interest of this thesis is the representation theory of the unitary group U$(m)$, and its action on the space of $(\mathbb{C}^{m})^{\otimes n}$. The intuition for linking this to Boson Sampling is that each vector in $\mathbb{C}^m$ is referring to a photon which could be in one of $m$ modes, and the action of $U \in \unitary(m)$ will be our interferometer.
+As we shall see from the Schur-Weyl Duality, the irreducible representations for $\unitary(m)$ are intimately related to those of the symmetric group $\textrm{S}_n$.
 
 For the tensor space of $(\mathbb{C}^{m})^{\otimes n}$, the actions of the symmetric and unitary groups on a tensor $v_1\otimes\dots\otimes v_n \in (\mathbb{C}^m)^{\otimes n}$ are explicitly as follows. 
 For a permutation $\sigma \in \textrm{S}_n$, the action permutes the tensor factors,
@@ -723,10 +749,10 @@ It is a simple exercise to see that these two actions commute:
 &= \Phi_\sigma(\Phi_U(v_1\otimes\dots\otimes v_n)).
 \end{align}
 
-The Schur-Weyl duality describes how $(\mathbb{C}^m)^{\otimes n}$ can be decomposed into irreps for the direct product group $\unitary(m)\times\symm_n$.
+The Schur-Weyl Duality describes how $(\mathbb{C}^m)^{\otimes n}$ can be decomposed into irreps for the direct product group $\unitary(m)\times\symm_n$.
 
-\begin{theorem}[Schur-Weyl duality~\cite{rowe2012}]
-The complex vector space of $(\mathbb{C}^m)^{\otimes n}$ decomposes into irreducible subspaces
+\begin{theorem}[Schur-Weyl Duality~\cite{rowe2012}]
+\label{thm:schur-weyl-duality} The complex vector space of $(\mathbb{C}^m)^{\otimes n}$ decomposes into irreducible subspaces
 \begin{equation}
 (\mathbb{C}^m)^{\otimes n} \simeq \bigoplus_{\lambda\vdash n} \mathbb{C}^{\{\lambda\}} \otimes \mathbb{C}^{(\lambda)} ,
 \end{equation}
@@ -740,10 +766,11 @@ The number of nonzero $\lambda_i$ is called the length of the partition, $\ell(\
 %Following the convention of~\cite{rowe2012}, we shall label irreps of S$_n$ and U$(m)$ indexed by $\lambda$ as $(\lambda)$ and $\{\lambda\}$, respectively.
 
 \subsection{The Quantum Schur Transform}
+\label{ssec:quantum-schur-transform}
 
-The Quantum Schur Transform realises the basis change of the Schur-Weyl Duality as a quantum circuit. This circuit takes as input a state in the basis $(\mathbb{C}^m)^{\otimes n}$, and decomposes it into a basis of states labelled by which irrep $\lambda$ they are in.
+The Quantum Schur Transform realises the basis change of The Schur-Weyl Duality as a quantum circuit. This circuit takes as input a state in the basis $(\mathbb{C}^m)^{\otimes n}$, and decomposes it into a basis of states labelled by which irrep $\lambda$ they are in.
 
-The canonical example of the Quantum Schur Transform is when $m=n=2$. In this case, the only partitions available are $\lambda=(2,0)$ and $\lambda=(1,1)$. Our representation labelled by $\lambda=(2,0)$ is defined by the basis states $\ket{00}$, $\ket{11}$ and $(\ket{01}+\ket{10})/\sqrt{2}$, while our $(1,1)$ irrep is simply the state $(\ket{01}-\ket{10})/\sqrt{2}$. This is equivalent to the triplet and singlet states of two electrons:
+The canonical example of the Quantum Schur Transform is when $m=n=2$. In this case, the only partitions available are $\lambda=(2,0)$ and $\lambda=(1,1)$. Our representation labelled by $\lambda=(2,0)$ is defined by the basis states $\ket{00}$, $\ket{11}$ and $(\ket{01}+\ket{10})/\sqrt{2}$, while our $(1,1)$ irrep is simply the state $(\ket{01}-\ket{10})/\sqrt{2}$. This is equivalent to the triplet and singlet states of two electrons and their corresponding description in angular momentum notation:
 
 \begin{align}
 \ket{j=1,m=1} &= \ket{00},\\
@@ -752,7 +779,7 @@ The canonical example of the Quantum Schur Transform is when $m=n=2$. In this ca
 \ket{j=0,m=0} &= \frac{\ket{01}-\ket{10}}{\sqrt{2}}.
 \end{align}
 
-This can generalise further to describe $n$ qubits, noting that $j=(\lambda_1-\lambda_2)/2$. The Quantum Schur Transform is even more general, offering a mapping for any collection of $m$-level qudits. Given a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ in the computational basis, the Quantum Schur Transform, which we denote as the quantum circuit $W$, performs the transformation
+This can generalise further to describe $n$ qubits, noting that $j=(\lambda_1-\lambda_2)/2$. The Quantum Schur Transform is even more general, offering a mapping for any collection of $m$-level qudits. Given a state $|\Psi\rangle \in (\mathbb{C}^m)^{\otimes n}$ written in the computational basis, the Quantum Schur Transform, which we denote as the quantum circuit $W$, performs the transformation
 \begin{equation}
 W|\Psi\rangle
  = \sum_{\lambda \vdash n} \, \sum_{q_{\lambda}} \, \sum_{p_\lambda}C^\lambda_{q_\lambda,p_\lambda}|\lambda\rangle|q_\lambda\rangle|p_\lambda\rangle , 
@@ -762,7 +789,7 @@ For interferometry applications, the unitary action of U$(m)$ in this basis is
 \begin{equation}
 U : |\lambda\rangle |q_\lambda\rangle |p\rangle \rightarrow |\lambda\rangle |U\cdot q_\lambda\rangle |p\rangle := |\lambda\rangle \left( \sum_{q_\lambda'} U^\lambda_{q_\lambda, q_\lambda'} |q_\lambda'\rangle \right) |p\rangle ,
 \end{equation}
-where $U^\lambda$ is the irreducible unitary matrix corresponding to $U \in \mathrm{U}(m)$. Equivalently, one can write $q_\lambda$ as a photon occupation $\underline{n}_\lambda$ and inner multiplicity $r_\lambda \in \mathbb{N}$.
+where $U^\lambda$ is the irreducible unitary matrix corresponding to $U \in \mathrm{U}(m)$. Equivalently, one can write $q_\lambda$ as a photon occupation $\underline{n} \in F(\mathbb{C}^m)$ and inner multiplicity $r_{\underline{n}} \in \mathbb{N}$.
 
 Although this notation will largely not be used in this thesis, we will briefly describe how the basis states of $\{\lambda\}$ and $(\lambda)$ are denoted. An equivalent way of writing irrep $\lambda$, rather than using partitions, is to use Young diagrams. These are diagrams of $n$ boxes across $m$ rows such that the number of boxes in row $i$ is at most the number of boxes in row $i-1$. A simple mapping from partitions $\lambda$ to Young diagrams is then that row $i$ of the diagram has $\lambda_i$ boxes. Using $m=n=3$ as an example, the possible irreps are as follows:
 
@@ -829,7 +856,7 @@ Recently there has been some interest in making this quantum circuit more effici
 
 With efficient circuits for the Quantum Schur Transform now described, we will briefly discuss some example applications. Further applications can be found in Aram Harrow's PhD Thesis \cite{harrow2005}.
 
-Many applications exist which simply take advantage of measuring the irreps of a quantum state. One example is estimating the spectrum of a quantum state $\rho$ from $n$ copies of the state $\rho^{\otimes n}$. Vidal et al.~\cite{vidal1999} used irreps of the Symmetric Group to find optimal measurements for fixed numbers of particles. Later, Keyl and Werner \cite{keyl2001} gave an approximator from measuring the irreps of a state, and showed that the probability of an error decreased exponentially with $n$.
+Many applications exist which simply take advantage of measuring the irreps of a quantum state. One example is estimating the spectrum of a quantum state $\rho$ from $n$ copies of the state $\rho^{\otimes n}$. Vidal et al.~\cite{vidal1999} used irreps of the Symmetric Group to find optimal measurements, that is, measurements which allow us to learn the most information about $\rho$, when we only have a fixed number of copies of $\rho$. Later, Keyl and Werner \cite{keyl2001} gave an approximator from measuring the irreps of a state, and showed that the probability of an error decreased exponentially with $n$.
 
 Another such application is quantum state compression, the task of encoding a large quantum state in a smaller one. Hayashi and Matsumoto \cite{hayashi2002, hayashi2002simple} gave a scheme for compressing an arbitrary quantum state by weakly measuring the irrep $\lambda$ and then applying an encoding process. This scheme is variable-length, meaning that the output was not guaranteed to be bounded but the scheme would ensure that no information was lost in decoding. Hayashi and Matsumoto also showed that the probability of this scheme returning an encoded state whose size was larger than a particular bound (also known as an overflow) is optimal in terms of its exponent.
 
@@ -846,23 +873,25 @@ Quantum Schur Sampling is a generalisation of Permutational Quantum Computing, f
 
 It has only been in recent years that Quantum Schur Sampling has been shown to be classically simulable. This was proven as a result of two papers. The first, by Havl\'{i}\v{c}ek and Strelchuk \cite{havlicek2018}, disproved a conjecture of Jordan upon which the computational hardness of PQC was reliant: that the transition amplitudes of a PQC circuit cannot be approximated to within additive error in polynomial time. This was disproven by showing that states output from applying the Quantum Schur Transform to a computational basis state were Computationally Tractable (CT). This is a term coined by Van den Nest \cite{vandennest2011} meaning that the following tasks can be performed classically in polynomial time up to polynomial multiplicative error: first, that the amplitudes of a state can be approximated; and second, that a sample can be output from a measurement in the computational basis. With this proven for Quantum Schur Transform states, Havl\'{i}\v{c}ek and Strelchuk used a result by Van den Nest that unitary transformations which simply map between states in the same CT basis, such as permutations or reversible classical circuits in this case, will also produce a CT state. Finally, they used one more result of Van den Nest which is that the transition amplitude of two CT states can be approximated in polynomial time on a classical computer, thus rendering Jordan's conjecture false.
 
-However, while the main claim to hardness had been proven wrong, this still left open the possibility that Quantum Schur Sampling was classically intractable. This is because while a polynomial time algorithm existed for computing the probability outcomes, which are simply the square of the transition amplitudes, no algorithm for sampling had yet been found. This was resolved by Havl\'{i}\v{c}ek, Strelchuk and Temme, who gave a polynomial time classical algorithm for sampling when the output distribution can be approximated by a distribution with $t$ elements with non-zero probability up to accuracy $\epsilon$. This algorithm is based on an algorithm by Schwarz and Van den Nest \cite{schwarz2013}, and follows two steps: First they use the Computational Tractability result of \cite{havlicek2018} to show that marginal probabilities can also be approximated; second they use an algorithm by Kushilevitz and Mansour to show that a subset of outcomes with high probabilities in the output distribution can be found efficiently; and third that sampling from either this distribution of high-probability outcomes is at most $6\epsilon$ away from the Quantum Schur Sampling distribution in total variational distance and can be done in time polynomial in $n, t$ and $1/\epsilon$. But how sparse is the output of a Quantum Schur Sampling circuit? Havl\'{i}\v{c}ek, Strelchuk and Temme ran some numerical simulations exploring the output of PQC circuits with up to $n=10$ qubits, and showed that in these small cases all except $0.1\%$ of tested cases on 10 qubits could be approximated by a $2n^2$-sparse distribution up to accuracy $1/n$. Although this was not a formal proof of how many distributions are approximately sparse, it gives some intuition as to how common these sparse distributions might be.
+However, while the main claim to hardness had been proven wrong, this still left open the possibility that Quantum Schur Sampling was classically intractable. This is because while a polynomial time algorithm existed for computing the probability of an outcome, which is simply the square of the its amplitude, there might be an exponentially large number of probabilities to approximate before a sample can be obtained. This was resolved by Havl\'{i}\v{c}ek, Strelchuk and Temme, who gave a polynomial time classical algorithm for sampling when the output distribution is approximately $t$-sparse, meaning that it can be approximated by a distribution with $t$ elements with non-zero probability up to accuracy $\epsilon$. This is based on an algorithm by Schwarz and Van den Nest \cite{schwarz2013}, and follows three steps: First, they use the Computational Tractability result of \cite{havlicek2018} to show that approximate the marginal probabilities; second, they use an algorithm by Kushilevitz and Mansour to show that a subset of outcomes with high probabilities in the output distribution can be found efficiently; and third, they sample that sampling from this distribution of high-probability outcomes. Havl\'{i}\v{c}ek, Strelchuk and Temme showed that this high-probability distribution is at most $6\epsilon$ away from the Quantum Schur Sampling distribution in total variational distance and can be done in time polynomial in $n, t$ and $1/\epsilon$. But how sparse is the output of a Quantum Schur Sampling circuit? Havl\'{i}\v{c}ek, Strelchuk and Temme ran some numerical simulations exploring the output of PQC circuits with up to $n=10$ qubits, and showed that in these small cases all except $0.1\%$ of tested cases on 10 qubits could be approximated by a $2n^2$-sparse distribution up to accuracy $1/n$. Although this was not a formal proof of how many distributions are approximately sparse, it gives some intuition as to how common these sparse distributions might be.
 
 It is also worth discussing the actions of the symmetric and unitary groups on these different representations, and how they affect the classical complexity of computing the amplitudes. For this, we shall discuss a generalisation of the matrix permanent, and known results on its complexity.
 
 Let $\lambda$ be an irreducible representation, and $\sigma$ be a permutation. Define
 
 \begin{equation}
-\chi_\lambda(\sigma) \colon= \trace\left[\sigma\right]
+\chi_\lambda(\sigma) \colon= \trace\left[\Phi_\sigma\right]
 \end{equation}
 
 \noindent as the characteristic of $\sigma$ in representation $\lambda$. Note that for any $\sigma' = \tau\sigma\tau^{-1}$ for some $\tau \in \symm_n$, $\chi_\lambda(\sigma) = \chi_\lambda(\sigma')$, meaning that $\sigma$ and $\sigma'$ are in the same conjugacy class:
 
 \begin{align}
-\chi_\lambda(\sigma') &= \trace\left[\sigma'\right]\\
-&= \trace\left[\tau\sigma\tau^{-1}\right]\\
-&= \trace\left[\sigma\tau^{-1}\tau\right]\\
-&= \trace\left[\sigma\right]\\
+\chi_\lambda(\sigma') &= \trace\left[\Phi_{\sigma'}\right]\\
+&= \trace\left[\Phi_{\tau\sigma\tau^{-1}}\right]\\
+&= \trace\left[\Phi_{\tau}\Phi_{\sigma}\Phi_{\tau^{-1}}\right]\\
+&= \trace\left[\Phi_{\sigma}\Phi_{\tau^{-1}}\Phi_{\tau}\right]\\
+&= \trace\left[\Phi_{\sigma}\Phi_{\tau^{-1}\tau}\right]\\
+&= \trace\left[\Phi_\sigma\right]\\
 &= \chi_\lambda(\sigma).
 \end{align}
 

@@ -13,7 +13,7 @@ A significant improvement could be achieved through adapting the method of Cliff
 Here we consider the cost of classically simulating Boson Sampling when the photons are partially distinguishable or lossy.
 We look at the same model of distinguishability as considered in \cite{renema2018,renema2018loss}, and use techniques for modelling photon distinguishability in first quantization as described in Chapter \ref{chp:noisy_circuit} to show that this is akin to choosing the indistinguishable photons of a Boson Sampling experiment via the binomial distribution. 
 We combine this with the well-studied model of uniform loss, where each photon independently survives with probability $\eta$. Under this model, the probability of how many photons survive overall also follows a binomial distribution. 
-This gives rise to a method which is able to naturally apply the Clifford \& Clifford algrithm and take advantage of its efficiency. This algorithm also offers a worst-case error bound for \textit{any} linear optical interferometer, rather than a random one.
+This gives rise to a method which is able to naturally apply the Clifford \& Clifford algrithm and take advantage of its efficiency. This algorithm also offers a worst-case error bound for \textit{any} linear optical interferometer, rather than simply offering a small error on average for a Haar random interferometer.
 Although this approach only offers a polynomial improvement compared to the runtime for ideal Boson Sampling (unlike the exponential improvement shown in \cite{renema2018,renema2018loss}) we use analytical bounds to show that for photon numbers of experimental interest our algorithm can make a significant improvement over alternative approaches.
 
 This chapter is laid out as follows.
@@ -65,12 +65,12 @@ The most natural state to use to classically simulate Boson Sampling under disti
 \noindent where $\ket{s} = \bigotimes_{i=1}^n\ket{i}$. We shall also use 
 
 \begin{equation}
-\rho_I = \sum_{\sigma, \sigma' \in \symm_n}\sigma\ket{s}\bra{s}\sigma'^\dagger
+\rho_I = \frac{1}{n!}\sum_{\sigma, \sigma' \in \symm_n}\sigma\ket{s}\bra{s}\sigma'^\dagger
 \end{equation}
 
 \noindent to indicate the fully indistinguishable input state.
 
-As already noted in Section \ref{ssec:fully-dist-sim}, this state is completely separable, and an interferometer acting on it can be classically simulated in polynomial time. In this section, we shall compute the trace distance between this state and various other Boson Sampling input states which could be interesting. For this, note that the trace distance between mixed states $\rho, \rho'$ is defined as
+As already noted in Section \ref{ssec:fully-dist-sim}, the state $\rho_D$ is completely separable, and an interferometer acting on it can be classically simulated in polynomial time. In this section, we shall compute the trace distance between this state and various other Boson Sampling input states which could be interesting. For this, note that the trace distance between mixed states $\rho, \rho'$ is defined as
 
 \begin{equation}
 \delta_{\trace}
@@ -82,20 +82,20 @@ We start by subtracting $\rho_I$ from $\rho_D$, which gives the matrix\begin{ali
 &= \frac{1}{n!}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right).
 \end{align}
 
-Multiplying this matrix by its Hermitian adjoint gives the positive semidefinite matrix
+\noindent Multiplying this matrix by its Hermitian adjoint gives the positive semidefinite matrix
 
 \begin{align}
 (\rho_I - \rho_D)(\rho_I - \rho_D)^\dagger &= \frac{1}{(n!)^2}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\left(\sum_{\substack{\tau,\tau'\in\textrm{S}_n\\\tau\neq\tau'}}\tau'\ket{s}\bra{s}\tau^\dagger\right)\\
 &= \frac{1}{(n!)^2}\left((n! - 2)\sum_{\sigma,\tau\in\textrm{S}_n}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
 \end{align}
 
-As the above matrix is positive semidefinite, we can find its square root as
+\noindent As the above matrix is positive semidefinite, we can find its square root as
 
 \begin{align}
 \sqrt{(\rho_I - \rho_D)(\rho_I - \rho_D)^\dagger} &= \frac{1}{n!}\left(\left(\frac{n!-2}{n!}\right)\sum_{\sigma,\tau\in\textrm{S}_n}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
 \end{align}
 
-From this we can work out the trace distance between the two states to be
+\noindent From this we can work out the trace distance between the two states to be
 
 \begin{align}
 \delta_{\mathrm{tr}}(\rho_I, \rho_D) &= \frac{1}{2\times n!}\left(\left(\frac{n!-2}{n!}\right)n! + n!\right)\\
@@ -108,27 +108,27 @@ We next consider the singly distinguishable state, as considered by Stanisic and
 
 $$\rho_{SD} = \frac{1}{n!}\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)}}\sigma\ket{s}\bra{s}\sigma'^\dagger.$$
 
-Following the same structure as with fully indistinguishable photons, we find that subtracting the two matrices gives
+\noindent Following the same structure as with fully indistinguishable photons, we find that subtracting the two matrices gives
 
 \begin{align}
 \rho_{SD} - \rho_D &= \frac{1}{n!}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)}}\sigma\ket{s}\bra{s}\sigma'^\dagger - \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right)\\
 &= \frac{1}{n!}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right).
 \end{align}
 
-Multiplying the matrix by its adjoint gives the positive semidefinite matrix
+\noindent Multiplying the matrix by its adjoint gives the positive semidefinite matrix
 
 \begin{align}
 (\rho_{SD} - \rho_D)(\rho_{SD} - \rho_D)^\dagger &= \frac{1}{(n!)^2}\left(\sum_{\substack{\sigma,\sigma'\in\textrm{S}_n\\\sigma^{-1}(i)=\sigma'^{-1}(i)\\\sigma\neq\sigma'}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\left(\sum_{\substack{\tau,\tau'\in\textrm{S}_n\\\tau^{-1}(i)=\tau'^{-1}(i)\\\tau\neq\tau'}}\tau'\ket{s}\bra{s}\tau^\dagger\right)\\
 &= \frac{1}{(n!)^2}\left(((n-1)! - 2)\sum_{\substack{\sigma,\tau\in\textrm{S}_n\\\sigma^{-1}(i)=\tau^{-1}(i)}}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
 \end{align}
 
-We can then work out the square root of this positive semidefinite matrix as the positive matrix
+\noindent We can then work out the square root of this positive semidefinite matrix as the positive matrix
 
 \begin{align}
 \sqrt{(\rho_{SD} - \rho_D)(\rho_{SD} - \rho_D)^\dagger} &= \frac{1}{n!}\left(\left(\frac{(n-1)!-2}{(n-1)!}\right)\sum_{\substack{\sigma,\tau\in\textrm{S}_n\\\sigma^{-1}(i)=\tau^{-1}(i)}}\sigma\ket{s}\bra{s}\tau^\dagger + \sum_{\sigma \in \textrm{S}_n}\sigma\ket{s}\bra{s}\sigma^\dagger\right).
 \end{align}
 
-Finally, we work out the trace of this matrix, and find the trace distance to be
+\noindent Finally, we work out the trace of this matrix, and find the trace distance to be
 
 \begin{align}
 \delta_{\mathrm{tr}}(\rho_{SD}, \rho_D) &= \frac{1}{2\times n!}\left(\left(\frac{(n-1)!-2}{(n-1)!}\right)n! + n!\right)\\
@@ -137,9 +137,7 @@ Finally, we work out the trace of this matrix, and find the trace distance to be
 &= 1 - \frac{1}{(n-1)!}.
 \end{align}
 
-An intuitive question to ask at this point is to make sure this distance still applies after applying the Schur transform again, thus matching the method used by Stanisic and Turner \cite{stanisic2018}.
-
-The fully distinguishable state in this picture is
+An intuitive question to ask at this point is to make sure this distance still applies after applying the Schur transform again, thus matching the method used by Stanisic and Turner \cite{stanisic2018}. The fully distinguishable state in this picture is
 
 \begin{equation}
 \rho_D = \frac{1}{n!} \sum_{\lambda \vdash n} \sum_{r_\lambda} \sum_{p_\lambda} |\lambda,p_\lambda,\underline{1}, r_\lambda\rangle\langle \lambda,p_\lambda,\underline{1}, r_\lambda|,
@@ -151,16 +149,16 @@ The fully distinguishable state in this picture is
 \rho_{SD} = \frac{1}{n}\left(\ket{(n),1,\underline{1},1}\bra{(n),1,\underline{1},1} + \sum_{p}\ket{(n-1,1),p,\underline{1},1}\bra{(n-1,1),p,\underline{1},1}\right).
 \end{equation}
 
-The difference between these two states is
+\noindent The difference between these two states is
 
 \begin{align}
 \rho_{SD}-\rho_D &= \left(\frac{1}{n}-\frac{1}{n!}\right)\left(\ket{(n),1,\underline{1},1}\bra{(n),1,\underline{1},1} + \sum_{p}\ket{(n-1,1),p,\underline{1},1}\bra{(n-1,1),p,\underline{1},1}\right)\nonumber\\
-&+ \frac{1}{n!}\sum_{\substack{\lambda \vdash n\\\ell(\lambda) > 1}} \sum_{r_\lambda>1} \sum_{p_\lambda} |\lambda,p_\lambda,\underline{1},r_\lambda\rangle\langle \lambda,p_\lambda,\underline{1},r_\lambda|\\
+&\quad+ \frac{1}{n!}\sum_{\substack{\lambda \vdash n\\\ell(\lambda) > 1}} \sum_{r_\lambda>1} \sum_{p_\lambda} |\lambda,p_\lambda,\underline{1},r_\lambda\rangle\langle \lambda,p_\lambda,\underline{1},r_\lambda|\\
 &= \frac{(n-1)!-1}{n!}\left(\ket{(n),1,\underline{1},1}\bra{(n),1,\underline{1},1} + \sum_{p}\ket{(n-1,1),p,\underline{1},1}\bra{(n-1,1),p,\underline{1},1}\right)\nonumber\\
-&+ \frac{1}{n!}\sum_{\substack{\lambda \vdash n\\\ell(\lambda) > 1}} \sum_{r_\lambda>1} \sum_{p_\lambda} |\lambda,p_\lambda,\underline{1},r_\lambda\rangle\langle \lambda,p_\lambda,\underline{1},r_\lambda|.
+&\quad+ \frac{1}{n!}\sum_{\substack{\lambda \vdash n\\\ell(\lambda) > 1}} \sum_{r_\lambda>1} \sum_{p_\lambda} |\lambda,p_\lambda,\underline{1},r_\lambda\rangle\langle \lambda,p_\lambda,\underline{1},r_\lambda|.
 \end{align}
 
-This matrix is diagonal and all non-zero elements are positive, meaning that $\sqrt{(\rho_{SD}-\rho_D)^2}=\rho_{SD}-\rho_D$. The trace distance thus ends up being
+\noindent This matrix is diagonal and all non-zero elements are positive, meaning that $\sqrt{(\rho_{SD}-\rho_D)^2}=\rho_{SD}-\rho_D$. The trace distance thus ends up being
 
 \begin{align}
 \delta_{\mathrm{tr}}(\rho_{SD},\rho_{D}) &= \frac{1}{2}\trace[\rho_{SD},\rho_{D}]\\
@@ -170,7 +168,7 @@ This matrix is diagonal and all non-zero elements are positive, meaning that $\s
 &= 1 - \frac{1}{(n-1)!}.
 \end{align}
 
-Therefore either technique produces the same trace distance.
+\noindent Therefore either technique produces the same trace distance.
 
 We can easily generalise the two results above to a case where $k$ photons are fully indistinguishable, and the remaining $n-k$ are fully distinguishable. Now we specify that $\sigma^{-1}(i)=\sigma'^{-1}(i)\forall i \in \bar{K}$, where $\bar{K}$ is the set of $n-k$ distinguishable photons. The only other change is that the $(n-1)!$ terms become $k!$. The final trace distance will be $1-1/k!$. Even more generally, it seems likely that if we have two states with indistinguishable photons defined by set $K$ and $K'$, then the trace distance would equal $|K\cap K'|!/|K\cap K'|!$, though this has not been formally proven.
 
@@ -191,7 +189,7 @@ The trace distance between this state and the fully distinguishable state is
 &= \epsilon-\frac{\epsilon}{n!},
 \end{align}
 
-\noindent where we have used the fact that the trace distance in convex. Noting that $\lim_{n\rightarrow\infty}\epsilon/n! = 0$, we can conclude that as $n\rightarrow\infty$ this state tends to $\epsilon$. This is an interesting change from the previous sections, but not particularly surprising, given that we are asking for the classical part of the state to essentially dominate the result.
+\noindent where we have used the fact that the trace distance in convex. Noting that $\lim_{n\rightarrow\infty}\epsilon/n! = 0$, we can conclude that as $n\rightarrow\infty$ this state tends to $\epsilon$. As our interferometer $U$ cannot increase the trace distance, and the state $\rho_D$ is classically simulable, then Boson Sampling with this state could be approximately simulated. This is an interesting change from the other cases, but not particularly surprising, given that this state is cooked up to essentially be the fully distinguishable state, with only $\epsilon$ weighting towards an ideal Boson Sampling state.
 
 \section{Expanding in terms of states}
 \label{sec:expansion}
@@ -412,8 +410,7 @@ where the denominator is a normalising factor, and similarly
 We can now estimate the trace distance by rewriting $\rho_{n,x}$ as
 \begin{align}
 \rho_{n,x}
-&=\sum_{i=0}^kx^i(1-x)^{n-i}\binom{n}{i} \rho_{\leq k,x} \\
-&\quad+\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i} \rho_{>k,x} ,
+&=\sum_{i=0}^kx^i(1-x)^{n-i}\binom{n}{i} \rho_{\leq k,x} +\sum_{i=k+1}^nx^i(1-x)^{n-i}\binom{n}{i} \rho_{>k,x} ,
 \end{align}
 which, by convexity, gives
 \begin{equation}
@@ -447,7 +444,7 @@ As discussed in Section \ref{sec:nc-loss}, it was shown that the initial state f
 \frac{1}{\binom{n}{\ell}}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\frac{1}{\ell!}\sum_{\sigma,\sigma'\in\symm_n}\sigma\ket{s_L}\bra{s_L}\sigma'^\dagger,
 \end{equation}
 where $s_L$ is the state where photons in the subset $L$ of the original input photons have survived. 
-In order to generalise this to uniform loss, we append $n-\ell$ "lost" photons in an additional spatial mode (single particle state $0$) which isn't affected by the interferometer:
+In order to generalise this to uniform loss, we append $n-\ell$ ``lost'' photons in an additional spatial mode (single particle state $0$) which isn't affected by the interferometer:
 \begin{align}
 \left(\frac{1}{\binom{n}{\ell}}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\frac{1}{\ell!}\sum_{\sigma,\sigma'\in\symm_n}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\otimes(\ket{0}\bra{0})^{\otimes n-\ell}.
 \end{align}
@@ -456,7 +453,7 @@ Uniform loss matches that of choosing which subset of photons survive according 
 We can combine this model with the distinguishability model of Section \ref{sec:expansion}, giving
 \begin{align}
 \rho_{n,\eta,x}&=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\nonumber\\
-&\times\sum_{\substack{I\subseteq L\\|I|=i}}\left(\frac{1}{\ell!}\sum_{\substack{\sigma,\sigma'\in\symm_n\\\sigma^{-1}(j)=\sigma'^{-1}(j)\\\forall j \notin I}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\otimes(\ket{0}\bra{0})^{\otimes n-\ell}\\
+&\quad\times\sum_{\substack{I\subseteq L\\|I|=i}}\left(\frac{1}{\ell!}\sum_{\substack{\sigma,\sigma'\in\symm_n\\\sigma^{-1}(j)=\sigma'^{-1}(j)\\\forall j \notin I}}\sigma\ket{s}\bra{s}\sigma'^\dagger\right)\otimes(\ket{0}\bra{0})^{\otimes n-\ell}\\
 &=\sum_{\ell=0}^n\eta^\ell(1-\eta)^{n-\ell}\sum_{\substack{L\subseteq[n]\\|L|=\ell}}\sum_{i=0}^\ell x^i(1-x)^{\ell-i}\sum_{\substack{I\subseteq L\\|I|=i}}\rho_{L,I}.
 \end{align}
 
@@ -545,7 +542,7 @@ With this in mind, we plot values for distinguishability and loss separately, an
 \hfill
 \subfloat[\label{fig:max-eta-samek}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_eta_samek}}
 \caption[Highest value of $x$ and $\eta$ simulable via state or point truncation]{\label{fig:samek} 
-Highest value of (\ref{fig:max-x-samek}) $x$ when $\eta=1$ and (\ref{fig:max-eta-samek}) of $\eta$ when $x=1$ simulable via state (solid) or point (dashed) truncation up to 10\% error ($\epsilon=0.1$). 
+Highest value (\ref{fig:max-x-samek}) of $x$ when $\eta=1$ and (\ref{fig:max-eta-samek}) of $\eta$ when $x=1$ simulable via state (solid) or point (dashed) truncation up to 10\% error ($\epsilon=0.1$). 
 The number of photons, $n$, is varying, with $k$ chosen as either $k=n-1$ (red) or $k=n/2$ (green).
 The oscillatory behaviour is due to rounding $k=n/2$ when $n$ is odd.}
 \end{figure}
@@ -623,7 +620,7 @@ And in the case where $\eta=0.755, x=0.982$, both algorithms have runtimes of ap
 \hfill
 \subfloat[\label{fig:max-eta-fixed-n-90}]{\includegraphics[width=0.45\linewidth]{classical_sim/max_eta_fixed_n_90}}
 \caption[Highest value of $x$ and $\eta=1$ simulable for 90-photon boson sampling at truncation level $k$]{\label{fig:fixed-n-90} 
-Highest value of (\ref{fig:max-x-fixed-n-90}) $x$ when $\eta=1$ and (\ref{fig:max-eta-fixed-n-90}) $\eta$ when $x=1$ simulable for 90-photon boson sampling at truncation level $k$ up to 10\% error ($\epsilon=0.1$). 
+Highest value (\ref{fig:max-x-fixed-n-90}) of $x$ when $\eta=1$ and (\ref{fig:max-eta-fixed-n-90}) of $\eta$ when $x=1$ simulable for 90-photon boson sampling at truncation level $k$ up to 10\% error ($\epsilon=0.1$). 
 Blue line indicates highest values simulable via state truncation at level $k$, green lines indicate highest values simulable via point truncation at level $k$, orange lines indicate highest values simulable by point truncation at level $k'$ such that $k'$ is the smallest level of truncation such that the approximate runtime of point truncation at level $k'$ is longer than the runtime of state truncation at level $k$.}
 \end{figure}
 
@@ -666,7 +663,7 @@ It also shows how distinguishability can affect the simulability of lossy compon
 \section{Discussion of possible improvements}
 \label{sec:small-photon-no}
 
-There are several possible ways one might seek to improve this research. In this section we shall give two potential improvements, and discuss their potential. Although we cannot provide full analysis for general $n$, we can look at cases where there are a small number of photons and use this as a springboard for discussing how these improvements might work for general $n$.
+There are several possible ways one might seek to improve this research. In this section we shall give two potential improvements, and discuss their potential. Although we do not provide full analysis for general $n$, we can look at cases where there are a small number of photons and use this as a springboard for discussing how these improvements might work for general $n$.
 
 \subsection{Computing the exact trace distance}
 \label{ssec:exact-trace-distance}
@@ -714,7 +711,7 @@ It is interesting to note from Figure \ref{fig:exact-trace} that for some values
 \subsection{Expanding in terms of representations}
 \label{ssec:irrep-expansion}
 
-Another natural question is if we can instead expand in terms of representations rather than in terms of state. This would provide us with an alternative decomposition where rather than needing to sample which photons are indistinguishable, we would instead be sampling an immanant to compute. It is hard to analytically work out how the different immanants contribute for general $n$, but in this section we will use results noted by Stanisic and Turner \cite{stanisic2018} to show the decompositions for two and three particles, as well as offer some general comments on why this technique might not necessarily provide a better classical simulation but could still be of theoretical interest.
+Another natural question is if we can instead expand in terms of representations rather than in terms of state. This would provide us with an alternative decomposition where rather than needing to sample which photons are indistinguishable, we would instead be sampling which immanants we need to compute to find the probability of an outcome. It is hard to analytically work out how the different immanants contribute for general $n$, but in this section we will use results noted by Stanisic and Turner \cite{stanisic2018} to show the decompositions for two and three particles, as well as offer some general comments on why this technique might not necessarily provide a better classical simulation but could still be of theoretical interest.
 
 We shall start with the simpler case of two photons, which we shall assume to be in the first two spatial modes. As noted earlier, the state takes the form
 
@@ -728,16 +725,16 @@ We shall start with the simpler case of two photons, which we shall assume to be
 \rho_{\{1,2\}} = \ket{\young(12)}\bra{\young(12)},
 \end{equation}
 
-\noindent where we have suppressed notation for the irrep as it is implied by the Young tableaux, and we have suppressed the Symmetric irrep basis as it is one dimensional in the two particle cases. Note that states where only one photon is in the indistinguishable set are effectively fully distinguishable as well. As a result, all other states can be described in the irrep basis as the fully distinguishable state as given in Equation \ref{distinguishable-irreps}, giving us
+\noindent where we have suppressed notation for the irrep as it is implied by the Young tableaux, and we have suppressed the Symmetric irrep basis as it is one dimensional in the two particle cases. Note that states where only one photon is in the indistinguishable set are effectively fully distinguishable as well. As a result, the states $\rho_{\{1\}}, \rho_{\{2\}}$ are equal to $\rho_{\emptyset}$, the fully distinguishable state, which as described in the irrep basis in Equation \ref{distinguishable-irreps} gives us
 
 \begin{equation}
-\frac{1}{2}\left(\ket{\young(12)}\bra{\young(12)}+\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right).
+\rho_\emptyset = \frac{1}{2}\left(\ket{\young(12)}\bra{\young(12)}+\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right).
 \end{equation}
 
 The overall state can therefore be written as
 
 \begin{align}
-\rho_x &= x^2\ket{\young(12)}\bra{\young(12)} + frac{(2x(1-x)+(1-x)^2)}{2}\left(\ket{\young(12)}\bra{\young(12)}+\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right)\\
+\rho_x &= x^2\ket{\young(12)}\bra{\young(12)} + \frac{(2x(1-x)+(1-x)^2)}{2}\left(\ket{\young(12)}\bra{\young(12)}+\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right)\\
 &= \frac{1}{2}\left((2x^2 + 2x(1-x)+(1-x)^2)\ket{\young(12)}\bra{\young(12)}+(2x(1-x)+(1-x)^2)\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right)\\
 &= \frac{1+x^2}{2}\ket{\young(12)}\bra{\young(12)}+\frac{1-x^2}{2}\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|.
 \end{align}
@@ -747,7 +744,7 @@ As $x\rightarrow 1$, this tends towards only the fully symmetric irrep contribut
 We can also work out the explicit decomposition for three particles, again assuming our photons start in the first three modes. The state is now
 
 \begin{equation}
-\rho_x = x^3\rho_{\{1,2,3\}} + x^2(1-x)(\rho_{\{1,2\}}+\rho_{\{1,3\}}+\rho_{\{2,3\}}) + x(1-x)^2(\rho{\{1\}}+\rho{\{2\}}+\rho{\{3\}}) + (1-x)^3\rho_\emptyset.
+\rho_x = x^3\rho_{\{1,2,3\}} + x^2(1-x)(\rho_{\{1,2\}}+\rho_{\{1,3\}}+\rho_{\{2,3\}}) + x(1-x)^2(\rho_{\{1\}}+\rho_{\{2\}}+\rho_{\{3\}}) + (1-x)^3\rho_\emptyset.
 \end{equation}
 
 The fully indistinguishable state is similar to before:
@@ -756,26 +753,26 @@ The fully indistinguishable state is similar to before:
 \rho_{\{1,2,3\}} = \ket{\young(123)}\bra{\young(123)}.
 \end{equation}
 
-Rather than writing out the full Young-Yagamouchi basis, we shall use the same notation as in \cite{stanisic2018} to simply use a 1 or 2 subscript to denote the multiplicity of the $(1,2)$ irrep of the Unitary group. With this in mind, the uniform mixture of all three singly distinguishable states is
+Rather than writing out the full Young-Yagamouchi basis, we shall simply use a 1 or 2 subscript to denote the basis state of the $(1,2)$ irrep of the Symmetric group, which, as noted in Theorem \ref{thm:schur-weyl-duality}, induces a multiplicity on the corresponding irrep of the Unitary group. This matches the notation used in Stanisic and Turner \cite{stanisic2018}. With this in mind, the uniform mixture of all three singly distinguishable states is
 
 \begin{align}
 \rho_{\{1,2\}}+\rho_{\{1,3\}}+\rho_{\{2,3\}} &= \ket{\young(123)}\bra{\young(123)} + \frac{1}{2}\left(\left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\nonumber\\
-&+ \frac{1}{2}\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right|\right).
+&\quad+ \frac{1}{2}\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right|\right).
 \end{align}
 
-Finally, we note that the fully distinguishable states can be written as
+Finally, we note that the fully distinguishable states $\rho_{\emptyset}, \rho_{\{1\}}, \rho_{\{2\}}, \rho_{\{3\}}$ can all be written as
 
 \begin{align}
-&\frac{1}{6}\left(\ket{\young(123)}\bra{\young(123)} + \left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\nonumber\\
-&+\frac{1}{6}\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right| + \left|\young(1,2,3)\right\rangle\left\langle\young(1,2,3)\right|\right).
+\rho_\emptyset &= \frac{1}{6}\left(\ket{\young(123)}\bra{\young(123)} + \left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\nonumber\\
+&\quad+\frac{1}{6}\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right| + \left|\young(1,2,3)\right\rangle\left\langle\young(1,2,3)\right|\right).
 \end{align}
 
 The overall state can be expanded as
 
 \begin{align}
 \rho_x &= \frac{1}{6}\left((1+3x^2+2x^3)\ket{\young(123)}\bra{\young(123)}\right)\nonumber\\
-&+\frac{1}{6}\left((1-x^3)\left(\left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\right)\nonumber\\
-&+\frac{1}{6}\left((1-x^3)\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right|\right) + (1-3x^2+2x^3)\left|\young(1,2,3)\right\rangle\left\langle\young(1,2,3)\right|\right).
+&\quad+\frac{1}{6}\left((1-x^3)\left(\left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\right)\nonumber\\
+&\quad+\frac{1}{6}\left((1-x^3)\left(\left|\young(13,2)_1\right\rangle\left\langle\young(13,2)_1\right| + \left|\young(13,2)_2\right\rangle\left\langle\young(13,2)_2\right|\right) + (1-3x^2+2x^3)\left|\young(1,2,3)\right\rangle\left\langle\young(1,2,3)\right|\right).
 \end{align}
 
 It is again possible to verify that as $x\rightarrow 1$ then only the symmetric irrep contributes, and as $x \rightarrow 0$ then all irreps contribute uniformly.
@@ -814,7 +811,7 @@ In doing so, we have effectively set a benchmark for what is required of a 50--9
 There are a number of ways one could improve this classical simulation. 
 In particular, the approach of Ref.~\cite{renema2018} for truncation when looking at near-term devices is dependent on Metropolised Independence Sampling. 
 A direct adaptation of the Clifford \& Clifford algorithm to this approach would almost certainly offer an improvement over our algorithm. 
-However, such an adaptation is non-trivial, due to the fact that the term in the expansion are not states, something that motivated our work here.
+However, such an adaptation is non-trivial, due to the fact that the terms in the expansion do not correspond to states, something that motivated our work here.
 
 There are other open questions we would like to consider as well. The first would be to reduce the average-case error bounds to be less than our worst-case error bounds. This would most likely involve an alternative to using the triangle inequality. The second would be to find a way of explaining the difference in dependence on $\eta$ and $x$ between point and state truncation, and ideally improving either algorithm in the process.
 

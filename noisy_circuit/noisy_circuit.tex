@@ -10,7 +10,7 @@ We do so by observing that ideal Boson Sampling is equivalent to sampling from t
 We show that quantum circuits for the Schur transform~\cite{bacon2007} can therefore be used to give a polynomial time quantum algorithm for sampling from the same probability distribution as bosons emerging from a linear interferometer, regardless of distinguishability.
 
 Although it is generally accepted that quantum computers can perform Boson Sampling efficiently, there are few places where such algorithms are actually described explicitly. 
-An example of such a method for the ideal (indistinguishable) case is by Aaronson and Arkhipov~\cite{aaronson2011}, using a technique by Reck et al.~\cite{reck1994} to decompose the unitary matrix $U$ into a sequence of $O(d^2)$ optical elements, each implemented via the Solovay-Kitaev theorem~\cite{nielsen2010}. 
+An example of such a method for the ideal (indistinguishable) case is by Aaronson and Arkhipov~\cite{aaronson2011}, using a technique by Reck et al.~\cite{reck1994} to decompose the unitary matrix $U$ into a sequence of $O(m^2)$ optical elements, each implemented via the Solovay-Kitaev theorem~\cite{nielsen2010}. 
 %An example for fermions is given by Abrams and Lloyd~\cite{abrams1997}. 
 %An interesting next step would be to try and get more of an idea of the runtimes for these two quantum algorithms, and see how they perform against one another. 
 %As it currently stands, the only algorithm of these three with an explicit runtime calculated is the one by Abrams and Lloyd, which runs in $O(n^2\log^2d)$ time. 
@@ -20,7 +20,7 @@ Our approach shows that while the ideal case is intimately related to the symmet
 
 The chapter is structured as follows. 
 We provide a simple quantum circuit for ideal indistinguishable photon sampling in Section \ref{sec:qc-bs}, before introducing the full circuit for sampling with distinguishable particles in Section \ref{sec:qc-noisy}. 
-In Section \ref{sec:uu-duality}, we provide some further explanation as to why these circuits work, via what is known as unitary-unitary duality.
+In Section \ref{sec:uu-duality}, we provide some further explanation as to why these circuits work, via what is known as Unitary-Unitary Duality.
 Following this result, we discuss a few interesting consequences: in Section \ref{sec:post-bs}, we show how postselection can be used with this circuit to sample from the indistinguishable distribution when given a distinguishable input; in Section \ref{sec:nc-loss}, we consider how the circuit can be used to simulate Boson Sampling when photons are lost; and in Section \ref{sec:mixture}, we consider the multipartite entanglement of the output in the partially distinguishable case. 
 %We conclude with some discussion and future work in Section \ref{sec:nc-conclusion}.
 
@@ -46,7 +46,7 @@ Note that there is only one possible state for the $p_{(n)}$ register, because t
 The inverse Schur transformation $W^\dag$ takes this state to a symmetric state of $n$ qudits in $(\mathbb{C}^m)^{\otimes n}$.
  In this tensor space, we now need only apply the interferometer matrix $U$ to each qudit in parallel as the circuit $U^{\otimes n}$.
 This can be done with accuracy $\epsilon$ in $O(\log^c(1/\epsilon))$ time via the Solovay-Kitaev theorem~\cite{nielsen2010, dawson2006}. 
-Finally, we apply the Schur transform again and measure the $q$-register to get a sample $q_{(n)}'$, from which we can easily compute the pattern weight/type to get an output occupation $S'$.
+Finally, we apply the Schur transform again and measure the $q$-register to get a sample $q_{(n)}'$, from which we can easily compute the pattern weight to get an output occupation $S'$.
 A complete version of the quantum circuit for Boson Sampling is given in Algorithm \ref{alg:bs}, as well as a circuit description in Figure \ref{fig:bs}.
 \begin{algorithm}
 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
@@ -95,14 +95,14 @@ Arguing similarly for the output $S'$, we see that the probability of the algori
 &= \frac{|\per(U_{S',S})|^2}{\prod_{i=1}^m S'_i! S_i!}.
 \end{align}
 Thus the output probability distribution matches the one given in Equation (\ref{eqn:bs-distribution}).
-We also see that Schur-Weyl duality implies
+We also see that the Schur-Weyl Duality implies
 \begin{equation}
 U^{(n)}_{q_{(n)}, q_{(n)}'} = \frac{\per(U_{S',S})}{\sqrt{\prod_{i=1}^m S'_i! S_i!}}.
 \label{eqn:symmetric_action}
 \end{equation}
 That is, the totally symmetric representation of the unitary group can be constructed from permanents of $U_{S',S}$ matrices~\cite{bhatia1997}.
 
-As for the complexity of this circuit, the mapping from bosons to $q_{(n)}$ states and back can be done in polynomial time and space in terms of $n$~\cite{rowe1999}, Schur-Weyl duality takes polynomial time and space in terms of $m$, $n$ \& $\log(1/\epsilon)$ and the Solovay-Kitaev theorem allows $U$ to be implemented in polynomial time and space. 
+As for the complexity of this circuit, the mapping from bosons to $q_{(n)}$ states and back can be done in polynomial time and space in terms of $n$~\cite{rowe1999}, the Quantum Schur Transform takes polynomial time and space in terms of $m$, $n$ \& $\log(1/\epsilon)$ and the Solovay-Kitaev theorem allows $U$ to be implemented in polynomial time and space. 
 From this and the earlier points discussed in this section, we find that Theorem \ref{thm:bs} holds.
 \begin{theorem}
 Algorithm \ref{alg:bs} performs ideal bosonic sampling with approximation $\delta+\epsilon$ in polynomial time and space in terms of $m$, $n$, $\log(\delta^{-1})$ and $\log(\epsilon^{-1})$.
@@ -124,7 +124,7 @@ The probability of measuring a particular computational basis state $|s'\rangle 
 &= \frac{|\per(U_{S',S})|^2}{n!\prod_{j=1}^m (S_i!)}.
 \end{align}
 %This becomes the Boson Sampling distribution by mapping back to occupations. 
-The probability of measuring an occupation $S'$ is equal to summing over the probabilities of all states $|s'\rangle$ of type $S'$, of which there are $n!/\prod_{i=1}^m (S_i'!)$.
+The probability of measuring an occupation $S'$ is equal to summing over the probabilities of all states $|s'\rangle$ of pattern weight $S'$, of which there are $n!/\prod_{i=1}^m (S_i'!)$.
 We will consider both versions of this circuit in subsequent sections on sampling from distinguishable bosonic distributions.
 
 \section{A quantum circuit for arbitrarily distinguishable bosonic sampling}
@@ -196,7 +196,7 @@ This is always possible since the space of internal states, span$\{\Phi_i\}_{i=1
 For example, consider two bosons in two System modes where one boson is in System mode 1 and has internal state $|1\rangle$ (corresponding to Label mode 1), and the other boson is in System mode 2 and has internal state $|\Phi_2\rangle=\alpha|1\rangle+\beta|2\rangle$.
 This is represented as the following superposition of System-Label occupations:
 \begin{align}
-\alpha \Ket{1_R, 0_G, 1_R, 0_G} + \beta \Ket{1_R, 0_G, 0_R, 1_G} .
+\alpha \Ket{1_{1,R}, 0_{1,G}, 1_{2,R}, 0_{2,G}} + \beta \Ket{1_{1,R}, 0_{1,G}, 0_{2,R}, 1_{2,G}} .
 \end{align}
 Given a distinguishability matrix $\mathcal{S}_{k,l}$, in this way we can prepare a corresponding superposition of occupations $T$ at step 2 of the algorithm.
 (We can in fact consider more general partially distinguishable situations of bosons with different Label states in the same System mode.)
@@ -270,7 +270,7 @@ After the action of $U$, the probability of measuring $|s'\rangle \in (\mathbb{C
  &= \frac{\textrm{per}(|U_{S',S}|^2)}{n!} ,
 \end{align}
 where we've defined $|U_{S',S}|^2$ as the elementwise square of the absolute value.
-We can find the probability of returning occupation $S'$ by summing up the probabilities of all $n!/\prod_{i=1}^{m}(S'_i!)$ states of type $s'$, giving
+We can find the probability of returning occupation $S'$ by summing up the probabilities of all $n!/\prod_{i=1}^{m}(S'_i!)$ states of pattern weight $s'$, giving
 \begin{equation}\label{eq:DistPer}
 \textrm{Pr}[S'] = \frac{\textrm{per}(|U_{S',S}|^2)}{\prod_{i=1}^m S'_i!},
 \end{equation}
@@ -282,7 +282,7 @@ which agrees with the (classical) probability distribution for sampling with dis
 
 
 
-\section{Unitary-unitary duality}
+\section{Unitary-Unitary Duality}
 \label{sec:uu-duality}
 
 The preceding shows how the Schur transform gives a map between second quantised occupation states and first quantised single particle states via symmetrisation.
@@ -290,14 +290,14 @@ The complication added by distinguishability is that each single particle become
 As shown above, distinguishability arises as correlations between the System and Label registers of the circuit in Figure \ref{fig:noisy-bs}.
 It turns out that independently transforming the System and Label registers back into the Schur basis can give a Schmidt decomposition for these correlated states (see Figure \ref{fig:noisy-bs-rep}).
 This can be seen as a consequence of the following duality~\cite{goodman2009, rowe2012}.
-\begin{theorem}[Unitary-unitary duality]\label{thm:unitary-unitary}
+\begin{theorem}[Unitary-Unitary Duality]\label{thm:unitary-unitary}
 The totally symmetric irrep of $\mr{U}(md)$ can be decomposed into irreps of $\mr{U}(m) \times \mr{U}(d)$ as
 \begin{align}\label{eq:uudecomp}
 (\mathbb{C}^{m} \otimes \mathbb{C}^{d})^{(n)} \cong \bigoplus_{\lambda\vdash n} \mathbb{C}^{\{\lambda\}_m} \otimes \mathbb{C}^{\{\lambda\}_d} ,
 \end{align}
 where $\{\lambda\}_m$ indicates an irrep $\lambda$ of $\mr{U}(m)$, similarly for $\{\lambda\}_d$, and $\lambda$ runs over all partitions of $n$ consistent with both $m$ and $d$.
 \end{theorem}
-This can be proven by Schur decomposing the System and Label registers, each of which, by Schur-Weyl duality, will have good permutation symmetry quantum numbers.
+This can be proven by Schur decomposing the System and Label registers, each of which, by the Schur-Weyl Duality, will have good permutation symmetry quantum numbers.
 The question is then which linear combinations of tensor products of such states are totally symmetric, and the answer turns out to be only states of the form (suppressing normalisation)~\cite{hamermesh1962}
 \begin{align}\label{eq:symSL}
 \ket{\lambda, q_\lambda, {q'}_\lambda}_\mr{SysLab} &=  \sum_{p_\lambda} \ket{\lambda, q_\lambda, p_\lambda}_\mr{Sys} \ket{\lambda, {q'}_\lambda, p_\lambda}_\mr{Lab} .
@@ -310,7 +310,7 @@ For example, the completely distinguishable state that from Equation (\ref{eq:Co
 \frac{1}{\sqrt{n!}} \sum_{\lambda \vdash n} \sum_{q_\lambda^\mr{coin}} \sum_{p_\lambda} |\lambda,q_\lambda,p_\lambda\rangle_{\textrm{Sys}}|\lambda,q_\lambda,p_\lambda\rangle_{\textrm{Lab}},
 \label{distinguishable-irreps}
 \end{equation}
-where the sum over $q_\lambda^\mr{coin}$ is taken over the coincident subspace, that is, the irrep basis states with pattern weight (or type) $(11\cdots 1)$.
+where the sum over $q_\lambda^\mr{coin}$ is taken over the coincident subspace, that is, the irrep basis states with pattern weight $(11\cdots 1)$.
 That the dimensions of these spaces are the same can be shown combinatorially and follows from the theorem.
 This shows that although in the ideal case only the symmetric subspace is in play and therefore the full Schur transform is overkill, for the distinguishable case all irreps $\lambda$ can play a role.
 
@@ -318,7 +318,7 @@ This shows that although in the ideal case only the symmetric subspace is in pla
 \includegraphics[width=\linewidth]{noisy_circuit/post_circuit}
 \caption[Circuit diagram illustrating how postselection can be used to `filter out' distinguishability]{Circuit diagram illustrating how postselection can be used to `filter out' distinguishability.
 Note that the postselection measurement of the System $\lambda$-register is in the irrep basis, while that of the System $q$-register is in the GZ basis.
-The second Schur transform on the Label register is not necessary, but illustrates the unitary-unitary duality.}
+The second Schur transform on the Label register is not necessary, but illustrates the Unitary-Unitary Duality.}
 \label{fig:noisy-bs-rep}
 \end{figure}
 
@@ -326,7 +326,7 @@ The second Schur transform on the Label register is not necessary, but illustrat
 \subsection{Postselection of ideal bosonic sampling}
 \label{sec:post-bs}
 
-Although unitary-unitary duality can be demonstrated in this model by implementing local Schur transforms before measuring, in both the ideal and distinguishable case circuits considered previously, it was argued that this was not necessary; it was enough to measure in the computational basis after the unitary transformation was implemented and post-process.
+Although Unitary-Unitary Duality can be demonstrated in this model by implementing local Schur transforms before measuring, in both the ideal and distinguishable case circuits considered previously, it was argued that this was not necessary; it was enough to measure in the computational basis after the unitary transformation was implemented and post-process.
 An interesting observation is that given a distinguishable input, by performing the second Schur transform on the System it becomes possible to use postselection to sample from the indistinguishable distribution.
 Of course, this comes at the cost of throwing away a lot of bad samples.
 
@@ -349,7 +349,7 @@ Another serious practical difficulty with linear optics is the loss of photons t
 In this section, we discuss how the loss model developed by Aaronson and Brod~\cite{aaronson2016} can be simulated. 
 In their model, $n+k$ bosons are generated as occupation $S^0$, $k$ of which are lost before they reach the interferometer. 
 As we don't know which bosons were lost, Aaronson and Brod take the average over the set of all $n$-boson occupations which are consistent with $S^0$, denoted $\bar{\Lambda}_{m,S^0,n}$.
-The result can be shown by tracing out any choice of $k$ qudits in the ideal case, as shown in Figure \ref{fig:lost-bs}. 
+The result can be shown by tracing out any choice of $k$ qudits in the ideal case, as shown in Figure \ref{fig:lost-bs}. This fits with the model of loss in first quantisation described in Section \ref{ssec:imperfections-loss}.
 
 \begin{figure}
 \includegraphics[width=\linewidth]{noisy_circuit/lost_circuit}
@@ -436,6 +436,7 @@ Without a specific noise model, there are several mixed states we could consider
 \rho_\epsilon 
 =& \epsilon\left(\frac{\sum_{\sigma \in  \textrm{S}_n}\sigma|s\rangle}{\sqrt{n!}}\right)\left(\frac{\sum_{\tau \in  \textrm{S}_n}\langle s|\tau^\dagger}{\sqrt{n!}}\right) + (1-\epsilon)\left(\frac{\sum_{\sigma \in  \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger}{{n!}}\right).
 \end{align}
+For simplicity, we shall only consider coincident photon states, and leave analysis of more general photon states as an open question.
 Equation~(\ref{eq:ComDis}) tells us that the completely indistinguishable state is maximally mixed on the coincident subspace, and it has been shown that states of the form $\epsilon\ket{\psi}\bra{\psi} + (1-\epsilon)\Id/d$ are separable for sufficiently small $\epsilon$~\cite{braunstein1999, rungta2001}, where $\Id/d$ is the completely mixed state on the entire space (the tensor product $(\mathbb{C}^m)^{\otimes n}$).
 It is therefore tempting to conclude that there is a measurable set of states near the completely distinguishable state that are separable.
 However, the completely distinguishable state only has support on the coincident subspace, which is not a tensor product, and so these results cannot be applied directly.
@@ -445,7 +446,7 @@ This is similar to results that show a mixture of the totally antisymmetric stat
 
 To demonstrate entanglement, we shall use the generalised partial transpose criterion \cite{chen2002}, which is a method for testing if a mixed state $\rho = \sum_{i,j}\rho_{i,j}\ket{i}\otimes\bra{j}$ is entangled. Define the trace norm of $\rho$ as $\|\rho\| \colon= \trace\sqrt{\rho^\dagger\rho}$. We denote a row transposition as $\rho^{T_{r}} = \sum_{i,j}\rho_{i,j}\bra{i}\otimes\bra{j}$, and a column transposition as $\rho^{T_{c}} = \sum_{i,j}\rho_{i,j}\ket{i}\otimes\ket{j}$. The generalised partial transpose criterion states that $\rho$ is separable if for any transposition $y \subset \{r_A,c_A,\dots,r_Z,c_Z\}$ of rows or columns corresponding to subsystems of $\rho$, $\|\rho^{T_y}\| \leq 1$. In our case, it is sufficient to only transpose the rows and columns corresponding to the first particle.
 
-Rewrite $\rho_\epsilon$ in the form
+First, we rewrite $\rho_\epsilon$ in the form
 \begin{align}
 \rho_\epsilon
  &= \frac{1}{n!}\left((1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\sigma,\tau \in \textrm{S}_n}\sigma|s\rangle\langle s|\tau^\dagger\right)\\
@@ -453,22 +454,26 @@ Rewrite $\rho_\epsilon$ in the form
 \end{align}
 where we have separated the sum over $\sigma$ and $\tau$ into two sums, based on whether or not $\sigma^{-1}(1) = \tau^{-1}(1)$. 
 Transposing the first qudit will leave the first of these sums invariant, while always affecting the second. 
-The resulting state is
+The resulting state after this transposition is
 \begin{align}
 \rho_{\epsilon}^{T_1}&=
 \frac{1}{n!} \left((1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
-&\left.+ \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\sigma^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|\right)
+&\quad\quad\quad\quad\left.+ \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\sigma^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|\right).
 \end{align}
-To work out the trace norm of this density matrix, we need to multiply it by its transpose and take the square root. 
-We can compute $\sqrt{\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}}$ as follows:
+
+To work out the trace norm of this density matrix, we need to multiply it by its transpose and take the square root. We note that of the three summations that make up $\rho_{\epsilon}^{T_1}$, the first two have no overlap with the third. This is because of the transposition, which as noted earlier only affects the third summation. For every term in the third summation, there is some $i \in \{2,\dots,n\}$ such that $\ket{s_{\tau^{-1}(1)}} = \ket{s_{\sigma^{-1}(i)}}$. As a result, any term from the other two summations with permutation $\chi$ either has $\braket{s_{\chi^{-1}(1)}|s_{\tau^{-1}(1)}}=0$ or $\braket{s_{\chi^{-1}(i)}|s_{\sigma^{-1}(i)}}=0$. Therefore we only need to consider the product of the first two sums with each other and product of the third summation with itself. Note that this relies on our photons being coincident, to ensure that $\braket{s_i|s_j}=\delta_{i,j}\forall i,j \in [n]$. For more general bosonic states, where multiple photons might occupy the same spatial mode, this simplification would not hold and we might need to consider more complicated analysis. We discuss some consequences of more general photonic states at the end of this section.
+
+Using this knowledge, we compute $\sqrt{\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}}$ as
 \begin{align}
-&\frac{1}{n!} \left((1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger+ \epsilon^2\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)\\\upsilon^{-1}(1) = \chi^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\chi|s\rangle\langle s|\upsilon^\dagger\right.\nonumber\\
-&\left. + \epsilon\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\upsilon^{-1}(1) \neq \chi^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\sigma^{-1}(1)}|s_{\upsilon^{-1}(1)}\rangle\langle s_{\chi^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|s_{\chi^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right)^{1/2}\\
-&= \frac{1}{n!}\left((1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
-&\left.+ \epsilon^2(n-1)!\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.
-\left. + \epsilon\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right)^{1/2} \\
-&= \frac{1}{n!}\left((1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
-&+ \left.\frac{\epsilon}{(n-1)!}\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right).\label{eqn:mismatched-perms}
+\sqrt{\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}} &= \frac{1}{n!} \left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
+&\quad\quad\quad\quad\left.+ \epsilon^2\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)\\\upsilon^{-1}(1) = \chi^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\chi|s\rangle\langle s|\upsilon^\dagger\right.\nonumber\\
+&\quad\quad\quad\quad\left. + \epsilon\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\upsilon^{-1}(1) \neq \chi^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\sigma^{-1}(1)}|s_{\upsilon^{-1}(1)}\rangle\langle s_{\chi^{-1}(1)}|\right.\nonumber\\
+&\quad\quad\quad\quad\quad\left.\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|s_{\chi^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\vphantom{\sum_{\substack{a\\b\\c\\d}}}\right)^{1/2}\\
+&= \frac{1}{n!}\left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
+&\quad\quad\quad\quad\left. + \epsilon^2(n-1)!\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger \right.\nonumber\\
+&\quad\quad\quad\quad\left.+ \epsilon\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right)^{1/2} \\
+&= \frac{1}{n!}\left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
+&\quad\quad\quad\quad\left.+\frac{\epsilon}{(n-1)!}\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right).\label{eqn:mismatched-perms}
 \end{align}
 From this we can work out the trace norm as
 \begin{align}
@@ -483,10 +488,16 @@ The third term comes from Equation (\ref{eqn:mismatched-perms}), the trace of wh
 This can be worked out by choosing any permutation $\sigma \in \textrm{S}_n$, and constructing $\tau$ by first choosing $\tau^{-1}(1)\neq\sigma^{-1}(1)$ and choosing $\tau^{-1}(i)$ for $i>1$ to be a permutation in $\textrm{S}_{n-1}$. 
 Thus the overall number is $(n-1)n!(n-1)!$.
 
-We can see that the trace norm of $\rho_\epsilon^{T_1}$ therefore fails the generalised partial transposition criterion for separability if $n>1$ and $\epsilon>0$.
-Note that this does not imply that efficiently sampling from unitary actions on such states is not classically possible for any nonzero $\epsilon$, merely that techniques used for simulating separable states cannot be used for exact sampling in this case.
+We can see that the trace norm of $\rho_\epsilon^{T_1}$ therefore fails the generalised partial transposition criterion for separability for all $n>1$ and $\epsilon>0$.
+Note that this does not imply that efficiently sampling from unitary actions on such states is not classically possible for any nonzero $\epsilon$, merely that techniques used for simulating separable states cannot be used for exact sampling in this case. Indeed, as we shall see in Section \ref{ssec:fixed-dist-distance}, Boson Sampling with this input state can be \textit{approximately} simulated using separable states.
 
+As stated earlier, this relies on our initial state being $n$ coincident photons. One example of where this does not hold for particular input occupations is the photonic state corresponding to $n$ photons all generated in the same spatial mode. Let $i$ be the spatial mode in question. In this case note that the Label register is completely separable from the system register regardless of distinguishability
 
+\begin{align}
+\frac{1}{\sqrt{n!}}\sum_{\sigma\in\symm_n}\sigma\ket{i}^{\otimes n}\sigma\ket{l} &= \ket{i}^{\otimes n}\left(\frac{1}{\sqrt{n!}}\sum_{\sigma\in\symm_n}\sigma\ket{l}\right).
+\end{align}
+
+As a result, tracing out the Label register will leave the state $\ket{i}^{\otimes n}$, which is a product state. Thus an equivalent state given in Equation (\ref{eq:Werner}), a mixture of the fully indistinguishable and fully distinguishable photonic states, would be separable for any choice of $\epsilon$. It is therefore likely that entanglement in first quantisation depends on both indistinguishability and photon occupation. We leave more general analysis as a direction for further research.
 
 \section{Conclusion}
 \label{sec:nc-conclusion}
