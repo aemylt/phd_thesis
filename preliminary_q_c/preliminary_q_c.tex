@@ -1,4 +1,4 @@
-\chapter{Preliminary Material: Quantum Algorithms for NP-Hard Problems}
+\chapter{Preliminary Material: Quantum algorithms for NP-Hard problems}
 \label{chp:prelim-q-c}
 
 Parts of this chapter are joint work with Noah Linden and Ashley Montanaro, and published as ``Quantum speedup of the traveling-salesman problem for bounded-degree graphs'', \href{https://link.aps.org/doi/10.1103/PhysRevA.95.032323}{\textit{Physical Review A} \textbf{95}, 032323 (2017)}, copyright American Physics Society. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1612.06203}{arXiv:1612.06203}}. Note that this work was completed and published under my former name.
@@ -11,7 +11,7 @@ The following two chapters will focus on this question. In this chapter we shall
 
 The rest of this chapter is presented as follows. In Section \ref{sec:p-vs-np}, we introduce the complexity classes P and NP, explain the significance of the P vs NP problem and discuss the relevance of NP-Hard problems. In Section \ref{sec:classical-np}, we introduce standard classical algorithms for solving NP-Hard problems exactly in an exponential amount of time. Finally, we present quantum speedups of these approaches in Section \ref{sec:quantum-np}.
 
-\section{P vs NP and NP-Hardness}
+\section{P vs NP and NP-Hard problems}
 \label{sec:p-vs-np}
 
 To understand why NP-Hard problems are a good starting point in the hunt for a quantum speedup, we first need to understand why they are so important in the world of complexity theory. This is because they provide a potential solution to one of the famous problems in computer science and mathematics: the P vs NP problem.
@@ -26,7 +26,7 @@ These reductions mean that if an NP-Hard problem requires a polynomial amount of
 
 This shows why NP-Hard problems are such a strong motivation for the P vs NP problem. Finding a polynomial time algorithm for any NP-Hard problem is sufficient for proving that $\p = \np$. Conversely, if any NP-Complete problem can be proven to not be solvable in polynomial time, then we have proven that $\p \neq \np$. However, both directions of work have proven to be highly non-trivial to solve.
 
-\subsection{Examples of NP-Hard Problems}
+\subsection{Examples of NP-Hard problems}
 
 There are many examples of problems which are NP-Hard. For this summary, we shall give three well-known problems which are often discussed in the theoretical computer science literature and are applicable to which the algorithms discussed later in this chapter. For more examples of NP-Hard problems, we point the reader towards \cite{karp1972, garey1979}, which also includes reductions for these and many other problems.
 
@@ -59,7 +59,7 @@ We shall now move on to exploring how we can classically solve these NP-Hard pro
 
 In some cases, the best performance we are able to asymptotically achieve is a brute force evaluation. With SAT, for example, there are $2^n$ possible assignments of $n$ variables, and evaluating a single assignment takes polynomial time. Assuming the Strong Exponential Time Hypothesis holds, which in turn would imply that $\p \neq \np$, any classical algorithm must solve the SAT problem in $\Omega(2^n)$ time \cite{calabro2009}. But even when asymptotically brute force approaches are as good as any, in practice there might be many instances that do not require a full evaluation of all possible outcomes. This has led to significant interest in developing faster algorithms for non-worst-case Boolean formulae, with numerous surveys and competitions assessing these approaches \cite{sohanghpurwala2017, sat18}.
 
-\subsection{Dynamic Programming}
+\subsection{Dynamic programming}
 
 Dynamic programming is a method for solving optimisation problems in a recursive fashion. The technique works by computing smaller instances of the problem and storing the result in memory in order to prevent needing to recompute the instance later.
 
@@ -116,20 +116,21 @@ Return \FnBTSAT{$B$, $\tilde{\mathbf{x}}(x_i=\false)$};
 
 Algorithm \ref{alg:backtracksat} gives an example of a backtracking algorithm for Boolean Satisfiability. Suppose we can apply a partial assignment $\tilde{\mathbf{x}}$ to $B$ in order to produce a Boolean formula $B'$ consisting of the remaining unassigned variables. Then our predicate $P$ is simply to apply a partial assignment to $B$ and check if $B'$ is now trivial; if so then we return True or False depending on if $B'$ is True or False, respectively. Otherwise, our predicate $P$ returns Undefined. Our heuristic $h$ is to simply pick an unassigned variable $x_i$. Asymptotically, this algorithm will require $O^*(2^n)$ time in the worst case, where every possible assignment needs to be tested. However, in practice we might not need to evaluate large portions of the tree, due to finding partial assignments which already succeed or fail to satisfy the Boolean formula. There might also be ways to improve this algorithm in practice, such as by applying polynomial time techniques to simplify $B'$.
 
-\subsubsection{Branch and Bound}
+\subsubsection{Branch and bound}
+\label{sssec:branch-and-bound}
 
-Branch and Bound is a development of backtracking specifically looking at optimisation problems. Rather than proceeding recursively like in Backtracking, Branch and Bound uses a bound function to decide the order in which to evaluate potential solutions, as well as a branch function to decide on how to reduce the solution space.
+Branch and bound is a development of backtracking specifically looking at optimisation problems. Rather than proceeding recursively like in backtracking, branch and bound uses a bound function to decide the order in which to evaluate potential solutions, as well as a branch function to decide on how to reduce the solution space.
 
-Branch and Bound is a standard approach for Integer Linear Programming. An upper bound can be computed by removing the constraint that the solution vector $x$ needs to be an integer, relaxing the problem to that of a Linear Programming problem which can be solved in polynomial time via, for example, \cite{cohen2019}. If $x$ is an integer solution, no solution exists, or the upper bound is worse than our current best solution, we stop exploring that potential solution. Otherwise we branch by choosing an $s = x_i$ in the solution vector which is not an integer, and create two new reduced problems by adding either the constraint that $x_i \leq \lfloor s \rfloor$ or that $x_i \geq \lceil s \rceil$. We can also improve the algorithm even further by adding constraints in the form of cutting planes; such a technique is commonly referred to as Branch and Cut.
+Branch and bound is a standard approach for Integer Linear Programming. An upper bound can be computed by removing the constraint that the solution vector $x$ needs to be an integer, relaxing the problem to that of a Linear Programming problem which can be solved in polynomial time via, for example, \cite{cohen2019}. If $x$ is an integer solution, no solution exists, or the upper bound is worse than our current best solution, we stop exploring that potential solution. Otherwise we branch by choosing an $s = x_i$ in the solution vector which is not an integer, and create two new reduced problems by adding either the constraint that $x_i \leq \lfloor s \rfloor$ or that $x_i \geq \lceil s \rceil$. We can also improve the algorithm even further by adding constraints in the form of cutting planes; such a technique is commonly referred to as branch and cut.
 
-Both Branch and Bound \& Branch and Cut algorithms have also been developed for the Travelling Salesman Problem \cite{little1963, padberg1991}. Asymptotic analysis of these algorithms are hard to come by, but these approaches have been found to be the best performing in practice. Indeed, a Branch and Cut algorithm is responsible for some of the largest solved instances of the Travelling Salesman Problem to date, finding the optimal tour of 85,900 cities in 2005/2006 \cite{applegate2006}, and later finding the optimal tours of 49,687 UK pubs and 109,399 stars \cite{tspuk49687}.
+Both branch and bound \& branch and cut algorithms have also been developed for the Travelling Salesman Problem \cite{little1963, padberg1991}. Asymptotic analysis of these algorithms are hard to come by, but these approaches have been found to be the best performing in practice. Indeed, a branch and cut algorithm is responsible for some of the largest solved instances of the Travelling Salesman Problem to date, finding the optimal tour of 85,900 cities in 2005/2006 \cite{applegate2006}, and later finding the optimal tours of 49,687 UK pubs and 109,399 stars \cite{tspuk49687}.
 
-\section{Quantum Speedups}
+\section{Quantum speedups}
 \label{sec:quantum-np}
 
 We shall now summarise some of the research in quantum speedups of the classical algorithms described in this chapter. For a more broad summary of quantum algorithms, we direct the reader to \cite{montanaro2016}.
 
-\subsection{Quantum Search}
+\subsection{Quantum search}
 
 The most immediate way in which one might try to solve NP-Hard problems is with quantum search, originally developed by Grover \cite{grover96}. Given an oracle for checking if a solution is correct, Grover search works by querying this oracle over a superposition of different solutions. If there is a total of $n$ solutions, then it is possible to show that Grover search will find a correct solution after $O(\sqrt{n})$ queries, whereas an unstructured classical search would require $O(n)$ queries in the worst case.
 
@@ -139,7 +140,7 @@ This seems like a reasonable starting place for trying to solve NP-Hard problems
 
 However, a quadratic speedup over \textit{any} classical algorithm is not necessarily guaranteed. Take the Travelling Salesman Problem for example: The number of possible solutions is on the order of the number of permutations of vertices, of which there are $n!$, meaning that the quantum minimum finding algorithm would find a shortest Hamiltonian cycle in $O(\sqrt{(n-1)!})$ queries. But there are already classical algorithms which are significantly faster, such as the Held-Karp algorithm, which uses $O(n^22^n)$ queries. As a result, we need to consider other speedups to gain an improvement over these better classical algorithms.
 
-\subsection{Dynamic Programming}
+\subsection{Dynamic programming}
 \label{ssec:q-dynamic}
 
 Until recently, it was not known whether or not quantum algorithms would be able to speed up dynamic programming algorithms. This is because of the way in which dynamic programming typically records the solutions to all possible subproblems in memory. Adapting these methods for quantum computers is non-trivial as a result. It is also worth noting that these works came after the work written in this thesis.
@@ -233,7 +234,7 @@ $$O\left(v^{3/2}\sqrt{T}\log^2\frac{v\log T_0}{\epsilon}\right)$$
 
 Runtime factors of Montanaro's algorithm were improved in subsequent work by Jarret and Wan \cite{jarret2018}. This was achieved by noting that the runtime of Belovs' quantum walk algorithm also depends on the effective resistance of a graph, a property of a graph inspired by electrical networks, which is not utilised by Montanaro. Jarret and Wan showed that this quantity can be efficiently approximated on a quantum computer and utilised to achieve a runtime of $O(\sqrt{Tn}\log^4(mn)\log(m/\epsilon))$, where $m$ is the number of satisfying assignments. This leads to an improvement in terms of $n$ as long as $m$ grows sub-exponentially with $n$.
 
-\subsection{Adiabatic Quantum Computing}
+\subsection{Adiabatic quantum computing}
 
 We conclude this preliminary material by briefly mentioning the role of adiabatic quantum computing in achieving a quantum speedup for NP-Hard problems. Adiabatic quantum computing is a model of quantum computation where one starts with a quantum system with a known ground state, and then gradually updates the Hamiltonian until the system is one whose ground state is the solution to the problem one is trying to solve. As long as the Hamiltonian evolves slowly enough over time, the adiabatic theorem states that with high probability the system will still be in the ground state at the end of the evolution \cite{das2008}. The run time of this algorithm is therefore dependent on the minimum distance in energy levels between the ground state and the next excited state at any point in the evolution, known as the spectral gap. This model of quantum computing is very similar to, though not strictly the same as, quantum annealing, which the model used by D-Wave quantum processors \cite{mcgeoch2019}.
 

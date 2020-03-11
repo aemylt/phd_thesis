@@ -501,7 +501,7 @@ This shows a relationship between distinguishability and loss similarly to, but 
 
 
 
-\section{Empirical Errors}
+\section{Empirical errors}
 \label{sec:empirical-errors}
 
 A natural question at this point is how to assess the performance of this new approach over that of \cite{renema2018,renema2018loss}. 
@@ -725,7 +725,7 @@ We shall start with the simpler case of two photons, which we shall assume to be
 \rho_{\{1,2\}} = \ket{\young(12)}\bra{\young(12)},
 \end{equation}
 
-\noindent where we have suppressed notation for the irrep as it is implied by the Young tableaux, and we have suppressed the Symmetric irrep basis as it is one dimensional in the two particle cases. Note that states where only one photon is in the indistinguishable set are effectively fully distinguishable as well. As a result, the states $\rho_{\{1\}}, \rho_{\{2\}}$ are equal to $\rho_{\emptyset}$, the fully distinguishable state, which as described in the irrep basis in Equation \ref{distinguishable-irreps} gives us
+\noindent where we have suppressed notation for the irrep as it is implied by the Young tableaux, and we have suppressed the symmetric irrep basis as it is one dimensional in the two particle cases. Note that states where only one photon is in the indistinguishable set are effectively fully distinguishable as well. As a result, the states $\rho_{\{1\}}, \rho_{\{2\}}$ are equal to $\rho_{\emptyset}$, the fully distinguishable state, which as described in the irrep basis in Equation \ref{distinguishable-irreps} gives us
 
 \begin{equation}
 \rho_\emptyset = \frac{1}{2}\left(\ket{\young(12)}\bra{\young(12)}+\left|\young(1,2)\right\rangle\left\langle\young(1,2)\right|\right).
@@ -753,7 +753,7 @@ The fully indistinguishable state is similar to before:
 \rho_{\{1,2,3\}} = \ket{\young(123)}\bra{\young(123)}.
 \end{equation}
 
-Rather than writing out the full Young-Yagamouchi basis, we shall simply use a 1 or 2 subscript to denote the basis state of the $(1,2)$ irrep of the Symmetric group, which, as noted in Theorem \ref{thm:schur-weyl-duality}, induces a multiplicity on the corresponding irrep of the Unitary group. This matches the notation used in Stanisic and Turner \cite{stanisic2018}. With this in mind, the uniform mixture of all three singly distinguishable states is
+Rather than writing out the full Young-Yagamouchi basis, we shall simply use a 1 or 2 subscript to denote the basis state of the $(1,2)$ irrep of the symmetric group, which, as noted in Theorem \ref{thm:schur-weyl-duality}, induces a multiplicity on the corresponding irrep of the unitary group. This matches the notation used in Stanisic and Turner \cite{stanisic2018}. With this in mind, the uniform mixture of all three singly distinguishable states is
 
 \begin{align}
 \rho_{\{1,2\}}+\rho_{\{1,3\}}+\rho_{\{2,3\}} &= \ket{\young(123)}\bra{\young(123)} + \frac{1}{2}\left(\left|\young(12,3)_1\right\rangle\left\langle\young(12,3)_1\right| + \left|\young(12,3)_2\right\rangle\left\langle\young(12,3)_2\right|\right)\nonumber\\
@@ -818,7 +818,7 @@ There are other open questions we would like to consider as well. The first woul
 Finally it would be interesting to extend these results to other photonics-based quantum advantage schemes, such as Gaussian Boson Sampling \cite{hamilton2017}. The probability distribution of Gaussian Boson Sampling is that of $n$ indistinguishable squeezed states at the output of an $m$-mode linear optical interferometer, and depends on the Hafnian of a matrix. Unlike Boson Sampling, there is no known polynomial time classical algorithm for computing the probability of a single outcome from $n$ fully distinguishable squeezed states. An attempt to remedy this was recently presented by Renema \cite{renema2019}, by looking at the probability of an outcome from a Gaussian Boson Sampling as a linear combination of matrix permanents and extending the point truncation method accordingly, but this result hits a stumbling block in the form of an open problem related to the hardness of matrix permanents. On the other hand, it is classically efficient to sample $n$ fully distinguishable squeezed states, via a similar approach to that used for classically sampling distinguishable single photons \cite{aaronson2014}: For each squeezed state, one first samples the number of photons in that squeezed state via the inverse binomial distribution \cite{wu2019}, then each of those photons is sampled through the interferometer individually, as photons that start in the same spatial mode do not interfere with one another and their outcomes can therefore be sampled individually. As a result, adapting the Clifford \& Clifford algorithm to non-ideal Boson Sampling models provides an important step towards being able to classically simulate imperfections in Gaussian Boson Sampling. This, combined with recent classical simulation algorithms for ideal Gaussian Boson Sampling \cite{quesada2019, wu2019}, show strong potential for these results to extent to Gaussian Boson Sampling.
 
 
-\subsection{Note Added}
+\subsection{Note added}
 
 During this work we were made aware of independent work by V. Shchesnovich, which also shows that the model of distinguishability considered by Renema et al.\ corresponds to that of selecting indistinguishable photons via the binomial distribution \cite{shchesnovich2019}. 
 This is derived using significantly different methods from those used in this manuscript, and does not consider classical simulation of distinguishability via the above method (though this has been anticipated~\cite{shchesnovich2019clifford}).
