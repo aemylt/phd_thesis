@@ -12,7 +12,7 @@ In this thesis, we have strived to close the gap between what problems quantum c
 
 But alas, the gap between these directions still exists, and there is yet more work to be done. We shall conclude this thesis with some open questions, such that an inspired reader might choose to pursue these routes even deeper. As we have done so throughout this thesis, we shall consider the two approaches separately.
 
-\subsection{Applications direction}
+\subsection{Application-focused directions}
 
 Several open directions have already been mentioned in Section \ref{sec:tsp-conclusion}. Of particular note is the question of what other classical algorithms for the Travelling Salesman Problem can be sped up by a quantum computer. Promising directions include cut-and-count \cite{bjorklund14,bodlaender15,cygan11}, which use a combination of Monte Carlo algorithms and dynamic programming, and branch-and-bound \& branch-and-cut \cite{little1963, padberg1991, applegate2006}, for which quantum speedups already exist but most complexity understanding is empirical rather than analytical.
 
@@ -24,7 +24,7 @@ We already hint at this open direction in Section \ref{sec:error-correction}, wh
 
 There are also other near-term architectures that can be considered. Of particular note is the Quantum Adiabatic Optimisation Algorithm. When originally proposed by Farhi et al.~\cite{farhi2014}, it was used as a quantum algorithm for finding an approximation to the Max-Cut problem, which is known to be NP-Hard \cite{karp1972}. As a model of universal quantum computation \cite{lloyd2018, morales2019}, it is likely that other applications for QAOA to NP-Hard problems will also be found in the future, though it is less clear how promising a speedup QAOA will offer. Other intermediate-scale, or NISQ, devices also show potential in different applications, such as the Variational Quantum Eigensolver for simulating physical systems \cite{peruzzo2014, preskill2018}.
 
-\subsection{Architecture direction}
+\subsection{Architecture-focused directions}
 
 There are many directions we can go when looking at near-term quantum architectures. As mentioned at the end of Chapters \ref{chp:noisy_circuit} and \ref{chp:classical_sim}, the most natural direction for continuing this work is to better understand the computational complexity of Boson Sampling under these imperfections. We have already discussed several examples of classical simulation approaches, such as \cite{renema2018, renema2018loss, garciapatron2017, oszmaniec2018, brod2019}, and have hinted at how one might prove hardness, via the computational complexity of immanants \cite{hartmann1985, barvinok1990, burgisser2000, burgisser2000immanants, mertens2013}. Better understanding of how the Quantum Schur Transform acts on certain states would also assist in this goal.
 
