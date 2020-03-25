@@ -3,7 +3,7 @@
 
 \section{Introduction}
 
-This work was completed in collaboration with Noah Linden and Ashley Montanaro, and published as ``Quantum speedup of the traveling-salesman problem for bounded-degree graphs'', \href{https://link.aps.org/doi/10.1103/PhysRevA.95.032323}{\textit{Physical Review A} \textbf{95}, 032323 (2017)}, copyright American Physics Society. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1612.06203}{arXiv:1612.06203}}. Note that this work was completed and published under my former name.
+This work was completed in collaboration with Noah Linden and Ashley Montanaro, and published as ``Quantum speedup of the traveling-salesman problem for bounded-degree graphs'', \href{https://link.aps.org/doi/10.1103/PhysRevA.95.032323}{\textit{Physical Review A} \textbf{95}, 032323 (2017)}, copyright American Physics Society. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1612.06203}{arXiv:1612.06203}}. Note that this work was completed and published under my former name. Details of contributions made by myself are given in Section \ref{ssec:publications}.
 
 In this chapter we apply known quantum-algorithmic techniques to accelerate a sequence of classical TSP algorithms for the important special case of bounded-degree graphs. We say that a graph $G$ is degree-$k$ if the degree of any vertex in $G$ is at most $k$. Although a sub-instance of the general Travelling Salesman Problem, this restriction is still NP-Hard for graphs of degree at least 3\footnote{Note that any graph of degree strictly less than 3 is trivial to solve, as the only such graphs that contains a Hamiltonian cycle are the cycle graphs $C_n$.} \cite{akiyama1980}.
 
@@ -45,7 +45,7 @@ We summarise our results in Table \ref{tab:summary}.
 \label{tab:summary}
 \end{table}
 
-The rest of this chapter is as follows. In Section \ref{sec:tsp-related}, we introduce related work on quantum speedups for the Travelling Salesman problem when the graphs are of bounded degree. Then, in Section \ref{sec:bd}, we describe how this technique can be used to accelerate classical algorithms of Xiao and Nagamochi for graphs of degree at most 4~\cite{xiao2016degree3,xiao2016degree4}. In Section \ref{sec:higher-bound}, we extend this approach to graphs of degree at most 6.
+The rest of this chapter is as follows. In Section \ref{sec:tsp-related}, we introduce related work on quantum speedups for the Travelling Salesman problem when the graphs are of bounded degree. Then, in Section \ref{sec:deg3}, we describe how this technique can be used to accelerate classical algorithms of Xiao and Nagamochi for graphs of degree at most 4~\cite{xiao2016degree3,xiao2016degree4}. In Section \ref{sec:higher-bound}, we extend this approach to graphs of degree at most 6.
 
 \subsection{Related work}
 \label{sec:tsp-related}
@@ -111,7 +111,7 @@ The same issue with amplitude amplification applies to other classical algorithm
 
 % ------------------------------------------------------------------------------
 
-\section{Quantum speedups for the Travelling Salesman Problem on bounded-degree graphs \label{sec:bd}}
+\section{Quantum speedups for the Travelling Salesman Problem on bounded-degree graphs}
 \label{sec:deg3}
 
 Our algorithms are based on applying the quantum algorithm for backtracking (Theorem \ref{thm:backtrack}) to Xiao and Nagamochi's algorithm for solving the TSP for degree-3 graphs~\cite{xiao2016degree3}. Before describing our algorithms, we need to introduce some terminology from~\cite{xiao2016degree3} and describe their original algorithm. The algorithm, and its analysis, are somewhat involved, so we omit details wherever possible.
