@@ -3,7 +3,7 @@
 
 \section{Introduction}
 
-This work was completed in collaboration with Peter S. Turner, and published as ``Quantum simulation of partially distinguishable boson sampling'', \href{https://link.aps.org/doi/10.1103/PhysRevA.97.062329}{\textit{Physical Review A} \textbf{97}, 062329 (2018)}, copyright American Physics Society. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1803.03657}{arXiv:1803.03657}}. Details of contributions made by myself are given in Section \ref{ssec:publications}.
+\change{This work was completed in collaboration with Peter S. Turner, and published as ``Quantum simulation of partially distinguishable boson sampling'', \href{https://link.aps.org/doi/10.1103/PhysRevA.97.062329}{\textit{Physical Review A} \textbf{97}, 062329 (2018)}, copyright American Physics Society. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1803.03657}{arXiv:1803.03657}}. Details of contributions made by myself are given in Section \ref{ssec:publications}.}
 
 In this chapter we explore the problem of sampling from a collection of $n$ partially distinguishable single bosons interacting on a $m$-mode interferometer from the opposite direction, that is, from the perspective of quantum simulation. 
 We do so by observing that ideal Boson Sampling is equivalent to sampling from the totally symmetric representation of the unitary group, and that partial distinguishability generalises this to the problem of sampling from arbitrary irreducible representations.
@@ -183,15 +183,7 @@ Note that we only sample from the System qudits, effectively tracing out the Lab
 \label{fig:noisy-bs}
 \end{figure}
 
-To see that this distribution matches that of partially distinguishable bosons, we will compare with the results of Tichy~\cite{tichy2015}.
-There, each boson is assigned an ``internal'' state $|\Phi_i\rangle$, where $i=1, \cdots, m$.
-Thus, in our terminology, every boson in System mode $i$ has a Label state given by $\Phi_i$.
-The probability distribution given there for sampling from partially distinguishable bosons is (in our notation)
-\begin{equation}\label{eq:TichyDist}
-\textrm{Pr}[S'] =  \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau'}(k)}} \mathcal{S}_{{\tau'(k)},{\tau(k)}},
-\end{equation}
-where $\mathcal{S}_{k,l} = \langle \Phi_{s_k}|\Phi_{s_l}\rangle$ is a Hermitian positive-definite $n \times n$ distinguishability matrix, $s_k$ gives the mode occupied by particle $k$, and we've included a factor to account for the possibility of multiple bosons in the same output mode.
-In order to connect our model with this model of distinguishability, one simply needs to take superpositions of $mn$-mode input occupations $T$ in such a way as to realise the Label states $\Phi_i$.
+To see that this distribution matches that of partially distinguishable bosons, we will compare with the results of Tichy~\cite{tichy2015} \change{discussed in Section \ref{ssec:imperfections-distinguishability}}. In order to connect our model with this model of distinguishability, one simply needs to take superpositions of $mn$-mode input occupations $T$ in such a way as to realise the Label states $\Phi_i$.
 This is always possible since the space of internal states, span$\{\Phi_i\}_{i=1}^m$, can always be embedded in the Label space $(\mathbb{C}^n)^{\otimes n}$.
 For example, consider two bosons in two System modes where one boson is in System mode 1 and has internal state $|1\rangle$ (corresponding to Label mode 1), and the other boson is in System mode 2 and has internal state $|\Phi_2\rangle=\alpha|1\rangle+\beta|2\rangle$.
 This is represented as the following superposition of System-Label occupations:
@@ -338,7 +330,8 @@ Following the arguments above, the circuit remains efficient since the added Sch
 More generally, such a postselected quantum circuit could sample from any irrep $\lambda$ of $\textrm{U}(m)$. 
 All we need to achieve this is to ensure that the input state has support in the irrep we wish to sample from, and postselect on being in that irrep.
 A dimension counting argument shows that the completely distinguishable input discussed above has support in all irreps~\cite{stanisic2018}, and so could be used for this purpose.
-%We will discuss the complexity of such sampling in Sec.~\ref{sec:nc-conclusion}.
+
+\change{It is worth noting however that the probability of this postselection succeeding can be extremely small. For the worst case, when we have the fully distinguishable state, the probability of postselecting on the fully symmetric irrep is $1/n!$, thus we expect on average $O(n!)$ attempts before postselection is successful.}
 
 
 
