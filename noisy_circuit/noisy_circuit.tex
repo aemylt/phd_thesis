@@ -456,19 +456,27 @@ The resulting state after this transposition is
 
 To work out the trace norm of this density matrix, we need to multiply it by its transpose and take the square root. We note that of the three summations that make up $\rho_{\epsilon}^{T_1}$, the first two have no overlap with the third. This is because of the transposition, which as noted earlier only affects the third summation. For every term in the third summation, there is some $i \in \{2,\dots,n\}$ such that $\ket{s_{\tau^{-1}(1)}} = \ket{s_{\sigma^{-1}(i)}}$. As a result, any term from the other two summations with permutation $\chi$ either has $\braket{s_{\chi^{-1}(1)}|s_{\tau^{-1}(1)}}=0$ or $\braket{s_{\chi^{-1}(i)}|s_{\sigma^{-1}(i)}}=0$. Therefore we only need to consider the product of the first two sums with each other and product of the third summation with itself. Note that this relies on our photons being coincident, to ensure that $\braket{s_i|s_j}=\delta_{i,j}\forall i,j \in [n]$. For more general bosonic states, where multiple photons might occupy the same spatial mode, this simplification would not hold and we might need to consider more complicated analysis. We discuss some consequences of more general photonic states at the end of this section.
 
-Using this knowledge, we compute $\sqrt{\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}}$ as
+\change{Using this knowledge, we compute $\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}$ as}
+
 \begin{align}
-\sqrt{\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}} &= \frac{1}{n!} \left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
+\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger} &= \frac{1}{(n!)^2} \left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
 &\quad\quad\quad\quad\left.+ \epsilon^2\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)\\\upsilon^{-1}(1) = \chi^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\chi|s\rangle\langle s|\upsilon^\dagger\right.\nonumber\\
 &\quad\quad\quad\quad\left. + \epsilon\sum_{\substack{\sigma,\tau,\upsilon,\chi \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\upsilon^{-1}(1) \neq \chi^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\sigma^{-1}(1)}|s_{\upsilon^{-1}(1)}\rangle\langle s_{\chi^{-1}(1)}|\right.\nonumber\\
-&\quad\quad\quad\quad\quad\left.\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|s_{\chi^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\vphantom{\sum_{\substack{a\\b\\c\\d}}}\right)^{1/2}\\
-&= \frac{1}{n!}\left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
+&\quad\quad\quad\quad\quad\left.\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\tau^{-1}(i)}|s_{\chi^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\vphantom{\sum_{\substack{a\\b\\c\\d}}}\right)\\
+&= \frac{1}{(n!)^2}\left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
 &\quad\quad\quad\quad\left. + \epsilon^2(n-1)!\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger \right.\nonumber\\
-&\quad\quad\quad\quad\left.+ \epsilon\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right)^{1/2} \\
-&= \frac{1}{n!}\left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
+&\quad\quad\quad\quad\left.+ \epsilon\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right).
+\end{align}
+
+\noindent \change{The square root of this matrix can be written as}
+
+\begin{align}
+\sqrt{\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}} &= \frac{1}{n!}\left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
 &\quad\quad\quad\quad\left.+\frac{\epsilon}{(n-1)!}\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right).\label{eqn:mismatched-perms}
 \end{align}
-From this we can work out the trace norm as
+
+\noindent From this we can work out the trace norm as
+
 \begin{align}
 \|\rho_{\epsilon}^{T_1}\|_*
  &= \textrm{Tr}\left[\sqrt{\rho_\epsilon^{T_1}\rho_\epsilon^{T_1\dagger}}\right]\\
@@ -476,6 +484,7 @@ From this we can work out the trace norm as
  &= 1-\epsilon + \epsilon+\epsilon(n-1)\\
  &= 1+\epsilon(n-1).
 \end{align}
+
 Here, the $(1-\epsilon)n!$ and $\epsilon n!$ terms come from the trace of the first two terms. 
 The third term comes from Equation (\ref{eqn:mismatched-perms}), the trace of which one can think of as the number of ways we can pick permutations $\sigma,\tau\in\textrm{S}_n$ such that $\sigma^{-1}(1)\neq\tau^{-1}(1)$. 
 This can be worked out by choosing any permutation $\sigma \in \textrm{S}_n$, and constructing $\tau$ by first choosing $\tau^{-1}(1)\neq\sigma^{-1}(1)$ and choosing $\tau^{-1}(i)$ for $i>1$ to be a permutation in $\textrm{S}_{n-1}$. 

@@ -133,7 +133,7 @@ A circuit is reducible if subgraph $B_i$ for some $i$ is incident to only two ed
 \begin{center}
 \includegraphics[width=0.7\linewidth]{tsp/circuit}
 \end{center}
-\caption{\label{fig:circuit-procedure} An example of the circuit procedure, and branching on a circuit, applied to a circuit of six vertices.}
+\caption[An example of the circuit procedure and branching on a circuit]{\label{fig:circuit-procedure} An example of the circuit procedure, and branching on a circuit, applied to a circuit of six vertices.}
 \end{figure}
 
 Note that each edge can be in at most one circuit. If two distinct circuits $\mathcal{C}, \mathcal{C}'$ shared an edge $e_i$, then there are two possibilities. The first is that there is a subgraph $B_i$ incident to unforced edges $e_i \in \mathcal{C} \cap \mathcal{C}', e_{i+1} \in \mathcal{C} - \mathcal{C}', e_j \in \mathcal{C}' - \mathcal{C}$. In this case, $B_i$ is incident to more than two unforced edges, so neither $\mathcal{C}$ nor $\mathcal{C}'$ are circuits, which is a contradiction.
@@ -150,7 +150,7 @@ The second is that there is some edge $e_i$ which is incident to distinct subgra
 
 \subfloat[\label{fig:parity}]{\includegraphics[width=0.3\linewidth]{tsp/badcircuit}}
 \end{center}
-\caption{\label{fig:xn-examples}Some example simplifications. \ref{fig:3-cut}: An example of a 3-cut reducible graph being reduced to a single point. \ref{fig:4-cut}: An example of a 4-cut reducible graph being reduced to a pair of forced paths. \ref{fig:parallel}: An example of parallel edges being reduced to a single edge. \ref{fig:parity}: An example of a circuit which fails the parity condition.}
+\caption[Some example simplifications used in the Xiao-Nagamochi algorithm]{\label{fig:xn-examples}Some example simplifications used in the Xiao-Nagamochi algorithm. \ref{fig:3-cut}: An example of a 3-cut reducible graph being reduced to a single point. \ref{fig:4-cut}: An example of a 4-cut reducible graph being reduced to a pair of forced paths. \ref{fig:parallel}: An example of parallel edges being reduced to a single edge. \ref{fig:parity}: An example of a circuit which fails the parity condition.}
 \end{figure}
 
 Let $X$ be a subgraph. We define $\text{cut}(X)$ to be the set of edges that connect $X$ to the rest of the graph. If $|\text{cut}(X)| = 3$, then we say that $X$ is $3$-cut reducible. It was shown by Xiao and Nagamochi~\cite{xiao2016degree3} that, if $X$ is 3-cut reducible, $X$ can be replaced with a single vertex of degree $3$ with outgoing edges weighted such that the length of the shortest Hamiltonian cycle is preserved. \change{The simplest example of this reduction is when $X$ is a triangle graph, as shown in Figure \ref{fig:3-cut}. In this case, a triangle with edge weights $a,b,c$ incident to edges with weights $x,y,z$ can be reduced to a single vertex by noting that to visit every vertex via edge $x$ (resp. $y$, $z$), we also need to travel via edge $c$ (resp. $a$, $b$).}
