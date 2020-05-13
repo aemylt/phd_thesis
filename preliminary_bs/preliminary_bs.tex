@@ -502,10 +502,10 @@ Thus, in our terminology, every boson in System mode $i$ has a Label state given
 \textrm{Pr}[S'] =  \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\tau, \tau' \in \textrm{S}_n} \prod_{k=1}^n U_{s'_k,s_{\tau(k)}} U^\ast_{s'_k,s_{{\tau'}(k)}} \mathcal{S}_{{\tau'(k)},{\tau(k)}}.
 \end{equation}
 
-\noindent \change{By noting that $\sum_\tau\prod_iM_{i,\tau(i)}=\per(M)$, we can rewrite the sum over $\tau'$ into a matrix permanent and see that, up to normalisation,}
+\noindent \change{By noting that $\sum_\tau\prod_iM_{i,\tau(i)}=\per(M)$, we can rewrite the sum over $\tau$ into a matrix permanent and see that}
 
 \begin{equation}
-\prob[S'] \propto \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(U_{S',S}*U_{S',\sigma(S)}^*),
+\prob[S'] = \frac{1}{\prod_{i=1}^m S_i! S'_i!} \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(U_{S',S}*U_{S',\sigma(S)}^*),
 \label{eqn:tichy-perm}
 \end{equation}
 
@@ -636,7 +636,7 @@ These results showed that Boson Sampling under non-uniform loss can be classical
 \label{sec:renema-review}
 
 In \cite{renema2018, renema2018loss}, Renema et al.\ consider the Tichy model of inter-photon distinguishability described in Section \ref{ssec:imperfections-distinguishability}. 
-\change{As mentioned previously,} the probability distribution of arbitrarily distinguishable bosons is modelled as
+\change{As mentioned previously,} the probability distribution of arbitrarily distinguishable bosons \change{in a coincident occupation $S'$} is modelled as
 \begin{equation}
 \prob[S'] = \sum_{\sigma\in\symm_n}\prod_{i=1}^n\mathcal{S}_{i,\sigma(i)}\per(M*M^*_{1,\sigma}) ,
 \end{equation}
