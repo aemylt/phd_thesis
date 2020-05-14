@@ -3,7 +3,7 @@
 
 \section{Introduction}
 
-\change{This work was completed in collaboration with Ra\'ul Garc\'ia-Patr\'on, Jelmer J. Renema and Peter S. Turner, and published as ``Classically simulating near-term partially-distinguishable and lossy boson sampling'', \href{https://iopscience.iop.org/article/10.1088/2058-9565/ab5555}{\textit{Quantum Science and Technology} \textbf{5}, 015001 (2020)}, copyright Institute of Physics. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1907.00022}{arXiv:1907.00022}}. Details of contributions made by myself are given in Section \ref{ssec:publications}.}
+This work was completed in collaboration with Ra\'ul Garc\'ia-Patr\'on, Jelmer J. Renema and Peter S. Turner, and published as ``Classically simulating near-term partially-distinguishable and lossy boson sampling'', \href{https://iopscience.iop.org/article/10.1088/2058-9565/ab5555}{\textit{Quantum Science and Technology} \textbf{5}, 015001 (2020)}, copyright Institute of Physics. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1907.00022}{arXiv:1907.00022}}. Details of contributions made by myself are given in Section \ref{ssec:publications}.
 
 As we saw in Chapter \ref{chp:preliminary_bs}, recent classical simulations have been expanded to consider practical issues such as photon distinguishability, based on a rich collection of theoretical work \cite{deguise2014, tamma2014, shchesnovich2014, rohde2015, shchesnovich2015, tichy2015, tillmann2015}. 
 Renema et al.~\cite{renema2018} demonstrated that Boson Sampling with partially-distinguishable photons can be simulated in time which grows polynomially with $n$, which was later expanded to consider loss as well~\cite{renema2018loss}. 
@@ -427,20 +427,20 @@ Choosing a value of $k=n\alpha$ for $\alpha>x$ will give an error bound of $\tex
 Thus, choosing such a value for $k$ would give an error that decreases as $n$ increases, albeit at the cost of needing to increase $k$ linearly with $n$. 
 While this is still an exponential time algorithm, it would offer a polynomial speedup over the Clifford \& Clifford method for Boson Sampling with indistinguishable photons.
 
-\change{If we are only interested in simulating up to a constant error, we can obtain a slightly better runtime. To do this, we use Hoeffding's inequality to find that}
+If we are only interested in simulating up to a constant error, we can obtain a slightly better runtime. To do this, we use Hoeffding's inequality to find that
 
 \begin{equation}
 \label{eqn:constant-error-truncation}
 \tdist(\rho_{n,x},\rho_{\leq k,x}) \leq \exp\left(-2\frac{(k-nx)^2}{n}\right).
 \end{equation}
 
-\noindent \change{We can note that this value is at most $\epsilon$ if}
+\noindent We can note that this value is at most $\epsilon$ if
 
 \begin{equation}
 k \geq nx + \sqrt{\frac{n\ln(1/\epsilon)}{2}}.
 \end{equation}
 
-\noindent \change{Our overall runtime is then $O(k^22^k+k^2m)$. Asymptotically, this gives us a lower value of $k$ than choosing $n\alpha$.}
+\noindent Our overall runtime is then $O(k^22^k+k^2m)$. Asymptotically, this gives us a lower value of $k$ than choosing $n\alpha$.
 
 Finally, we note that the trace distance is only dependent on the initial states and not the measurement outcomes. 
 As a result, this error bound also applies in the case where the output is not collision free.
@@ -513,7 +513,7 @@ As a result, the worst-case error of this simulation, using the convex propertie
 where in the second line we have used the rule of conditional binomial distributions. 
 Using the same result as used for Equation (\ref{eqn:worst-case}), we can bound the error to a value decreasing in $n$ by setting $k = n\beta$ for $\beta>\eta x$ \cite{arratia1989}. 
 
-\change{Similarly, we can use Hoeffding's inequality as in Equation \ref{eqn:constant-error-truncation} to show that for a constant error it suffices to have}
+Similarly, we can use Hoeffding's inequality as in Equation \ref{eqn:constant-error-truncation} to show that for a constant error it suffices to have
 
 \begin{equation}
 k \geq n\eta x + \sqrt{\frac{n\ln(1/\epsilon)}{2}}.
@@ -674,32 +674,32 @@ The uniform loss layer means that each photon has probability $\eta=\tau^s$ of s
 If we take the total number of lossy components to be $d$, the remaining lossy circuit can be modelled as an $(m+d)$-mode interferometer, with lost photons ending up in the additional $d$ modes. 
 Thus we can achieve the same error as Equation (\ref{eqn:lossy-worst}) in $O(k2^k+\poly(k,m,d))$ time. 
 In typical schemes for linear interferometers, $d$ is at most polynomial in $m$ \cite{reck1994,clements2016}, so the overhead from these additional modes is small. 
-\change{We can bound the error to a decreasing value in terms of $n$ if $k=n\gamma$ for $\gamma > x\tau^s$. Taking the logarithm on both sides and rearranging for $s$, we find that this holds if}
+We can bound the error to a decreasing value in terms of $n$ if $k=n\gamma$ for $\gamma > x\tau^s$. Taking the logarithm on both sides and rearranging for $s$, we find that this holds if
 
 \begin{equation}
 s>\frac{\log (1/\gamma)-\log 1/x}{\log1/\tau}.
 \end{equation}
 
-\change{This suggests simulability of even constant depth Boson Sampling circuits, but requires our algorithm's runtime to increase linearly with $n$. If we are only interested in simulating up to a constant error, we can use Hoeffding's inequality again to find that we need}
+This suggests simulability of even constant depth Boson Sampling circuits, but requires our algorithm's runtime to increase linearly with $n$. If we are only interested in simulating up to a constant error, we can use Hoeffding's inequality again to find that we need
 
 \begin{equation}
 k \geq nx\tau^s + \sqrt{\frac{n\ln(1/\epsilon)}{2}}
 \end{equation}
 
-\noindent \change{for our simulator to be $\epsilon$-close. Rearranging for $s$ gives us that this holds if}
+\noindent for our simulator to be $\epsilon$-close. Rearranging for $s$ gives us that this holds if
 
 \begin{equation}
 s\log(1/\tau) \geq \frac{3\log n}{2} + \frac{\log(\ln(1/\epsilon))}{2} - \log k -\log(1/x) - \frac{\log 2}{2}.
 \end{equation}
 
-\change{Thus we can simulate Boson Sampling up to accuracy $\epsilon$ under non-uniform loss in $O(k^22^k+mk^2)$ time if our circuit depth is}
+Thus we can simulate Boson Sampling up to accuracy $\epsilon$ under non-uniform loss in $O(k^22^k+mk^2)$ time if our circuit depth is
 
 \begin{equation}
 s = \Omega\left(\frac{\log n + \log\log(1/\epsilon)-\log(1/x)-\log k}{\log(1/\tau)}\right).
 \end{equation}
 
-\change{Note that even if $k=O(\log n)$, which would imply a polynomial runtime for our simulator, this bound holds if the circuit depth is at least logarithmic in terms of $n$.} This matches results in \cite{garciapatron2017,oszmaniec2018}, showing that boson sampling can be classically simulated if each photon encounters at least a logarithmic number of lossy components. 
-It also shows how distinguishability can affect the simulability of lossy components in Boson Sampling: if our photons are more distinguishable, corresponding to a smaller value of $x$, then we can simulate shallower (i.e.\ less total loss) optical circuits. \change{Finally it is worth emphasising that our best-known universal interferometers, such as the ones mentioned in Section \ref{ssec:universal-lo}, require at least linear depth in terms of $m$, which translates to $O(n^2)$ depth overall.}
+Note that even if $k=O(\log n)$, which would imply a polynomial runtime for our simulator, this bound holds if the circuit depth is at least logarithmic in terms of $n$. This matches results in \cite{garciapatron2017,oszmaniec2018}, showing that boson sampling can be classically simulated if each photon encounters at least a logarithmic number of lossy components. 
+It also shows how distinguishability can affect the simulability of lossy components in Boson Sampling: if our photons are more distinguishable, corresponding to a smaller value of $x$, then we can simulate shallower (i.e.\ less total loss) optical circuits. Finally it is worth emphasising that our best-known universal interferometers, such as the ones mentioned in Section \ref{ssec:universal-lo}, require at least linear depth in terms of $m$, which translates to $O(n^2)$ depth overall.
 
 \section{Discussion of possible improvements}
 \label{sec:small-photon-no}
@@ -856,9 +856,9 @@ However, such an adaptation is non-trivial, due to the fact that the terms in th
 
 There are other open questions we would like to consider as well. The first would be to reduce the average-case error bounds to be less than our worst-case error bounds. This would most likely involve an alternative to using the triangle inequality. The second would be to find a way of explaining the difference in dependence on $\eta$ and $x$ between point and state truncation, and ideally improving either algorithm in the process.
 
-\change{As mentioned in Section \ref{sec:renema-review}, Renema et al.\ argue informally at the end of \cite{renema2018} that the expansion can also apply to more complex models of distinguishability with multiple parameters. We leave extending this classical simlation to more complex models of distinguishability as a question for future research, but note that the expansion considered in Equation \ref{eqn:rhon} can also be made more generalised to the cases considered by Renema et al., as well as other imperfections such as those mentioned in Section \ref{ssec:other-imperfections}.}
+As mentioned in Section \ref{sec:renema-review}, Renema et al.\ argue informally at the end of \cite{renema2018} that the expansion can also apply to more complex models of distinguishability with multiple parameters. We leave extending this classical simlation to more complex models of distinguishability as a question for future research, but note that the expansion considered in Equation \ref{eqn:rhon} can also be made more generalised to the cases considered by Renema et al., as well as other imperfections such as those mentioned in Section \ref{ssec:other-imperfections}.
 
-Finally it would be interesting to extend these results to other photonics-based quantum advantage schemes, such as Gaussian Boson Sampling \cite{hamilton2017}. The probability distribution of Gaussian Boson Sampling is that of $n$ indistinguishable squeezed states at the output of an $m$-mode linear optical interferometer, and depends on the Hafnian of a matrix. Unlike Boson Sampling, there is no known polynomial time classical algorithm for computing the probability of a single outcome from $n$ fully distinguishable squeezed states. An attempt to remedy this was recently presented by Renema \cite{renema2019}, by looking at the probability of an outcome from a Gaussian Boson Sampling as a linear combination of matrix permanents and extending the point truncation method accordingly, but this result hits a stumbling block in the form of an open problem related to the hardness of matrix permanents. On the other hand, it is classically efficient to sample $n$ fully distinguishable squeezed states, via a similar approach to that used for classically sampling distinguishable single photons \cite{aaronson2014}: For each squeezed state, one first samples the number of photons in that squeezed state via the inverse binomial distribution \cite{wu2019}, then each of those photons is sampled through the interferometer individually, as photons that start in the same spatial mode do not interfere with one another and their outcomes can therefore be sampled individually. \change{It might seem odd to think that there is a probability distribution for which it is easy to compute a sample but hard to approximate the probability of a given outcome; after all, surely someone can approximate the probability distribution by simply taking a polynomial number of samples. However, while this will give an approximation up to additive error, it will not give an approximation up to multiplicative error. This is because the distribution space is exponentially large, and most outcomes have an exponentially small probability due to the anti-concentration conjecture. Indeed, simply stating that every outcome has zero probability of happening is a polynomial time approximation up to additive error.}
+Finally it would be interesting to extend these results to other photonics-based quantum advantage schemes, such as Gaussian Boson Sampling \cite{hamilton2017}. The probability distribution of Gaussian Boson Sampling is that of $n$ indistinguishable squeezed states at the output of an $m$-mode linear optical interferometer, and depends on the Hafnian of a matrix. Unlike Boson Sampling, there is no known polynomial time classical algorithm for computing the probability of a single outcome from $n$ fully distinguishable squeezed states. An attempt to remedy this was recently presented by Renema \cite{renema2019}, by looking at the probability of an outcome from a Gaussian Boson Sampling as a linear combination of matrix permanents and extending the point truncation method accordingly, but this result hits a stumbling block in the form of an open problem related to the hardness of matrix permanents. On the other hand, it is classically efficient to sample $n$ fully distinguishable squeezed states, via a similar approach to that used for classically sampling distinguishable single photons \cite{aaronson2014}: For each squeezed state, one first samples the number of photons in that squeezed state via the inverse binomial distribution \cite{wu2019}, then each of those photons is sampled through the interferometer individually, as photons that start in the same spatial mode do not interfere with one another and their outcomes can therefore be sampled individually. It might seem odd to think that there is a probability distribution for which it is easy to compute a sample but hard to approximate the probability of a given outcome; after all, surely someone can approximate the probability distribution by simply taking a polynomial number of samples. However, while this will give an approximation up to additive error, it will not give an approximation up to multiplicative error. This is because the distribution space is exponentially large, and most outcomes have an exponentially small probability due to the anti-concentration conjecture. Indeed, simply stating that every outcome has zero probability of happening is a polynomial time approximation up to additive error.
 
 As a result, adapting the Clifford \& Clifford algorithm to non-ideal Boson Sampling models provides an important step towards being able to classically simulate imperfections in Gaussian Boson Sampling. This, combined with recent classical simulation algorithms for ideal Gaussian Boson Sampling \cite{quesada2019, wu2019}, show strong potential for these results to extent to Gaussian Boson Sampling.
 

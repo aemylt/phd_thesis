@@ -3,7 +3,7 @@
 
 \section{Introduction}
 
-\change{This work was completed in collaboration with Peter S. Turner, and published as ``Quantum simulation of partially distinguishable boson sampling'', \href{https://link.aps.org/doi/10.1103/PhysRevA.97.062329}{\textit{Physical Review A} \textbf{97}, 062329 (2018)}, copyright American Physics Society. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1803.03657}{arXiv:1803.03657}}. Details of contributions made by myself are given in Section \ref{ssec:publications}.}
+This work was completed in collaboration with Peter S. Turner, and published as ``Quantum simulation of partially distinguishable boson sampling'', \href{https://link.aps.org/doi/10.1103/PhysRevA.97.062329}{\textit{Physical Review A} \textbf{97}, 062329 (2018)}, copyright American Physics Society. A preprint of this article is freely available at {\tt \href{https://arxiv.org/abs/1803.03657}{arXiv:1803.03657}}. Details of contributions made by myself are given in Section \ref{ssec:publications}.
 
 In this chapter we explore the problem of sampling from a collection of $n$ partially distinguishable single bosons interacting on a $m$-mode interferometer from the opposite direction, that is, from the perspective of quantum simulation. 
 We do so by observing that ideal Boson Sampling is equivalent to sampling from the totally symmetric representation of the unitary group, and that partial distinguishability generalises this to the problem of sampling from arbitrary irreducible representations.
@@ -183,7 +183,7 @@ Note that we only sample from the System qudits, effectively tracing out the Lab
 \label{fig:noisy-bs}
 \end{figure}
 
-To see that this distribution matches that of partially distinguishable bosons, we will compare with the results of Tichy~\cite{tichy2015} \change{discussed in Section \ref{ssec:imperfections-distinguishability}}. In order to connect our model with this model of distinguishability, one simply needs to take superpositions of $mn$-mode input occupations $T$ in such a way as to realise the Label states $\Phi_i$.
+To see that this distribution matches that of partially distinguishable bosons, we will compare with the results of Tichy~\cite{tichy2015} discussed in Section \ref{ssec:imperfections-distinguishability}. In order to connect our model with this model of distinguishability, one simply needs to take superpositions of $mn$-mode input occupations $T$ in such a way as to realise the Label states $\Phi_i$.
 This is always possible since the space of internal states, span$\{\Phi_i\}_{i=1}^m$, can always be embedded in the Label space $(\mathbb{C}^n)^{\otimes n}$.
 For example, consider two bosons in two System modes where one boson is in System mode 1 and has internal state $|1\rangle$ (corresponding to Label mode 1), and the other boson is in System mode 2 and has internal state $|\Phi_2\rangle=\alpha|1\rangle+\beta|2\rangle$.
 This is represented as the following superposition of System-Label occupations:
@@ -331,7 +331,7 @@ More generally, such a postselected quantum circuit could sample from any irrep 
 All we need to achieve this is to ensure that the input state has support in the irrep we wish to sample from, and postselect on being in that irrep.
 A dimension counting argument shows that the completely distinguishable input discussed above has support in all irreps~\cite{stanisic2018}, and so could be used for this purpose.
 
-\change{It is worth noting however that the probability of this postselection succeeding can be extremely small. For the worst case, when we have the fully distinguishable state, the probability of postselecting on the fully symmetric irrep is $1/n!$, thus we expect on average $O(n!)$ attempts before postselection is successful.}
+It is worth noting however that the probability of this postselection succeeding can be extremely small. For the worst case, when we have the fully distinguishable state, the probability of postselecting on the fully symmetric irrep is $1/n!$, thus we expect on average $O(n!)$ attempts before postselection is successful.
 
 
 
@@ -456,7 +456,7 @@ The resulting state after this transposition is
 
 To work out the trace norm of this density matrix, we need to multiply it by its transpose and take the square root. We note that of the three summations that make up $\rho_{\epsilon}^{T_1}$, the first two have no overlap with the third. This is because of the transposition, which as noted earlier only affects the third summation. For every term in the third summation, there is some $i \in \{2,\dots,n\}$ such that $\ket{s_{\tau^{-1}(1)}} = \ket{s_{\sigma^{-1}(i)}}$. As a result, any term from the other two summations with permutation $\chi$ either has $\braket{s_{\chi^{-1}(1)}|s_{\tau^{-1}(1)}}=0$ or $\braket{s_{\chi^{-1}(i)}|s_{\sigma^{-1}(i)}}=0$. Therefore we only need to consider the product of the first two sums with each other and product of the third summation with itself. Note that this relies on our photons being coincident, to ensure that $\braket{s_i|s_j}=\delta_{i,j}\forall i,j \in [n]$. For more general bosonic states, where multiple photons might occupy the same spatial mode, this simplification would not hold and we might need to consider more complicated analysis. We discuss some consequences of more general photonic states at the end of this section.
 
-\change{Using this knowledge, we compute $\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}$ as}
+Using this knowledge, we compute $\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}$ as
 
 \begin{align}
 \rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger} &= \frac{1}{(n!)^2} \left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)^2\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + 2(1-\epsilon)\epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
@@ -468,7 +468,7 @@ To work out the trace norm of this density matrix, we need to multiply it by its
 &\quad\quad\quad\quad\left.+ \epsilon\sum_{\substack{\sigma,\tau,\upsilon \in \textrm{S}_n\\\sigma^{-1}(1) \neq \tau^{-1}(1)\\\sigma^{-1}(1) = \upsilon^{-1}(1)}}|s_{\tau^{-1}(1)}\rangle\langle s_{\tau^{-1}(1)}|\bigotimes_{i=2}^n|s_{\sigma^{-1}(i)}\rangle\langle s_{\upsilon^{-1}(i)}|\right).
 \end{align}
 
-\noindent \change{The square root of this matrix can be written as}
+\noindent The square root of this matrix can be written as
 
 \begin{align}
 \sqrt{\rho_{\epsilon}^{T_1}\rho_{\epsilon}^{T_1\dagger}} &= \frac{1}{n!}\left(\vphantom{\sum_{\substack{a\\b\\c\\d}}}(1-\epsilon)\sum_{\sigma\in \textrm{S}_n}\sigma|s\rangle\langle s|\sigma^\dagger + \epsilon\sum_{\substack{\sigma,\tau \in \textrm{S}_n\\\sigma^{-1}(1) = \tau^{-1}(1)}}\sigma|s\rangle\langle s|\tau^\dagger\right.\nonumber\\
